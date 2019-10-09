@@ -17,6 +17,19 @@
     %meta{ name: 'msapplication-config', content: '/browserconfig.xml' }/
     %meta{ name: 'theme-color', content: '#282c37' }/
     %meta{ name: 'apple-mobile-web-app-capable', content: 'yes' }/
+    %script{ type: 'text/x-mathjax-config' }
+      \MathJax.Hub.Config({
+      \  extensions: ["tex2jax.js"],
+      \  jax: ["input/TeX", "output/CommonHTML"],
+      \  tex2jax: {
+      \    inlineMath: [ ["\\(","\\)"] ],
+      \    displayMath: [ ["\\[","\\]"] ],
+      \    processEscapes: true
+      \  },
+      \  "HTML-CSS": { availableFonts: ["TeX"] }
+
+      \});
+    %script{:src => "/MathJax/MathJax.js?config=TeX-AMS_CHTML,Safe"}
 
     %title= content_for?(:page_title) ? safe_join([yield(:page_title).chomp.html_safe, title], ' - ') : title
 
