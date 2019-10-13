@@ -95,7 +95,10 @@ export default class StatusContent extends React.PureComponent {
   }
 
   _renderMathJax() {
-    MathJax.typeset([this.node]);
+    try {
+      MathJax.typeset([this.node]);
+    } catch(e) {
+    }
   }
 
   componentDidMount () {
