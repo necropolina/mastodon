@@ -10,6 +10,15 @@
     - if storage_host?
       %link{ rel: 'dns-prefetch', href: storage_host }/
 
+    %script{}
+      \MathJax = {
+      \  tex: {
+      \    inlineMath: [ ["\\(","\\)"] ],
+      \    displayMath: [ ["\\[","\\]"] ]
+      \  },
+      \};
+    %script{ src: '/MathJax/es5/tex-chtml.js' }
+
     = stylesheet_pack_tag 'common', media: 'all'
     = stylesheet_pack_tag Setting.default_settings['theme'], media: 'all'
     = javascript_pack_tag 'common', integrity: true, crossorigin: 'anonymous'
