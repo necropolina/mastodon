@@ -221,11 +221,13 @@ const mergeLocalHashtagResults = (suggestions, prefix, tagHistory) => {
   }
 };
 
-const normalizeSuggestions = (state, { accounts, emojis, tags, token }) => {
+const normalizeSuggestions = (state, { accounts, emojis, tags, latex, token }) => {
   if (accounts) {
     return accounts.map(item => ({ id: item.id, type: 'account' }));
   } else if (emojis) {
     return emojis.map(item => ({ ...item, type: 'emoji' }));
+  } else if (latex) {
+    return latex.map(item => ({ ...item, type: 'latex' }));
   } else {
     return mergeLocalHashtagResults(sortHashtagsByUse(state, tags.map(item => ({ ...item, type: 'hashtag' }))), token.slice(1), state.get('tagHistory'));
   }
