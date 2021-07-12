@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
-import try_replace from '../features/compose/util/autolatex.js';
+import tex_to_unicode from '../features/compose/util/autolatex/autolatex.js';
 
 const textAtCursorMatchesToken = (str, caretPosition) => {
   let word;
@@ -91,10 +91,6 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
     }
 
     this.props.onChange(e);
-  }
-
-  onInput = (e) => {
-    try_replace(e.target);
   }
 
   onKeyDown = (e) => {

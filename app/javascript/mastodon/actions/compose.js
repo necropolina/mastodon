@@ -10,6 +10,7 @@ import { updateTimeline } from './timelines';
 import { showAlertForError } from './alerts';
 import { showAlert } from './alerts';
 import { defineMessages } from 'react-intl';
+import { tex_to_unicode } from '../features/compose/util/autolatex/autolatex.js';
 
 let cancelFetchComposeSuggestionsAccounts, cancelFetchComposeSuggestionsTags;
 
@@ -539,7 +540,8 @@ export function selectComposeSuggestion(position, token, suggestion, path) {
       completion    = getState().getIn(['accounts', suggestion.id, 'acct']);
       startPosition = position;
     } else if (suggestion.type === 'latex') {
-      completion = `${suggestion.start_delimiter}${suggestion.expression}${suggestion.end_delimiter}`;
+      const unicode = tex_to_unicode(suggestion.expression);
+      completion = unicode || `${suggestion.start_delimiter}${suggestion.expression}${suggestion.end_delimiter}`;
       startPosition = position - 1;
     }
 
