@@ -10,6 +10,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { replyCompose } from 'mastodon/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'mastodon/actions/interactions';
 import { makeGetStatus } from 'mastodon/selectors';
+import { initBoostModal } from 'mastodon/actions/boosts';
 import { openModal } from 'mastodon/actions/modal';
 
 const messages = defineMessages({
@@ -59,7 +60,7 @@ class Footer extends ImmutablePureComponent {
     const { router } = this.context;
 
     if (onClose) {
-      onClose();
+      onClose(true);
     }
 
     dispatch(replyCompose(status, router.history));
@@ -89,9 +90,9 @@ class Footer extends ImmutablePureComponent {
     }
   };
 
-  _performReblog = () => {
-    const { dispatch, status } = this.props;
-    dispatch(reblog(status));
+  _performReblog = (status, privacy) => {
+    const { dispatch } = this.props;
+    dispatch(reblog(status, privacy));
   }
 
   handleReblogClick = e => {
@@ -100,9 +101,9 @@ class Footer extends ImmutablePureComponent {
     if (status.get('reblogged')) {
       dispatch(unreblog(status));
     } else if ((e && e.shiftKey) || !boostModal) {
-      this._performReblog();
+      this._performReblog(status);
     } else {
-      dispatch(openModal('BOOST', { status, onReblog: this._performReblog }));
+      dispatch(initBoostModal({ status, onReblog: this._performReblog }));
     }
   };
 
@@ -113,9 +114,13 @@ class Footer extends ImmutablePureComponent {
       return;
     }
 
-    const { status } = this.props;
+    const { status, onClose } = this.props;
 
-    router.history.push(`/statuses/${status.get('id')}`);
+    if (onClose) {
+      onClose();
+    }
+
+    router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
   }
 
   render () {
@@ -151,7 +156,7 @@ class Footer extends ImmutablePureComponent {
         <IconButton className='status__action-bar-button' title={replyTitle} icon={status.get('in_reply_to_account_id') === status.getIn(['account', 'id']) ? 'reply' : replyIcon} onClick={this.handleReplyClick} counter={status.get('replies_count')} obfuscateCount />
         <IconButton className={classNames('status__action-bar-button', { reblogPrivate })} disabled={!publicStatus && !reblogPrivate}  active={status.get('reblogged')} pressed={status.get('reblogged')} title={reblogTitle} icon='retweet' onClick={this.handleReblogClick} counter={status.get('reblogs_count')} />
         <IconButton className='status__action-bar-button star-icon' animate active={status.get('favourited')} pressed={status.get('favourited')} title={intl.formatMessage(messages.favourite)} icon='star' onClick={this.handleFavouriteClick} counter={status.get('favourites_count')} />
-        {withOpenButton && <IconButton className='status__action-bar-button' title={intl.formatMessage(messages.open)} icon='external-link' onClick={this.handleOpenClick} />}
+        {withOpenButton && <IconButton className='status__action-bar-button' title={intl.formatMessage(messages.open)} icon='external-link' onClick={this.handleOpenClick} href={status.get('url')} />}
       </div>
     );
   }

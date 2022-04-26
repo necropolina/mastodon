@@ -4,8 +4,8 @@ RSpec.describe BatchedRemoveStatusService, type: :service do
   subject { BatchedRemoveStatusService.new }
 
   let!(:alice)  { Fabricate(:account) }
-  let!(:bob)    { Fabricate(:account, username: 'bob', domain: 'example.com', salmon_url: 'http://example.com/salmon') }
-  let!(:jeff)   { Fabricate(:user).account }
+  let!(:bob)    { Fabricate(:account, username: 'bob', domain: 'example.com') }
+  let!(:jeff)   { Fabricate(:account) }
   let!(:hank)   { Fabricate(:account, username: 'hank', protocol: :activitypub, domain: 'example.com', inbox_url: 'http://example.com/inbox') }
 
   let(:status1) { PostStatusService.new.call(alice, text: 'Hello @bob@example.com') }

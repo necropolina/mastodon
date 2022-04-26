@@ -91,7 +91,7 @@ export const fileNameFromURL = str => {
   const pathname = url.pathname;
   const index    = pathname.lastIndexOf('/');
 
-  return pathname.substring(index + 1);
+  return pathname.slice(index + 1);
 };
 
 export default @injectIntl
@@ -121,10 +121,11 @@ class Video extends React.PureComponent {
     autoPlay: PropTypes.bool,
     volume: PropTypes.number,
     muted: PropTypes.bool,
+    componentIndex: PropTypes.number,
   };
 
   static defaultProps = {
-    frameRate: 25,
+    frameRate: '25',
   };
 
   state = {
@@ -501,6 +502,7 @@ class Video extends React.PureComponent {
       startTime: this.video.currentTime,
       autoPlay: !this.state.paused,
       defaultVolume: this.state.volume,
+      componentIndex: this.props.componentIndex,
     });
   }
 

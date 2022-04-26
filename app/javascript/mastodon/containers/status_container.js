@@ -24,6 +24,7 @@ import {
   hideStatus,
   revealStatus,
   toggleStatusCollapse,
+  editStatus,
 } from '../actions/statuses';
 import {
   unmuteAccount,
@@ -35,6 +36,7 @@ import {
 } from '../actions/domain_blocks';
 import { initMuteModal } from '../actions/mutes';
 import { initBlockModal } from '../actions/blocks';
+import { initBoostModal } from '../actions/boosts';
 import { initReport } from '../actions/reports';
 import { openModal } from '../actions/modal';
 import { deployPictureInPicture } from '../actions/picture_in_picture';
@@ -82,11 +84,11 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
     });
   },
 
-  onModalReblog (status) {
+  onModalReblog (status, privacy) {
     if (status.get('reblogged')) {
       dispatch(unreblog(status));
     } else {
-      dispatch(reblog(status));
+      dispatch(reblog(status, privacy));
     }
   },
 
@@ -94,7 +96,7 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
     if ((e && e.shiftKey) || !boostModal) {
       this.onModalReblog(status);
     } else {
-      dispatch(openModal('BOOST', { status, onReblog: this.onModalReblog }));
+      dispatch(initBoostModal({ status, onReblog: this.onModalReblog }));
     }
   },
 
@@ -139,6 +141,10 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
         onConfirm: () => dispatch(deleteStatus(status.get('id'), history, withRedraft)),
       }));
     }
+  },
+
+  onEdit (status, history) {
+    dispatch(editStatus(status.get('id'), history));
   },
 
   onDirect (account, router) {

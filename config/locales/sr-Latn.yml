@@ -19,7 +19,6 @@ sr-Latn:
     people_followed_by: Ljudi koje %{name} prati
     people_who_follow: Ljudi koji prate %{name}
     posts_with_replies: Tutovi i odgovori
-    reserved_username: Korisničko ime je rezervisano
     roles:
       admin: Administrator
       moderator: Moderator
@@ -28,7 +27,6 @@ sr-Latn:
     account_moderation_notes:
       create: Napravi
       created_msg: Moderatorska beleška uspešno napravljena!
-      delete: Obriši
       destroyed_msg: Moderatorska beleška uspešno obrisana!
     accounts:
       are_you_sure: Da li ste sigurni?
@@ -60,7 +58,6 @@ sr-Latn:
       memorialize: Prebaci u in memoriam
       moderation:
         all: Svi
-        silenced: Ućutkani
         suspended: Suspendovani
         title: Moderacija
       moderation_notes: Moderatorske beleške
@@ -98,30 +95,6 @@ sr-Latn:
       username: Korisničko ime
       web: Veb
     action_logs:
-      actions:
-        confirm_user: "%{name} je potvrdio adresu e-pošte korisnika %{target}"
-        create_custom_emoji: "%{name} je otpremio novi emotikon %{target}"
-        create_domain_block: "%{name} je blokirao domen %{target}"
-        create_email_domain_block: "%{name} je stavio na crnu listu domen e-pošte %{target}"
-        demote_user: "%{name} je ražalovao korisnika %{target}"
-        destroy_domain_block: "%{name} je odblokirao domen %{target}"
-        destroy_email_domain_block: "%{name} je stavio na belu listu domen e-pošte %{target}"
-        destroy_status: "%{name} je uklonio status korisnika %{target}"
-        disable_2fa_user: "%{name} je isključio obaveznu dvofaktorsku identifikaciju za korisnika %{target}"
-        disable_custom_emoji: "%{name} je onemogućio emotikon %{target}"
-        disable_user: "%{name} je onemogućio prijavljivanje korisniku %{target}"
-        enable_custom_emoji: "%{name} je omogućio emotikon %{target}"
-        enable_user: "%{name} je omogućio prijavljivanje za korisnika %{target}"
-        memorialize_account: "%{name} je pretvorio stranu naloga %{target} kao in memoriam stranu"
-        promote_user: "%{name} je unapredio korisnika %{target}"
-        reset_password_user: "%{name} je resetovao lozinku korisniku %{target}"
-        resolve_report: "%{name} je odbacio prijavu %{target}"
-        silence_account: "%{name} je ućutkao nalog %{target}"
-        suspend_account: "%{name} je suspendovao nalog %{target}"
-        unsilence_account: "%{name} je ukinuo ćutanje nalogu %{target}"
-        unsuspend_account: "%{name} je ukinuo suspenziju nalogu %{target}"
-        update_custom_emoji: "%{name} je izmenio emotikon %{target}"
-        update_status: "%{name} je izmenio status korisnika %{target}"
       title: Zapisnik
     custom_emojis:
       by_domain: Domen
@@ -136,7 +109,6 @@ sr-Latn:
       emoji: Emotikon
       enable: Omogući
       enabled_msg: Emotikon uspešno omogućen
-      image_hint: PNG do 50KB
       listed: Izlistan
       new:
         title: Dodaj novi proizvoljni emotikon
@@ -164,22 +136,11 @@ sr-Latn:
         title: Novo blokiranje domena
       reject_media: Odbaci multimediju
       reject_media_hint: Uklanja lokalno uskladištene multimedijske fajlove i odbija da ih skida na dalje. Nebitno je za suspenziju
-      show:
-        affected_accounts:
-          few: Utiče na %{count} naloga u bazi
-          one: Utiče na jedan nalog u bazi
-          other: Utiče na %{count} naloga u bazi
-        retroactive:
-          silence: Ugasi ućutkivanje za sve postojeće naloge sa ovog domena
-          suspend: Ugasi suspenzije za sve postojeće naloge sa ovog domena
-        title: Poništi blokadu domena za domen %{domain}
-        undo: Poništi
       undo: Poništi
     email_domain_blocks:
       add_new: Dodaj novuAdd new
       created_msg: Uspešno dodao domen e-pošte na crnu listu
       delete: Ukloni
-      destroyed_msg: Uspešno uklonjen domen e-pošte sa crne liste
       domain: Domen
       new:
         create: Dodaj domen
@@ -244,14 +205,8 @@ sr-Latn:
       title: Postavke sajta
     statuses:
       back_to_account: Nazad na stranu naloga
-      batch:
-        delete: Obriši
-        nsfw_off: NSFW isključen
-        nsfw_on: NSFW uključen
-      failed_to_execute: Neuspelo izvršavanje
       media:
         title: Multimedija
-      no_media: Bez multimedije
       title: Statusi naloga
       with_media: Sa multimedijom
     title: Administracija
@@ -382,9 +337,9 @@ sr-Latn:
         one: Dobili ste jednog novog pratioca! Jeee!
         other: Dobili ste %{count} novih pratioca! Sjajno!
       subject:
-        few: "%{count} nova obaveštenja od poslednje posete \U0001F418"
-        one: "1 novo obaveštenje od poslednje posete \U0001F418"
-        other: "%{count} novih obaveštenja od poslednje posete \U0001F418"
+        few: "%{count} nova obaveštenja od poslednje posete 🐘"
+        one: "1 novo obaveštenje od poslednje posete 🐘"
+        other: "%{count} novih obaveštenja od poslednje posete 🐘"
     favourite:
       body: "%{name} je postavio kao omiljen Vaš status:"
       subject: "%{name} je postavio kao omiljen Vaš status"
@@ -453,7 +408,6 @@ sr-Latn:
     pin_errors:
       limit: Već imate prikačen najveći broj tutova
       ownership: Tuđi tutovi ne mogu da se prikače
-      private: Tutovi koji nisu javni ne mogu da se prikače
       reblog: Podrška ne može da se prikači
     show_more: Prikaži još
     visibilities:
@@ -481,6 +435,5 @@ sr-Latn:
     recovery_codes_regenerated: Kodovi za oporavak uspešno regenerisani
     recovery_instructions_html: Ako ikada izgubite pristup telefonu, možete iskoristiti kodove za oporavak date ispod da povratite pristup nalogu. <strong>Držite kodove za oporavak na sigurnom</strong>. Na primer, odštampajte ih i čuvajte ih sa ostalim važnim dokumentima.
   users:
-    invalid_email: Adresa e-pošte nije ispravna
     invalid_otp_token: Neispravni dvofaktorski kod
     signed_in_as: 'Prijavljen kao:'

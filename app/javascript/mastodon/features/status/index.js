@@ -29,6 +29,7 @@ import {
   muteStatus,
   unmuteStatus,
   deleteStatus,
+  editStatus,
   hideStatus,
   revealStatus,
 } from '../../actions/statuses';
@@ -42,9 +43,10 @@ import {
 } from '../../actions/domain_blocks';
 import { initMuteModal } from '../../actions/mutes';
 import { initBlockModal } from '../../actions/blocks';
+import { initBoostModal } from '../../actions/boosts';
 import { initReport } from '../../actions/reports';
 import { makeGetStatus, makeGetPictureInPicture } from '../../selectors';
-import { ScrollContainer } from 'react-router-scroll-4';
+import ScrollContainer from 'mastodon/containers/scroll_container';
 import ColumnBackButton from '../../components/column_back_button';
 import ColumnHeader from '../../components/column_header';
 import StatusContainer from '../../containers/status_container';
@@ -82,7 +84,7 @@ const makeMapStateToProps = () => {
     ancestorsIds = ancestorsIds.withMutations(mutable => {
       let id = statusId;
 
-      while (id) {
+      while (id && !mutable.includes(id)) {
         mutable.unshift(id);
         id = inReplyTos.get(id);
       }
@@ -100,7 +102,7 @@ const makeMapStateToProps = () => {
     const ids = [statusId];
 
     while (ids.length > 0) {
-      let id        = ids.shift();
+      let id        = ids.pop();
       const replies = contextReplies.get(id);
 
       if (statusId !== id) {
@@ -109,7 +111,7 @@ const makeMapStateToProps = () => {
 
       if (replies) {
         replies.reverse().forEach(reply => {
-          ids.unshift(reply);
+          if (!ids.includes(reply) && !descendantsIds.includes(reply) && statusId !== reply) ids.push(reply);
         });
       }
     }
@@ -234,8 +236,8 @@ class Status extends ImmutablePureComponent {
     }
   }
 
-  handleModalReblog = (status) => {
-    this.props.dispatch(reblog(status));
+  handleModalReblog = (status, privacy) => {
+    this.props.dispatch(reblog(status, privacy));
   }
 
   handleReblogClick = (status, e) => {
@@ -245,7 +247,7 @@ class Status extends ImmutablePureComponent {
       if ((e && e.shiftKey) || !boostModal) {
         this.handleModalReblog(status);
       } else {
-        this.props.dispatch(openModal('BOOST', { status, onReblog: this.handleModalReblog }));
+        this.props.dispatch(initBoostModal({ status, onReblog: this.handleModalReblog }));
       }
     }
   }
@@ -270,6 +272,10 @@ class Status extends ImmutablePureComponent {
         onConfirm: () => dispatch(deleteStatus(status.get('id'), history, withRedraft)),
       }));
     }
+  }
+
+  handleEditClick = (status, history) => {
+    this.props.dispatch(editStatus(status.get('id'), history));
   }
 
   handleDirectClick = (account, router) => {
@@ -395,7 +401,7 @@ class Status extends ImmutablePureComponent {
   }
 
   handleHotkeyOpenProfile = () => {
-    this.context.router.history.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
+    this.context.router.history.push(`/@${this.props.status.getIn(['account', 'acct'])}`);
   }
 
   handleHotkeyToggleHidden = () => {
@@ -497,7 +503,7 @@ class Status extends ImmutablePureComponent {
 
   render () {
     let ancestors, descendants;
-    const { shouldUpdateScroll, status, ancestorsIds, descendantsIds, intl, domain, multiColumn, pictureInPicture } = this.props;
+    const { status, ancestorsIds, descendantsIds, intl, domain, multiColumn, pictureInPicture } = this.props;
     const { fullscreen } = this.state;
 
     if (status === null) {
@@ -540,7 +546,7 @@ class Status extends ImmutablePureComponent {
           )}
         />
 
-        <ScrollContainer scrollKey='thread' shouldUpdateScroll={shouldUpdateScroll}>
+        <ScrollContainer scrollKey='thread'>
           <div className={classNames('scrollable', { fullscreen })} ref={this.setRef}>
             {ancestors}
 
@@ -566,6 +572,7 @@ class Status extends ImmutablePureComponent {
                   onReblog={this.handleReblogClick}
                   onBookmark={this.handleBookmarkClick}
                   onDelete={this.handleDeleteClick}
+                  onEdit={this.handleEditClick}
                   onDirect={this.handleDirectClick}
                   onMention={this.handleMentionClick}
                   onMute={this.handleMuteClick}

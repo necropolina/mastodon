@@ -27,10 +27,6 @@ io:
       new:
         severity:
           desc_html: "<strong>Silence</strong> will make the account's posts invisible to anyone who isn't following them. <strong>Suspend</strong> will remove all of the account's content, media, and profile data."
-      show:
-        retroactive:
-          silence: Unsilence all existing accounts from this domain
-          suspend: Unsuspend all existing accounts from this domain
       undo: Undo
     instances:
       title: Known Instances
@@ -106,8 +102,8 @@ io:
         one: Tu obtenis nova sequanto! Yey!
         other: Tu obtenis %{count} nova sequanti! Astonive!
       subject:
-        one: "1 nova savigo depos tua lasta vizito \U0001F418"
-        other: "%{count} nova savigi depos tua lasta vizito \U0001F418"
+        one: "1 nova savigo depos tua lasta vizito 🐘"
+        other: "%{count} nova savigi depos tua lasta vizito 🐘"
     favourite:
       body: "%{name} favoris tua mesajo:"
       subject: "%{name} favoris tua mesajo"
@@ -155,5 +151,4 @@ io:
     generate_recovery_codes: Generate Recovery Codes
     recovery_instructions_html: If you ever lose access to your phone, you can use one of the recovery codes below to regain access to your account. Keep the recovery codes safe, for example by printing them and storing them with other important documents.
   users:
-    invalid_email: La retpost-adreso ne esas valida
     invalid_otp_token: La dufaktora autentikigila kodexo ne esas valida
