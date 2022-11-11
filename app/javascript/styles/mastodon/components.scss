@@ -412,6 +412,11 @@
     top: 0;
     right: 0;
   }
+  .latex-dropdown {
+    position: absolute;
+    top: 24px;
+    right: 0;
+  }
 
   .compose-form__autosuggest-wrapper {
     position: relative;
@@ -4340,6 +4345,41 @@ a.status-card.compact:hover {
 }
 
 .dropdown--active .emoji-button img {
+  opacity: 1;
+  filter: none;
+}
+
+.latex-button {
+  display: block;
+  padding: 5px 5px 2px 2px;
+  outline: 0;
+  cursor: pointer;
+
+  &:active,
+  &:focus {
+    outline: 0 !important;
+  }
+
+  img {
+    filter: grayscale(100%);
+    opacity: 0.8;
+    display: block;
+    margin: 0;
+    width: 22px;
+    height: 22px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    img {
+      opacity: 1;
+      filter: none;
+    }
+  }
+}
+
+.dropdown--active .latex-button img {
   opacity: 1;
   filter: none;
 }

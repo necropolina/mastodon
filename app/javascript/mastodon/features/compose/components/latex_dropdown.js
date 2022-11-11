@@ -8,6 +8,7 @@ import spring from 'react-motion/lib/spring';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import classNames from 'classnames';
 import Icon from 'mastodon/components/icon';
+import { assetHost } from 'mastodon/utils/config';
 
 const messages = defineMessages({
   inline_short:  { id: 'latex.inline.short', defaultMessage: 'Inline' },
@@ -154,6 +155,7 @@ class LaTeXDropdown extends React.PureComponent {
     container: PropTypes.func,
     disabled: PropTypes.bool,
     intl: PropTypes.object.isRequired,
+    button: PropTypes.node,
   };
 
   state = {
@@ -234,26 +236,19 @@ class LaTeXDropdown extends React.PureComponent {
   }
 
   render () {
-    const { value, container, disabled, intl } = this.props;
+    const { value, container, disabled, intl, button } = this.props;
     const { open, placement } = this.state;
+
+    const title = intl.formatMessage(messages.start_latex);
 
     return (
       <div className={classNames('latex-dropdown', placement, { active: open })} onKeyDown={this.handleKeyDown}>
-        <div className={classNames('latex-dropdown__value')}>
-          <IconButton
-            className='latex-dropdown__value-icon'
-            icon='globe'
-            title={intl.formatMessage(messages.start_latex)}
-            size={18}
-            expanded={open}
-            active={open}
-            inverted
-            onClick={this.handleToggle}
-            onMouseDown={this.handleMouseDown}
-            onKeyDown={this.handleButtonKeyDown}
-            style={{ height: null, lineHeight: '27px' }}
-            disabled={disabled}
-          />
+        <div ref={this.setTargetRef} className='latex-button' title={title} aria-label={title} aria-expanded={open} role='button' onClick={this.handleToggle} onKeyDown={this.handleButtonKeyDown} onMouseDown={this.handleMouseDown} tabIndex={0}>
+          {button || <img
+            className={classNames('latex-icon')}
+            alt='𝑥'
+            src={`${assetHost}/latex/latex-icon.svg`}
+          />}
         </div>
 
         <Overlay show={open} placement={placement} target={this} container={container}>
