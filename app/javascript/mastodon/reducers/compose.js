@@ -31,6 +31,7 @@ import {
   COMPOSE_LANGUAGE_CHANGE,
   COMPOSE_COMPOSING_CHANGE,
   COMPOSE_EMOJI_INSERT,
+  COMPOSE_START_LATEX,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
   COMPOSE_UPLOAD_CHANGE_SUCCESS,
   COMPOSE_UPLOAD_CHANGE_FAIL,
@@ -208,6 +209,17 @@ const insertEmoji = (state, position, emojiData, needsSpace) => {
     text: `${oldText.slice(0, position)}${emoji} ${oldText.slice(position)}`,
     focusDate: new Date(),
     caretPosition: position + emoji.length + 1,
+    idempotencyKey: uuid(),
+  });
+};
+
+const startLaTeX = (state, position, delimiter) => {
+  const oldText = state.get('text');
+
+  return state.merge({
+    text: `${oldText.slice(0, position)}${delimiter} ${oldText.slice(position)}`,
+    focusDate: new Date(),
+    caretPosition: position + delimiter.length + 1,
     idempotencyKey: uuid(),
   });
 };
@@ -424,6 +436,8 @@ export default function compose(state = initialState, action) {
     }
   case COMPOSE_EMOJI_INSERT:
     return insertEmoji(state, action.position, action.emoji, action.needsSpace);
+  case COMPOSE_START_LATEX:
+    return startLaTeX(state, action.position, action.delimiter);
   case COMPOSE_UPLOAD_CHANGE_SUCCESS:
     return state
       .set('is_changing_upload', false)
