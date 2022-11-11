@@ -538,6 +538,9 @@
     line-height: 18px;
     font-size: 14px;
   }
+  .autosuggest-latex .hint {
+      font-style: italic;
+  }
 
   .autosuggest-hashtag {
     justify-content: space-between;
@@ -4546,6 +4549,11 @@ a.status-card.compact:hover {
   align-items: center;
   justify-content: center;
   margin-right: 10px;
+
+  img {
+      width: 24px;
+      height: 24px;
+  }
 }
 
 .latex-dropdown__option__content {

@@ -12,7 +12,8 @@ import { defineMessages, injectIntl } from 'react-intl';
 import SpoilerButtonContainer from '../containers/spoiler_button_container';
 import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
-import LaTeXDropdown from '../containers/latex_dropdown_container.js';
+import LaTeXDropdown from '../containers/latex_dropdown_container';
+import LaTeXInputHint from '../components/latex_input_hint';
 import PollFormContainer from '../containers/poll_form_container';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
@@ -290,11 +291,6 @@ class ComposeForm extends ImmutablePureComponent {
           <div className='compose-form__publish-button-wrapper'>
             <Button text={publishText} onClick={this.handleSubmit} disabled={!this.canSubmit()} block />
           </div>
-        </div>
-
-        <div className='compose-form__latex-hint'>
-            <p>Inline LaTeX: <code>\( code \)</code>.</p>
-            <p>Display-mode: <code>\[ code \]</code>.</p>
         </div>
       </div>
     );

@@ -127,6 +127,11 @@ class LaTeXDropdownMenu extends React.PureComponent {
             {items.map(item => (
               <div role='option' tabIndex='0' key={item.value} data-index={item.value} onKeyDown={this.handleKeyDown} onClick={this.handleClick} className={classNames('latex-dropdown__option', { active: item.value === value })} aria-selected={item.value === value} ref={item.value === value ? this.setFocusRef : null}>
                 <div className='latex-dropdown__option__icon'>
+                  <img
+                    className={classNames('latex-icon')}
+                    alt={item.value}
+                    src={`${assetHost}/latex/${item.icon}.svg`}
+                  />
                   <Icon id={item.icon} fixedWidth />
                 </div>
 
@@ -223,6 +228,7 @@ class LaTeXDropdown extends React.PureComponent {
   }
 
   handleChange = value => {
+    console.log('handleChange',value);
     this.props.onChange(value);
   }
 
@@ -230,8 +236,8 @@ class LaTeXDropdown extends React.PureComponent {
     const { intl: { formatMessage } } = this.props;
 
     this.options = [
-      { icon: '', value: '\\(', text: formatMessage(messages.inline_short), meta: formatMessage(messages.inline_long) },
-      { icon: '', value: '\\[', text: formatMessage(messages.display_short), meta: formatMessage(messages.display_long) },
+      { icon: 'inline-mode', value: 'inline', text: formatMessage(messages.inline_short), meta: formatMessage(messages.inline_long) },
+      { icon: 'display-mode', value: 'display', text: formatMessage(messages.display_short), meta: formatMessage(messages.display_long) },
     ];
   }
 

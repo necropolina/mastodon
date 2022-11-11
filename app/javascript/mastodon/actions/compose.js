@@ -714,11 +714,11 @@ export function insertEmojiCompose(position, emoji, needsSpace) {
   };
 };
 
-export function startLaTeXCompose(position, delimiter) {
+export function startLaTeXCompose(position, latex_style) {
   return {
     type: COMPOSE_START_LATEX,
     position,
-    delimiter,
+    latex_style,
   };
 };
 

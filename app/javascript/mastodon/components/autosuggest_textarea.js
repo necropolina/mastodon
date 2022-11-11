@@ -8,20 +8,19 @@ import PropTypes from 'prop-types';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
-import tex_to_unicode from '../features/compose/util/autolatex/autolatex.js';
 
 const textAtCursorMatchesToken = (str, caretPosition) => {
   let word;
   let left;
   let right;
 
-  left = str.slice(0, caretPosition).search(/\\[\(\[](?:(?!\\[\)\]]).)*$/);
+  left = str.slice(0, caretPosition).search(/\\[\(\[](?:(?!\\[\)\]]).)*(?:\\[\)\]])?$/);
   if (left >= 0) {
     right = str.slice(caretPosition).search(/\\[\)\]]/);
     if (right < 0) {
       word = str.slice(left);
     } else {
-      word = str.slice(left, right + caretPosition);
+      word = str.slice(left, right + caretPosition + 2);
     }
     if (word.trim().length >= 3) {
       return [left + 1, word];

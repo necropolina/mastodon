@@ -28,6 +28,8 @@ export default class AutosuggestLatex extends React.PureComponent {
     return (
       <div className='autosuggest-latex' ref={this.setRef}>
         \({latex.expression}\)
+        <br/>
+        <small>Convert to unicode</small>
       </div>
     );
   }

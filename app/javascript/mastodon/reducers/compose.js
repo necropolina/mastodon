@@ -213,13 +213,19 @@ const insertEmoji = (state, position, emojiData, needsSpace) => {
   });
 };
 
-const startLaTeX = (state, position, delimiter) => {
+const startLaTeX = (state, position, latex_style) => {
   const oldText = state.get('text');
 
+  const latex_styles = {
+    'inline':  {open: '\\(', close: '\\)'},
+    'display': {open: '\\[', close: '\\]'}
+  }
+  const { open, close } = latex_styles[latex_style];
+
   return state.merge({
-    text: `${oldText.slice(0, position)}${delimiter} ${oldText.slice(position)}`,
+    text: `${oldText.slice(0, position)}${open}  ${close} ${oldText.slice(position)}`,
     focusDate: new Date(),
-    caretPosition: position + delimiter.length + 1,
+    caretPosition: position + open.length + 1,
     idempotencyKey: uuid(),
   });
 };
@@ -437,7 +443,7 @@ export default function compose(state = initialState, action) {
   case COMPOSE_EMOJI_INSERT:
     return insertEmoji(state, action.position, action.emoji, action.needsSpace);
   case COMPOSE_START_LATEX:
-    return startLaTeX(state, action.position, action.delimiter);
+    return startLaTeX(state, action.position, action.latex_style);
   case COMPOSE_UPLOAD_CHANGE_SUCCESS:
     return state
       .set('is_changing_upload', false)
