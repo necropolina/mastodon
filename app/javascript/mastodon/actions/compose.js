@@ -504,7 +504,7 @@ const fetchComposeSuggestionsTags = throttle((dispatch, getState, token) => {
 const fetchComposeSuggestionsLatex = (dispatch, getState, token) => {
   const start_delimiter = token.slice(0,2);
   const end_delimiter = {'\\(': '\\)', '\\[': '\\]'}[start_delimiter];
-  let expression = token.slice(2).replace(/\\\)?$/,'');
+  let expression = token.slice(2).replace(/\\[\)\]]?$/,'');
   let brace = 0;
   for(let i=0;i<expression.length;i++) {
     switch(expression[i]) {
