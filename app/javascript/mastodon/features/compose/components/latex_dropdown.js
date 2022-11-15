@@ -228,7 +228,6 @@ class LaTeXDropdown extends React.PureComponent {
   }
 
   handleChange = value => {
-    console.log('handleChange',value);
     this.props.onChange(value);
   }
 

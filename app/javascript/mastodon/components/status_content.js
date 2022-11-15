@@ -146,6 +146,12 @@ class StatusContent extends React.PureComponent {
   }
 
   _renderMathJax() {
+    const {status} = this.props;
+    const contentHtml = status.get('contentHtml');
+    if(this.last_contentHtml == contentHtml) {
+      return;
+    }
+    this.last_contentHtml = contentHtml;
     try {
       MathJax.typeset([this.node]);
     } catch(e) {
@@ -160,6 +166,7 @@ class StatusContent extends React.PureComponent {
 
   componentDidUpdate () {
     this._updateStatusLinks();
+    this._renderMathJax();
   }
 
   onMentionClick = (mention, e) => {
