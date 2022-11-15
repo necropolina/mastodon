@@ -145,8 +145,17 @@ class StatusContent extends React.PureComponent {
     }
   }
 
+  _renderMathJax() {
+    try {
+      MathJax.typeset([this.node]);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
   componentDidMount () {
     this._updateStatusLinks();
+    this._renderMathJax();
   }
 
   componentDidUpdate () {

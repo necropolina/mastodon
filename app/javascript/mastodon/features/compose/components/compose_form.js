@@ -12,6 +12,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import SpoilerButtonContainer from '../containers/spoiler_button_container';
 import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
+import LaTeXDropdown from '../containers/latex_dropdown_container';
 import PollFormContainer from '../containers/poll_form_container';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
@@ -61,6 +62,7 @@ class ComposeForm extends ImmutablePureComponent {
     onChangeSpoilerText: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     onPickEmoji: PropTypes.func.isRequired,
+    onLaTeXStart: PropTypes.func.isRequired,
     showSearch: PropTypes.bool,
     anyMedia: PropTypes.bool,
     isInReply: PropTypes.bool,
@@ -206,6 +208,12 @@ class ComposeForm extends ImmutablePureComponent {
     this.props.onPickEmoji(position, data, needsSpace);
   }
 
+  handleLaTeXStart = (data) => {
+      const position = this.autosuggestTextarea.textarea.selectionStart;
+
+      this.props.onLaTeXStart(position, data);
+  }
+
   render () {
     const { intl, onPaste, showSearch } = this.props;
     const disabled = this.props.isSubmitting;
@@ -260,6 +268,7 @@ class ComposeForm extends ImmutablePureComponent {
           autoFocus={!showSearch && !isMobile(window.innerWidth)}
         >
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
+          <LaTeXDropdown onPickLaTeX={this.handleLaTeXStart} />
 
           <div className='compose-form__modifiers'>
             <UploadFormContainer />
