@@ -21,7 +21,9 @@
 #  account_id                   :bigint(8)        not null
 #  application_id               :bigint(8)
 #  in_reply_to_account_id       :bigint(8)
+#  local_only                   :boolean
 #  poll_id                      :bigint(8)
+#  content_type                 :string
 #  deleted_at                   :datetime
 #  edited_at                    :datetime
 #  trendable                    :boolean
@@ -66,6 +68,7 @@ class Status < ApplicationRecord
   has_many :reblogged_by_accounts, through: :reblogs, class_name: 'Account', source: :account
   has_many :replies, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :thread
   has_many :mentions, dependent: :destroy, inverse_of: :status
+  has_many :mentioned_accounts, through: :mentions, source: :account, class_name: 'Account'
   has_many :active_mentions, -> { active }, class_name: 'Mention', inverse_of: :status
   has_many :media_attachments, dependent: :nullify
 
@@ -83,6 +86,7 @@ class Status < ApplicationRecord
   validates_with DisallowedHashtagsValidator
   validates :reblog, uniqueness: { scope: :account }, if: :reblog?
   validates :visibility, exclusion: { in: %w(direct limited) }, if: :reblog?
+  validates :content_type, inclusion: { in: %w(text/plain text/markdown text/html) }, allow_nil: true
 
   accepts_nested_attributes_for :poll
 
@@ -108,6 +112,8 @@ class Status < ApplicationRecord
   scope :tagged_with_none, ->(tag_ids) {
     where('NOT EXISTS (SELECT * FROM statuses_tags forbidden WHERE forbidden.status_id = statuses.id AND forbidden.tag_id IN (?))', tag_ids)
   }
+
+  scope :not_local_only, -> { where(local_only: [false, nil]) }
 
   cache_associated :application,
                    :media_attachments,
@@ -141,11 +147,11 @@ class Status < ApplicationRecord
     ids << account_id if local?
 
     if preloaded.nil?
-      ids += mentions.where(account: Account.local, silent: false).pluck(:account_id)
-      ids += favourites.where(account: Account.local).pluck(:account_id)
-      ids += reblogs.where(account: Account.local).pluck(:account_id)
-      ids += bookmarks.where(account: Account.local).pluck(:account_id)
-      ids += poll.votes.where(account: Account.local).pluck(:account_id) if poll.present?
+      ids += mentions.joins(:account).merge(Account.local).active.pluck(:account_id)
+      ids += favourites.joins(:account).merge(Account.local).pluck(:account_id)
+      ids += reblogs.joins(:account).merge(Account.local).pluck(:account_id)
+      ids += bookmarks.joins(:account).merge(Account.local).pluck(:account_id)
+      ids += poll.votes.joins(:account).merge(Account.local).pluck(:account_id) if poll.present?
     else
       ids += preloaded.mentions[id] || []
       ids += preloaded.favourites[id] || []
@@ -310,6 +316,8 @@ class Status < ApplicationRecord
 
   around_create Mastodon::Snowflake::Callbacks
 
+  before_create :set_locality
+
   before_validation :prepare_contents, if: :local?
   before_validation :set_reblog
   before_validation :set_visibility
@@ -321,6 +329,47 @@ class Status < ApplicationRecord
   class << self
     def selectable_visibilities
       visibilities.keys - %w(direct limited)
+    end
+
+    def as_direct_timeline(account, limit = 20, max_id = nil, since_id = nil, cache_ids = false)
+      # direct timeline is mix of direct message from_me and to_me.
+      # 2 queries are executed with pagination.
+      # constant expression using arel_table is required for partial index
+
+      # _from_me part does not require any timeline filters
+      query_from_me = where(account_id: account.id)
+                      .where(Status.arel_table[:visibility].eq(3))
+                      .limit(limit)
+                      .order('statuses.id DESC')
+
+      # _to_me part requires mute and block filter.
+      # FIXME: may we check mutes.hide_notifications?
+      query_to_me = Status
+                    .joins(:mentions)
+                    .merge(Mention.where(account_id: account.id))
+                    .where(Status.arel_table[:visibility].eq(3))
+                    .limit(limit)
+                    .order('mentions.status_id DESC')
+                    .not_excluded_by_account(account)
+
+      if max_id.present?
+        query_from_me = query_from_me.where('statuses.id < ?', max_id)
+        query_to_me = query_to_me.where('mentions.status_id < ?', max_id)
+      end
+
+      if since_id.present?
+        query_from_me = query_from_me.where('statuses.id > ?', since_id)
+        query_to_me = query_to_me.where('mentions.status_id > ?', since_id)
+      end
+
+      if cache_ids
+        # returns array of cache_ids object that have id and updated_at
+        (query_from_me.cache_ids.to_a + query_to_me.cache_ids.to_a).uniq(&:id).sort_by(&:id).reverse.take(limit)
+      else
+        # returns ActiveRecord.Relation
+        items = (query_from_me.select(:id).to_a + query_to_me.select(:id).to_a).uniq(&:id).sort_by(&:id).reverse.take(limit)
+        Status.where(id: items.map(&:id))
+      end
     end
 
     def favourites_map(status_ids, account_id)
@@ -377,6 +426,15 @@ class Status < ApplicationRecord
         status&.distributable? ? status : nil
       end
     end
+  end
+
+  def marked_local_only?
+    # match both with and without U+FE0F (the emoji variation selector)
+    /#{local_only_emoji}\ufe0f?\z/.match?(content)
+  end
+
+  def local_only_emoji
+    '👁'
   end
 
   def status_stat
@@ -477,6 +535,12 @@ class Status < ApplicationRecord
     self.sensitive  = false if sensitive.nil?
   end
 
+  def set_locality
+    if account.domain.nil? && !attribute_changed?(:local_only)
+      self.local_only = marked_local_only?
+    end
+  end
+
   def set_conversation
     self.thread = thread.reblog if thread&.reblog?
 
@@ -527,8 +591,8 @@ class Status < ApplicationRecord
   def unlink_from_conversations
     return unless direct_visibility?
 
-    mentioned_accounts = (association(:mentions).loaded? ? mentions : mentions.includes(:account)).map(&:account)
-    inbox_owners       = mentioned_accounts.select(&:local?) + (account.local? ? [account] : [])
+    inbox_owners = mentioned_accounts.local
+    inbox_owners += [account] if account.local?
 
     inbox_owners.each do |inbox_owner|
       AccountConversation.remove_status(inbox_owner, self)

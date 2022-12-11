@@ -5,7 +5,12 @@ class Oauth::AuthorizationsController < Doorkeeper::AuthorizationsController
 
   before_action :store_current_location
   before_action :authenticate_resource_owner!
+  before_action :set_pack
   before_action :set_cache_headers
+
+  content_security_policy do |p|
+    p.form_action(false)
+  end
 
   include Localized
 
@@ -13,6 +18,10 @@ class Oauth::AuthorizationsController < Doorkeeper::AuthorizationsController
 
   def store_current_location
     store_location_for(:user, request.url)
+  end
+
+  def set_pack
+    use_pack 'auth'
   end
 
   def render_success
@@ -30,6 +39,6 @@ class Oauth::AuthorizationsController < Doorkeeper::AuthorizationsController
   end
 
   def set_cache_headers
-    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
+    response.headers['Cache-Control'] = 'private, no-store'
   end
 end
