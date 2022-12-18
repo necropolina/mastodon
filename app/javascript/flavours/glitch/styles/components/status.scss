@@ -393,22 +393,22 @@
     }
 
     .status__content {
-      height: 20px;
+      max-height: 6em;
       overflow: hidden;
       text-overflow: ellipsis;
-      padding-top: 0;
+      //padding-top: 0;
 
       &:after {
         content: "";
         position: absolute;
-        top: 0;
+        height: 40%;
         bottom: 0;
         left: 0;
         right: 0;
         background: linear-gradient(rgba($ui-base-color, 0), rgba($ui-base-color, 1));
         pointer-events: none;
       }
-      
+
       a:hover {
         text-decoration: none;
       }
