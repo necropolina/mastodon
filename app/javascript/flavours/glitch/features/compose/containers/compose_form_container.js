@@ -9,6 +9,7 @@ import {
   clearComposeSuggestions,
   fetchComposeSuggestions,
   insertEmojiCompose,
+  startLaTeXCompose,
   selectComposeSuggestion,
   submitCompose,
   uploadCompose,
@@ -106,6 +107,10 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
 
   onPickEmoji(position, emoji) {
     dispatch(insertEmojiCompose(position, emoji));
+  },
+
+  onLaTeXStart (position, data) {
+    dispatch(startLaTeXCompose(position, data));
   },
 
   onChangeSpoilerness() {

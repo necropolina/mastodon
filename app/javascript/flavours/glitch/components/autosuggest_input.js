@@ -1,5 +1,6 @@
 import React from 'react';
 import AutosuggestAccountContainer from 'flavours/glitch/features/compose/containers/autosuggest_account_container';
+import AutosuggestLatex from './autosuggest_latex';
 import AutosuggestEmoji from './autosuggest_emoji';
 import AutosuggestHashtag from './autosuggest_hashtag';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -9,9 +10,24 @@ import classNames from 'classnames';
 
 const textAtCursorMatchesToken = (str, caretPosition, searchTokens) => {
   let word;
+  let left;
+  let right;
 
-  let left  = str.slice(0, caretPosition).search(/[^\s\u200B]+$/);
-  let right = str.slice(caretPosition).search(/[\s\u200B]/);
+  left = str.slice(0, caretPosition).search(/\\\((?:(?!\\\)).)*$/);
+  if (left >= 0) {
+    right = str.slice(caretPosition).search(/\\\)/);
+    if (right < 0) {
+      word = str.slice(left);
+    } else {
+      word = str.slice(left, right + caretPosition);
+    }
+    if (word.trim().length >= 3) {
+      return [left + 1, word];
+    }
+  }
+
+  left  = str.slice(0, caretPosition).search(/\S+$/);
+  right = str.slice(caretPosition).search(/\s/);
 
   if (right < 0) {
     word = str.slice(left);
@@ -175,6 +191,9 @@ export default class AutosuggestInput extends ImmutablePureComponent {
     } else if (suggestion.type === 'account') {
       inner = <AutosuggestAccountContainer id={suggestion.id} />;
       key   = suggestion.id;
+    } else if (suggestion.type === 'latex') {
+      inner = <AutosuggestLatex latex={suggestion}/>;
+      key = 'latex' + suggestion.expression;
     }
 
     return (
