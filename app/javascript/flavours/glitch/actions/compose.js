@@ -11,6 +11,7 @@ import { useEmoji } from './emojis';
 import { importFetchedAccounts, importFetchedStatus } from './importer';
 import { openModal } from './modal';
 import { updateTimeline } from './timelines';
+import { tex_to_unicode } from '../features/compose/util/autolatex/autolatex.js';
 
 /** @type {AbortController | undefined} */
 let fetchComposeSuggestionsAccountsController;
@@ -61,6 +62,7 @@ export const COMPOSE_CONTENT_TYPE_CHANGE = 'COMPOSE_CONTENT_TYPE_CHANGE';
 export const COMPOSE_LANGUAGE_CHANGE     = 'COMPOSE_LANGUAGE_CHANGE';
 
 export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
+export const COMPOSE_START_LATEX = 'COMPOSE_START_LATEX';
 
 export const COMPOSE_UPLOAD_CHANGE_REQUEST     = 'COMPOSE_UPLOAD_UPDATE_REQUEST';
 export const COMPOSE_UPLOAD_CHANGE_SUCCESS     = 'COMPOSE_UPLOAD_UPDATE_SUCCESS';
@@ -521,6 +523,36 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, token) => 
   });
 }, 200, { leading: true, trailing: true });
 
+const fetchComposeSuggestionsLatex = (dispatch, getState, token) => {
+  const start_delimiter = token.slice(0,2);
+  const end_delimiter = {'\\(': '\\)', '\\[': '\\]'}[start_delimiter];
+  let expression = token.slice(2).replace(/\\[\)\]]?$/,'');
+  let brace = 0;
+  for(let i=0;i<expression.length;i++) {
+    switch(expression[i]) {
+      case '\\':
+        i += 1;
+        break;
+      case '{':
+        brace += 1;
+        break;
+      case '}':
+        brace -= 1;
+        break;
+    }
+  }
+  for(;brace<0;brace++) {
+    expression = '{'+expression;
+  }
+  for(;brace>0;brace--) {
+    expression += '}';
+  }
+  const results = [
+    { start_delimiter, end_delimiter, expression }
+  ];
+  dispatch(readyComposeSuggestionsLatex(token, results));
+};
+
 const fetchComposeSuggestionsEmojis = (dispatch, getState, token) => {
   const results = emojiSearch(token.replace(':', ''), { maxResults: 5 });
   dispatch(readyComposeSuggestionsEmojis(token, results));
@@ -564,10 +596,21 @@ export function fetchComposeSuggestions(token) {
     case '#':
       fetchComposeSuggestionsTags(dispatch, getState, token);
       break;
+    case '\\':
+      fetchComposeSuggestionsLatex(dispatch, getState, token);
+      break;
     default:
       fetchComposeSuggestionsAccounts(dispatch, getState, token);
       break;
     }
+  };
+};
+
+export function readyComposeSuggestionsLatex(token, latex) {
+  return {
+    type: COMPOSE_SUGGESTIONS_READY,
+    token,
+    latex,
   };
 };
 
@@ -603,6 +646,10 @@ export function selectComposeSuggestion(position, token, suggestion, path) {
       completion = `#${suggestion.name}`;
     } else if (suggestion.type === 'account') {
       completion = '@' + getState().getIn(['accounts', suggestion.id, 'acct']);
+    } else if (suggestion.type === 'latex') {
+      const unicode = tex_to_unicode(suggestion.expression);
+      completion = unicode || `${suggestion.start_delimiter}${suggestion.expression}${suggestion.end_delimiter}`;
+      position -= 1;
     }
 
     // We don't want to replace hashtags that vary only in case due to accessibility, but we need to fire off an event so that
@@ -732,6 +779,14 @@ export function insertEmojiCompose(position, emoji) {
     type: COMPOSE_EMOJI_INSERT,
     position,
     emoji,
+  };
+};
+
+export function startLaTeXCompose(position, latex_style) {
+  return {
+    type: COMPOSE_START_LATEX,
+    position,
+    latex_style,
   };
 };
 

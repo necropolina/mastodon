@@ -6,6 +6,7 @@ import AutosuggestTextarea from '../../../components/autosuggest_textarea';
 import AutosuggestInput from '../../../components/autosuggest_input';
 import { defineMessages, injectIntl } from 'react-intl';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
+import LaTeXDropdown from '../containers/latex_dropdown_container';
 import PollFormContainer from '../containers/poll_form_container';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
@@ -55,13 +56,12 @@ class ComposeForm extends ImmutablePureComponent {
     onFetchSuggestions: PropTypes.func,
     onSuggestionSelected: PropTypes.func,
     onChangeSpoilerText: PropTypes.func,
-    onPaste: PropTypes.func,
     onPickEmoji: PropTypes.func,
+    onLaTeXStart: PropTypes.func.isRequired,
     showSearch: PropTypes.bool,
     anyMedia: PropTypes.bool,
     isInReply: PropTypes.bool,
     singleColumn: PropTypes.bool,
-
     advancedOptions: ImmutablePropTypes.map,
     layout: PropTypes.string,
     media: ImmutablePropTypes.list,
@@ -88,7 +88,7 @@ class ComposeForm extends ImmutablePureComponent {
     return [
       this.props.spoiler? this.props.spoilerText: '',
       countableText(this.props.text),
-      this.props.advancedOptions && this.props.advancedOptions.get('do_not_federate') ? ' 👁️' : ''
+      this.props.advancedOptions && this.props.advancedOptions.get('do_not_federate') ? ' 👁️' : '',
     ].join('');
   }
 
@@ -151,6 +151,12 @@ class ComposeForm extends ImmutablePureComponent {
     }
   }
 
+  handleLaTeXStart = (data) => {
+    const position = this.textarea.selectionStart;
+
+    this.props.onLaTeXStart(position, data);
+  }
+
   //  Handles the secondary submit button.
   handleSecondarySubmit = () => {
     const {
@@ -173,7 +179,7 @@ class ComposeForm extends ImmutablePureComponent {
       this.handleSubmit();
     }
 
-    if (e.keyCode == 13 && e.altKey) {
+    if (e.keyCode === 13 && e.altKey) {
       this.handleSecondarySubmit();
     }
   }
@@ -345,6 +351,7 @@ class ComposeForm extends ImmutablePureComponent {
           autoFocus={!showSearch && !isMobile(window.innerWidth, layout)}
         >
           <EmojiPickerDropdown onPickEmoji={handleEmojiPick} />
+          <LaTeXDropdown onPickLaTeX={this.handleLaTeXStart} />
           <TextareaIcons advancedOptions={advancedOptions} />
           <div className='compose-form__modifiers'>
             <UploadFormContainer />
