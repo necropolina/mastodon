@@ -43,7 +43,7 @@ defaults: &defaults
   trending_status_cw: true
   crop_images: true
   notification_emails:
-    follow: true
+    follow: false
     reblog: false
     favourite: false
     mention: true
