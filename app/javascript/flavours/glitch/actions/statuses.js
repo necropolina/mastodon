@@ -3,6 +3,7 @@ import api from '../api';
 import { deleteFromTimelines } from './timelines';
 import { importFetchedStatus, importFetchedStatuses } from './importer';
 import { ensureComposeIsVisible, setComposeToStatus } from './compose';
+import { submitSearch } from './search';
 
 export const STATUS_FETCH_REQUEST = 'STATUS_FETCH_REQUEST';
 export const STATUS_FETCH_SUCCESS = 'STATUS_FETCH_SUCCESS';
@@ -15,6 +16,10 @@ export const STATUS_DELETE_FAIL    = 'STATUS_DELETE_FAIL';
 export const CONTEXT_FETCH_REQUEST = 'CONTEXT_FETCH_REQUEST';
 export const CONTEXT_FETCH_SUCCESS = 'CONTEXT_FETCH_SUCCESS';
 export const CONTEXT_FETCH_FAIL    = 'CONTEXT_FETCH_FAIL';
+
+export const EXTERNAL_CONTEXT_FETCH_REQUEST = 'EXTERNAL_CONTEXT_FETCH_REQUEST';
+export const EXTERNAL_CONTEXT_FETCH_SUCCESS = 'EXTERNAL_CONTEXT_FETCH_SUCCESS';
+export const EXTERNAL_CONTEXT_FETCH_FAIL    = 'EXTERNAL_CONTEXT_FETCH_FAIL';
 
 export const STATUS_MUTE_REQUEST = 'STATUS_MUTE_REQUEST';
 export const STATUS_MUTE_SUCCESS = 'STATUS_MUTE_SUCCESS';
@@ -213,6 +218,64 @@ export function fetchContextSuccess(id, ancestors, descendants) {
 export function fetchContextFail(id, error) {
   return {
     type: CONTEXT_FETCH_FAIL,
+    id,
+    error,
+    skipAlert: true,
+  };
+};
+
+
+
+export function fetchExternalContext(status_url, id){
+  // Get just the protocol and domain of the instance
+  // note that we are just assuming that the api is at <domain>/api
+  // since I don't know a better way of finding it
+  let { origin, pathname } = new URL(status_url);
+  let paths = pathname.split('/');
+  let external_id = paths[paths.length - 1];
+
+  return (dispatch, getState) => {
+    dispatch(fetchExternalContextRequest(id));
+
+    api(getState).get(`${origin}/api/v1/statuses/${external_id}/context`).then(response => {
+      response.data.descendants.forEach((status) => {
+        dispatch(submitSearch(status.url));
+      });
+      // dispatch(importFetchedStatuses(response.data.ancestors.concat(response.data.descendants)));
+      dispatch(fetchExternalContextSuccess(id, response.data.ancestors, response.data.descendants));
+
+    }).catch(error => {
+      if (error.response && error.response.status === 404) {
+        // dispatch(deleteFromTimelines(id));
+      }
+
+      dispatch(fetchContextFail(id, error));
+    });
+  };
+}
+
+
+export function fetchExternalContextRequest(id) {
+  return {
+    type: EXTERNAL_CONTEXT_FETCH_REQUEST,
+    id,
+  };
+};
+
+export function fetchExternalContextSuccess(id, ancestors, descendants) {
+  console.log('fetch success');
+  return {
+    type: EXTERNAL_CONTEXT_FETCH_SUCCESS,
+    id,
+    ancestors,
+    descendants,
+    statuses: ancestors.concat(descendants),
+  };
+};
+
+export function fetchExternalContextFail(id, error) {
+  return {
+    type: EXTERNAL_CONTEXT_FETCH_FAIL,
     id,
     error,
     skipAlert: true,

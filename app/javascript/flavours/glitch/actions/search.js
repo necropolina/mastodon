@@ -27,9 +27,9 @@ export function clearSearch() {
   };
 };
 
-export function submitSearch() {
+export function submitSearch(search) {
   return (dispatch, getState) => {
-    const value    = getState().getIn(['search', 'value']);
+    const value    = search ? search : getState().getIn(['search', 'value']);
     const signedIn = !!getState().getIn(['meta', 'me']);
 
     if (value.length === 0) {

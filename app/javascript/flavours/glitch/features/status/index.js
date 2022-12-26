@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 import { fetchStatus } from 'flavours/glitch/actions/statuses';
 import MissingIndicator from 'flavours/glitch/components/missing_indicator';
 import LoadingIndicator from 'flavours/glitch/components/loading_indicator';
+import Button from 'flavours/glitch/components/button';
 import DetailedStatus from './components/detailed_status';
 import ActionBar from './components/action_bar';
 import Column from 'flavours/glitch/features/ui/components/column';
@@ -36,6 +37,7 @@ import {
   revealStatus,
   translateStatus,
   undoStatusTranslation,
+  fetchExternalContext,
 } from 'flavours/glitch/actions/statuses';
 import { initMuteModal } from 'flavours/glitch/actions/mutes';
 import { initBlockModal } from 'flavours/glitch/actions/blocks';
@@ -463,6 +465,12 @@ class Status extends ImmutablePureComponent {
     this.props.dispatch(openModal('EMBED', { url: status.get('url') }));
   }
 
+  handleFetchContext = () => {
+    const { status, statusId } = this.props;
+    this.props.dispatch(fetchExternalContext(status.get('url'), statusId));
+    this.forceUpdate();
+  }
+
   handleHotkeyToggleSensitive = () => {
     this.handleToggleMediaVisibility();
   }
@@ -707,6 +715,24 @@ class Status extends ImmutablePureComponent {
             </HotKeys>
 
             {descendants}
+
+            {isLocal
+              ? null
+              : <div style={{
+                display: 'block',
+                margin: '1em 1em',
+                }}
+              >
+                <Button
+                className={'primary'}
+                text={'Get More Replies'}
+                title={'Get More Replies'}
+                onClick={this.handleFetchContext}
+                block
+                />
+              </div>
+            }
+
           </div>
         </ScrollContainer>
 
