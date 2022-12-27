@@ -3,6 +3,7 @@ image:
 
 tasks:
   - name: API server
+    init: gem install bundler -v 2.2.33 && vagrant plugin install vagrant-hostsupdater
     command: vagrant up
 
 

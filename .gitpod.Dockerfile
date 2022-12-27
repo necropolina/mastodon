@@ -9,5 +9,3 @@ RUN _ruby_version=ruby-3.0.4 \
     && printf "{ rvm use \$(rvm current); } >/dev/null 2>&1\n" >> "$HOME/.bashrc.d/70-ruby"
 
 RUN sudo install-packages vagrant
-
-RUN vagrant plugin install vagrant-hostsupdater
