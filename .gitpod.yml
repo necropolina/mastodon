@@ -1,12 +1,5 @@
-github:
-  prebuilds:
-    master: true
-    branches: true
-    pullRequests: true
-    pullRequestsFromForks: true
-    addComment: true
-    addBadge: false
-    addLabel: Gitpod Workspace Prebuild Completed
+image:
+  file: .gitpod.Dockerfile
 
 tasks:
   - name: API server
