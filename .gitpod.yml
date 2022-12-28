@@ -3,17 +3,13 @@ tasks:
   - name: streaming
     before: gp sync-await before
     init: gp sync-await init
-    command: |
-      cd mastodon
-      NODE_ENV=development BIND=0.0.0.0 PORT=8008 STREAMING_CLUSTER_NUM=1 node ./streaming
+    command: NODE_ENV=development BIND=0.0.0.0 PORT=8008 STREAMING_CLUSTER_NUM=1 node ./streaming
   - name: sidekiq
     before: |
       gp sync-await before
       redis-server --daemonize yes
     init: gp sync-await init
-    command: |
-      cd mastodon
-      RAILS_ENV=development DB_POOL=5 bundle exec sidekiq -c 5
+    command: RAILS_ENV=development DB_POOL=5 bundle exec sidekiq -c 5
   - name: web
     before: |
       mkdir -p /workspace/.rvm
@@ -22,9 +18,7 @@ tasks:
       if [ -z "$GITTAG" ]; then export GITTAG=main; fi
       gp sync-done before
     init: |
-      git clone -b "$GITTAG" https://github.com/mastodon/mastodon.git
-      echo "$RUBY_VERSION" | cut -d- -f2 > mastodon/.ruby-version
-      cd mastodon
+      echo "$RUBY_VERSION" | cut -d- -f2 > .ruby-version
       git checkout "$GITTAG"
       bundle config --local build.idn-ruby --with-idn-dir="$(brew --prefix libidn)"
       bundle install
@@ -40,9 +34,7 @@ tasks:
       echo "E-mail address: admin@$(gp url 8080 | cut -d/ -f3)"
       cd ..
       gp sync-done init
-    command: |
-      cd mastodon
-      RAILS_ENV=development BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
+    command: RAILS_ENV=development BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
 ports:
   - port: 8080
     visibility: public
