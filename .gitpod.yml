@@ -36,17 +36,17 @@ tasks:
       RAILS_ENV=development bin/tootctl accounts create dev --email "dev@local.dev" --confirmed --role Owner
       echo "E-mail address: dev@local.dev"
 ports:
-  - name: Web UI
+  - description: Web UI
     port: 8080
     visibility: public
     onOpen: open-browser
-  - name: Streaming API
+  - description: Streaming API
     port: 8008
     onOpen: ignore
-  - name: postgres
+  - description: postgres
     port: 5432
     onOpen: ignore
-  - name: redis
+  - description: redis
     port: 6379
     onOpen: ignore
 vscode:
