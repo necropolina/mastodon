@@ -33,7 +33,6 @@ tasks:
       RAILS_ENV=development rails assets:precompile
       RAILS_ENV=development bin/tootctl accounts create a --email "admin@$(gp url 8080 | cut -d/ -f3)" --confirmed --role Owner
       echo "E-mail address: admin@$(gp url 8080 | cut -d/ -f3)"
-      cd ..
       gp sync-done init
     command: RAILS_ENV=development BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
 ports:
