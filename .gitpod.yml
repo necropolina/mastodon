@@ -23,7 +23,7 @@ tasks:
       bundle install
       yarn install
       echo "LOCAL_DOMAIN=$(gp url 8080 | cut -d/ -f3)" > .env
-      cat ../.env.example >> .env
+      cat .env.example >> .env
       echo "SECRET_KEY_BASE=$(RAILS_ENV=development bundle exec rake secret)" >> .env
       echo "OTP_SECRET=$(RAILS_ENV=development bundle exec rake secret)" >> .env
       RAILS_ENV=development bundle exec rake mastodon:webpush:generate_vapid_key >> .env
@@ -33,6 +33,7 @@ tasks:
     command: RAILS_ENV=development BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
   - name: bash
     command: |
+      sleep 5
       RAILS_ENV=development bin/tootctl accounts create dev --email "dev@local.dev" --confirmed --role Owner
       echo "E-mail address: dev@local.dev"
 ports:
