@@ -1,5 +1,4 @@
-FROM gitpod/workspace-full
-USER gitpod
+FROM gitpod/workspace-postgres
 
 RUN _ruby_version=ruby-3.0.4 \
     && printf "rvm_gems_path=/home/gitpod/.rvm\n" > ~/.rvmrc \

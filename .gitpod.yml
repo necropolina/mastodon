@@ -1,4 +1,4 @@
-image: gitpod/workspace-postgres
+image: .gitpod.Dockerfile
 tasks:
   - name: streaming
     before: gp sync-await before
