@@ -17,6 +17,7 @@ import LoadingIndicator from 'flavours/glitch/components/loading_indicator';
 import MissingIndicator from 'flavours/glitch/components/missing_indicator';
 import RadioButton from 'flavours/glitch/components/radio_button';
 import StatusListContainer from 'flavours/glitch/features/ui/containers/status_list_container';
+import Toggle from 'react-toggle';
 
 const messages = defineMessages({
   deleteMessage: { id: 'confirmations.delete_list.message', defaultMessage: 'Are you sure you want to permanently delete this list?' },
@@ -136,10 +137,16 @@ class ListTimeline extends React.PureComponent {
   }
 
   handleRepliesPolicyChange = ({ target }) => {
-    const { dispatch, list } = this.props;
+    const { dispatch } = this.props;
     const { id } = this.props.params;
-    this.props.dispatch(updateList(id, undefined, false, target.value));
-  }
+    dispatch(updateList(id, undefined, false, undefined, target.value));
+  };
+
+  onExclusiveToggle = ({ target }) => {
+    const { dispatch } = this.props;
+    const { id } = this.props.params;
+    dispatch(updateList(id, undefined, false, target.checked, undefined));
+  };
 
   render () {
     const { hasUnread, columnId, multiColumn, list, intl } = this.props;
@@ -147,6 +154,7 @@ class ListTimeline extends React.PureComponent {
     const pinned = !!columnId;
     const title  = list ? list.get('title') : id;
     const replies_policy = list ? list.get('replies_policy') : undefined;
+    const isExclusive = list ? list.get('exclusive') : undefined;
 
     if (typeof list === 'undefined') {
       return (
@@ -186,6 +194,13 @@ class ListTimeline extends React.PureComponent {
             <button className='text-btn column-header__setting-btn' tabIndex='0' onClick={this.handleDeleteClick}>
               <Icon id='trash' /> <FormattedMessage id='lists.delete' defaultMessage='Delete list' />
             </button>
+          </div>
+
+          <div className='setting-toggle'>
+            <Toggle id={`list-${id}-exclusive`} defaultChecked={isExclusive} onChange={this.onExclusiveToggle} />
+            <label htmlFor={`list-${id}-exclusive`} className='setting-toggle__label'>
+              <FormattedMessage id='lists.exclusive' defaultMessage='Hide these posts from home' />
+            </label>
           </div>
 
           { replies_policy !== undefined && (
