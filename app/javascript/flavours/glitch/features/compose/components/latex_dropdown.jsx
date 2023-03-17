@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
 import IconButton from '../../../components/icon_button';
-import Overlay from 'react-overlays/lib/Overlay';
+import Overlay from 'react-overlays/Overlay';
 import Motion from '../../ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
 import { supportsPassiveEvents } from 'detect-passive-events';
@@ -240,6 +240,14 @@ class LaTeXDropdown extends React.PureComponent {
     ];
   }
 
+  setTargetRef = c => {
+    this.target = c;
+  };
+
+  findTarget = () => {
+    return this.target;
+  };
+
   render () {
     const { value, container, disabled, intl, button } = this.props;
     const { open, placement } = this.state;
@@ -256,13 +264,19 @@ class LaTeXDropdown extends React.PureComponent {
           />}
         </div>
 
-        <Overlay show={open} placement={placement} target={this} container={container}>
-          <LaTeXDropdownMenu
-            items={this.options}
-            onClose={this.handleClose}
-            onChange={this.handleChange}
-            placement={placement}
-          />
+        <Overlay show={open} placement={placement} target={this.findTarget} container={container}>
+          {({ props, placement })=> (
+            <div {...props} style={{ ...props.style, width:299}}>
+              <div className={`dropdown-animation ${placement}`}>
+                <LaTeXDropdownMenu
+                  items={this.options}
+                  onClose={this.handleClose}
+                  onChange={this.handleChange}
+                  placement={placement}
+                />
+              </div>
+            </div>
+          )}
         </Overlay>
       </div>
     );
