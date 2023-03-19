@@ -24,6 +24,7 @@ const messages = defineMessages({
   followed:   { id: 'lists.replies_policy.followed', defaultMessage: 'Any followed user' },
   none:    { id: 'lists.replies_policy.none', defaultMessage: 'No one' },
   list:  { id: 'lists.replies_policy.list', defaultMessage: 'Members of the list' },
+  exclusive: { id: 'lists.exclusive', defaultMessage: 'Hide these posts from home' }
 });
 
 const mapStateToProps = (state, props) => ({
