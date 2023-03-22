@@ -179,6 +179,24 @@ RSpec.describe FeedManager do
         reblog = Fabricate(:status, reblog: status, account: jeff)
         expect(FeedManager.instance.filter?(:home, reblog, alice)).to be true
       end
+
+      it 'returns false for post from followee on non-exclusive list' do
+        list.exclusive = false
+        list.accounts << bob
+        alice.follow!(bob)
+        status = Fabricate(:status, text:"I post a lot", account: bob)
+        expect(FeedManager.instance.filter?(:home, status, alice)).to be false
+      end
+
+      it 'returns false for reblog from followee on non-exclusive list' do
+        list.exclusive = false
+        list.accounts << bob
+        alice.follow!(bob)
+        alice.follow!(jeff)
+        status = Fabricate(:status, text:"I post a lot", account: bob)
+        reblog = Fabricate(:status, reblog: status, account: jeff)
+        expect(FeedManager.instance.filter?(:home, reblog, alice)).to be false
+      end
     end
 
     context 'with mentions feed' do
