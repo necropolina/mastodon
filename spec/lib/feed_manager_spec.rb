@@ -26,7 +26,7 @@ RSpec.describe FeedManager do
     let(:alice) { Fabricate(:account, username: 'alice') }
     let(:bob)   { Fabricate(:account, username: 'bob', domain: 'example.com') }
     let(:jeff)  { Fabricate(:account, username: 'jeff') }
-    let(:list)  { Fabricate(:list, account: owner) }
+    let(:list)  { Fabricate(:list, account: alice) }
 
     context 'with home feed' do
       it 'returns false for followee\'s status' do
