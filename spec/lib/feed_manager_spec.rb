@@ -162,21 +162,23 @@ RSpec.describe FeedManager do
         expect(FeedManager.instance.filter?(:home, status, alice)).to be false
       end
 
-      it 'returns true for post from followee on exclusive list' do
-        list.exclusive = true
-        alice.follow!(bob)
-        list.accounts << bob
-        status = Fabricate(:status, text: 'I post a lot', account: bob)
-        expect(FeedManager.instance.filter?(:home, status, alice)).to be true
-      end
+      context 'when list is exclusive' do
+        before do
+          list.exclusive = true
+          alice.follow!(bob)
+          list.accounts << bob
+        end
 
-      it 'returns true for reblog from followee on exclusive list' do
-        list.exclusive = true
-        alice.follow!(jeff)
-        list.accounts << jeff
-        status = Fabricate(:status, text: 'I post a lot', account: bob)
-        reblog = Fabricate(:status, reblog: status, account: jeff)
-        expect(FeedManager.instance.filter?(:home, reblog, alice)).to be true
+        it 'returns true for post from followee on exclusive list' do
+          status = Fabricate(:status, text: 'I post a lot', account: bob)
+          expect(FeedManager.instance.filter?(:home, status, alice)).to be true
+        end
+
+        it 'returns true for reblog from followee on exclusive list' do
+          status = Fabricate(:status, text: 'I post a lot', account: jeff)
+          reblog = Fabricate(:status, reblog: status, account: bob)
+          expect(FeedManager.instance.filter?(:home, reblog, alice)).to be true
+        end
       end
 
       it 'returns false for post from followee on non-exclusive list' do
