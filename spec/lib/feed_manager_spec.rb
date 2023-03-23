@@ -177,6 +177,7 @@ RSpec.describe FeedManager do
         status = Fabricate(:status, text: 'I post a lot', account: bob)
         reblog = Fabricate(:status, reblog: status, account: jeff)
 
+        expect(FeedManager.instance.push_to_home(alice, reblog)).to be false
         expect(list.exclusive).to be true
         expect(FeedManager.instance.filter?(:home, reblog, alice)).to be true
       end
@@ -186,7 +187,7 @@ RSpec.describe FeedManager do
         list.accounts << bob
         status = Fabricate(:status, text: 'I post a lot', account: bob)
 
-        expect(list.exclusive).to be false
+        expect(FeedManager.instance.push_to_home(alice, reblog)).to be true
         expect(FeedManager.instance.filter?(:home, status, alice)).to be false
       end
 
