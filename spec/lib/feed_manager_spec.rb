@@ -163,35 +163,37 @@ RSpec.describe FeedManager do
       end
 
       it 'returns true for post from followee on exclusive list' do
+        list = Fabricate(:list, account: alice)
         list.exclusive = true
         alice.follow!(bob)
         list.accounts << bob
-        status = Fabricate(:status, text:"I post a lot", account: bob)
+        status = Fabricate(:status, text: 'I post a lot', account: bob)
         expect(FeedManager.instance.filter?(:home, status, alice)).to be true
       end
 
       it 'returns true for reblog from followee on exclusive list' do
+        list = Fabricate(:list, account: alice)
         list.exclusive = true
         alice.follow!(jeff)
         list.accounts << jeff
-        status = Fabricate(:status, text:"I post a lot", account: bob)
+        status = Fabricate(:status, text: 'I post a lot', account: bob)
         reblog = Fabricate(:status, reblog: status, account: jeff)
         expect(FeedManager.instance.filter?(:home, reblog, alice)).to be true
       end
 
       it 'returns false for post from followee on non-exclusive list' do
-        list.exclusive = false
+        list = Fabricate(:list, account: alice)
         alice.follow!(bob)
         list.accounts << bob
-        status = Fabricate(:status, text:"I post a lot", account: bob)
+        status = Fabricate(:status, text: 'I post a lot', account: bob)
         expect(FeedManager.instance.filter?(:home, status, alice)).to be false
       end
 
       it 'returns false for reblog from followee on non-exclusive list' do
-        list.exclusive = false
+        list = Fabricate(:list, account: alice)
         alice.follow!(jeff)
         list.accounts << jeff
-        status = Fabricate(:status, text:"I post a lot", account: bob)
+        status = Fabricate(:status, text: 'I post a lot', account: bob)
         reblog = Fabricate(:status, reblog: status, account: jeff)
         expect(FeedManager.instance.filter?(:home, reblog, alice)).to be false
       end
