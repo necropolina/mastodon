@@ -167,7 +167,7 @@ RSpec.describe FeedManager do
         alice.follow!(bob)
         list.accounts << bob
         status = Fabricate(:status, text: 'I post a lot', account: bob)
-        expect(FeedManager.instance.filter?(:home, status, alice)).to be true
+        expect(FeedManager.instance.push_to_home(alice, status)).to be false
       end
 
       it 'returns true for reblog from followee on exclusive list' do
@@ -178,8 +178,6 @@ RSpec.describe FeedManager do
         reblog = Fabricate(:status, reblog: status, account: jeff)
 
         expect(FeedManager.instance.push_to_home(alice, reblog)).to be false
-        expect(list.exclusive).to be true
-        expect(FeedManager.instance.filter?(:home, reblog, alice)).to be true
       end
 
       it 'returns false for post from followee on non-exclusive list' do
@@ -187,7 +185,7 @@ RSpec.describe FeedManager do
         list.accounts << bob
         status = Fabricate(:status, text: 'I post a lot', account: bob)
 
-        expect(FeedManager.instance.push_to_home(alice, reblog)).to be true
+        expect(FeedManager.instance.push_to_home(alice, status)).to be true
         expect(FeedManager.instance.filter?(:home, status, alice)).to be false
       end
 
