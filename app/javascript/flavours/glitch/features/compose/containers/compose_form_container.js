@@ -22,12 +22,18 @@ import { changeLocalSetting } from 'flavours/glitch/actions/local_settings';
 import { privacyPreference } from 'flavours/glitch/utils/privacy_preference';
 
 const messages = defineMessages({
-  missingDescriptionMessage: {  id: 'confirmations.missing_media_description.message',
-                                defaultMessage: 'At least one media attachment is lacking a description. Consider describing all media attachments for the visually impaired before sending your toot.' },
-  missingDescriptionConfirm: {  id: 'confirmations.missing_media_description.confirm',
-                                defaultMessage: 'Send anyway' },
-  missingDescriptionEdit:    {  id: 'confirmations.missing_media_description.edit',
-                                defaultMessage: 'Edit media' },
+  missingDescriptionMessage: {
+    id: 'confirmations.missing_media_description.message',
+    defaultMessage: 'At least one media attachment is lacking a description. Consider describing all media attachments for the visually impaired before sending your toot.',
+  },
+  missingDescriptionConfirm: {
+    id: 'confirmations.missing_media_description.confirm',
+    defaultMessage: 'Send anyway',
+  },
+  missingDescriptionEdit: {
+    id: 'confirmations.missing_media_description.edit',
+    defaultMessage: 'Edit media',
+  },
 });
 
 //  State mapping.
@@ -39,12 +45,12 @@ function mapStateToProps (state) {
   const sideArmRestrictedPrivacy = replyPrivacy ? privacyPreference(replyPrivacy, sideArmBasePrivacy) : null;
   let sideArmPrivacy = null;
   switch (state.getIn(['local_settings', 'side_arm_reply_mode'])) {
-    case 'copy':
-      sideArmPrivacy = replyPrivacy;
-      break;
-    case 'restrict':
-      sideArmPrivacy = sideArmRestrictedPrivacy;
-      break;
+  case 'copy':
+    sideArmPrivacy = replyPrivacy;
+    break;
+  case 'restrict':
+    sideArmPrivacy = sideArmRestrictedPrivacy;
+    break;
   }
   sideArmPrivacy = sideArmPrivacy || sideArmBasePrivacy;
   return {
@@ -71,8 +77,9 @@ function mapStateToProps (state) {
     mediaDescriptionConfirmation: state.getIn(['local_settings', 'confirm_missing_media_description']),
     preselectOnReply: state.getIn(['local_settings', 'preselect_on_reply']),
     isInReply: state.getIn(['compose', 'in_reply_to']) !== null,
+    lang: state.getIn(['compose', 'language']),
   };
-};
+}
 
 //  Dispatch mapping.
 const mapDispatchToProps = (dispatch, { intl }) => ({
@@ -128,7 +135,7 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
       onConfirm: () => {
         if (overriddenVisibility) {
           dispatch(changeComposeVisibility(overriddenVisibility));
-        };
+        }
         dispatch(submitCompose(routerHistory));
       },
       secondary: intl.formatMessage(messages.missingDescriptionEdit),
