@@ -149,7 +149,7 @@ class LaTeXDropdownMenu extends React.PureComponent {
 
 }
 
-export default @injectIntl
+
 class LaTeXDropdown extends React.PureComponent {
 
   static propTypes = {
@@ -283,3 +283,5 @@ class LaTeXDropdown extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(LaTeXDropdown);
