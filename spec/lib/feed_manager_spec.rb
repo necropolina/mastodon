@@ -167,7 +167,6 @@ RSpec.describe FeedManager do
         alice.follow!(bob)
         list.accounts << bob
         allow(List).to receive(:where).and_return(list)
-        allow(ListAccount).to receive(:exists?).and_return(true)
         status = Fabricate(:status, text:"I post a lot", account: bob)
         expect(FeedManager.instance.filter?(:home, status, alice)).to be true
       end
