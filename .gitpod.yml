@@ -19,7 +19,7 @@ tasks:
     before: |
       mkdir -p /workspace/.rvm
       export DATABASE_URL=postgresql://gitpod@127.0.0.1:5432/postgres?sslmode=disable
-      rvm install 3.2.1
+      rvm install 3.2.2
       brew install libidn redis
       if [ -z "$GITTAG" ]; then export GITTAG=main; fi
       gp sync-done before
@@ -35,7 +35,8 @@ tasks:
       RAILS_ENV=production rails db:setup
       RAILS_ENV=production NODE_OPTIONS='--openssl-legacy-provider' rails assets:precompile
       RAILS_ENV=production bin/tootctl accounts create a --email "admin@gp.dev" --confirmed --role Owner
-      RAILS_ENV=production bin/tootctl accounts create b --email "dev@gp.dev" --confirmed --role Owner      echo "E-mail address: admin@$(gp url 8080 | cut -d/ -f3)"
+      RAILS_ENV=production bin/tootctl accounts create b --email "dev@gp.dev" --confirmed --role Owner      
+      echo "E-mail address: admin@$(gp url 8080 | cut -d/ -f3)"
       gp sync-done init
     command: RAILS_ENV=production BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
 ports:
