@@ -1,0 +1,57 @@
+image: gitpod/workspace-postgres
+tasks:
+  - name: streaming
+    before: |
+      gp sync-await before
+      export DATABASE_URL=postgresql://gitpod@127.0.0.1:5432/postgres?sslmode=disable
+    init: gp sync-await init
+    command: 
+      NODE_ENV=production BIND=0.0.0.0 PORT=8008 STREAMING_CLUSTER_NUM=1 node ./streaming
+  - name: sidekiq
+    before: |
+      gp sync-await before
+      export DATABASE_URL=postgresql://gitpod@127.0.0.1:5432/postgres?sslmode=disable
+      redis-server --daemonize yes
+    init: gp sync-await init
+    command: 
+      RAILS_ENV=production DB_POOL=5 bundle exec sidekiq -c 5
+  - name: web
+    before: |
+      mkdir -p /workspace/.rvm
+      export DATABASE_URL=postgresql://gitpod@127.0.0.1:5432/postgres?sslmode=disable
+      rvm install 3.2.1
+      brew install libidn redis
+      if [ -z "$GITTAG" ]; then export GITTAG=main; fi
+      gp sync-done before
+    init: |
+      echo "$RUBY_VERSION" | cut -d- -f2 > .ruby-version
+      git checkout "$GITTAG"
+      bundle config --local build.idn-ruby --with-idn-dir="$(brew --prefix libidn)"
+      bundle install
+      yarn install
+      echo "LOCAL_DOMAIN=$(gp url 8080 | cut -d/ -f3)" > .env.production
+      cat ../.env.production.example >> .env.production
+      echo "SECRET_KEY_BASE=$(RAILS_ENV=production bundle exec rake secret)" >> .env.production
+      echo "OTP_SECRET=$(RAILS_ENV=production bundle exec rake secret)" >> .env.production
+      RAILS_ENV=production bundle exec rake mastodon:webpush:generate_vapid_key >> .env.production
+      RAILS_ENV=production rails db:setup
+      RAILS_ENV=production NODE_OPTIONS='--openssl-legacy-provider' rails assets:precompile
+      RAILS_ENV=production bin/tootctl accounts create a --email "admin@$(gp url 8080 | cut -d/ -f3)" --confirmed --role Owner
+      echo "E-mail address: admin@$(gp url 8080 | cut -d/ -f3)"
+      cd ..
+      gp sync-done init
+    command: RAILS_ENV=production BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
+ports:
+  - port: 8080
+    visibility: public
+    onOpen: open-preview
+  - port: 8008
+    onOpen: ignore
+  - port: 5432
+    onOpen: ignore
+  - port: 6379
+    onOpen: ignore
+vscode:
+  extensions:
+    - mtxr.sqltools
+    - mtxr.sqltools-driver-pg
