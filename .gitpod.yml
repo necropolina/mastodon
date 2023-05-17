@@ -24,8 +24,6 @@ tasks:
       if [ -z "$GITTAG" ]; then export GITTAG=main; fi
       gp sync-done before
     init: |
-      echo "$RUBY_VERSION" | cut -d- -f2 > .ruby-version
-      git checkout "$GITTAG"
       bundle config --local build.idn-ruby --with-idn-dir="$(brew --prefix libidn)"
       bundle install
       yarn install
