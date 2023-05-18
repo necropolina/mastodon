@@ -38,6 +38,7 @@ tasks:
       RAILS_ENV=production bin/tootctl accounts create b --email "dev@gp.dev" --confirmed --role Owner      
       gp sync-done init
   - name: web
+    init: gp sync-await init
     command: RAILS_ENV=production BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
 ports:
   - port: 8080
