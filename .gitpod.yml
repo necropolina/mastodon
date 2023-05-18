@@ -34,8 +34,8 @@ tasks:
       RAILS_ENV=production bundle exec rake mastodon:webpush:generate_vapid_key >> .env.production
       RAILS_ENV=production rails db:setup
       RAILS_ENV=production NODE_OPTIONS='--openssl-legacy-provider' rails assets:precompile
-      RAILS_ENV=production bin/tootctl accounts create a --email "admin@gp.dev" --confirmed --role Owner
-      RAILS_ENV=production bin/tootctl accounts create b --email "dev@gp.dev" --confirmed --role Owner      
+      RAILS_ENV=production bin/tootctl accounts create a --email "admin@gitp.com" --confirmed --role Owner
+      RAILS_ENV=production bin/tootctl accounts create b --email "dev@gitp.com" --confirmed --role Owner      
       gp sync-done init
     command: RAILS_ENV=production BIND=0.0.0.0 PORT=8080 RAILS_SERVE_STATIC_FILES=true bundle exec puma -C config/puma.rb
 ports:
