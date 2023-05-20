@@ -1,9 +1,9 @@
 import React from 'react';
-import { WordmarkLogo, SymbolLogo } from 'mastodon/components/logo';
+import Logo from 'mastodon/components/logo';
 import { Link, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { registrationsOpen, me } from 'mastodon/initial_state';
-import { Avatar } from 'mastodon/components/avatar';
+import Avatar from 'mastodon/components/avatar';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { openModal } from 'mastodon/actions/modal';
@@ -22,6 +22,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
+export default @withRouter
+@connect(null, mapDispatchToProps)
 class Header extends React.PureComponent {
 
   static contextTypes = {
@@ -73,10 +75,7 @@ class Header extends React.PureComponent {
 
     return (
       <div className='ui__header'>
-        <Link to='/' className='ui__header__logo'>
-          <WordmarkLogo />
-          <SymbolLogo />
-        </Link>
+        <Link to='/' className='ui__header__logo'><Logo /></Link>
 
         <div className='ui__header__links'>
           {content}
@@ -86,5 +85,3 @@ class Header extends React.PureComponent {
   }
 
 }
-
-export default withRouter(connect(null, mapDispatchToProps)(Header));

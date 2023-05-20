@@ -12,6 +12,7 @@ const mapStateToProps = state => ({
   isLoading: state.getIn(['suggestions', 'isLoading']),
 });
 
+export default @connect(mapStateToProps)
 class Suggestions extends React.PureComponent {
 
   static propTypes = {
@@ -48,5 +49,3 @@ class Suggestions extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(Suggestions);

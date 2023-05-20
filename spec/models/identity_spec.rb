@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Identity do
+RSpec.describe Identity, type: :model do
   describe '.find_for_oauth' do
     let(:auth) { Fabricate(:identity, user: Fabricate(:user)) }
 

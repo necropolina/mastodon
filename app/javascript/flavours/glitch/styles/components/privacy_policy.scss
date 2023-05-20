@@ -26,13 +26,11 @@
   img {
     margin-top: 2em;
     margin-bottom: 2em;
-    max-width: 100%;
   }
 
   video {
     margin-top: 2em;
     margin-bottom: 2em;
-    max-width: 100%;
   }
 
   figure {
@@ -89,7 +87,7 @@
     &::before {
       content: counter(list-counter) '.';
       position: absolute;
-      inset-inline-start: 0;
+      left: 0;
     }
   }
 
@@ -101,13 +99,13 @@
     width: 0.375em;
     height: 0.375em;
     top: 0.5em;
-    inset-inline-start: 0.25em;
+    left: 0.25em;
   }
 
   ul > li,
   ol > li {
     position: relative;
-    padding-inline-start: 1.75em;
+    padding-left: 1.75em;
   }
 
   & > ul > li p {

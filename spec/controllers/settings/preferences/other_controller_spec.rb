@@ -12,16 +12,9 @@ describe Settings::Preferences::OtherController do
   end
 
   describe 'GET #show' do
-    before do
-      get :show
-    end
-
     it 'returns http success' do
+      get :show
       expect(response).to have_http_status(200)
-    end
-
-    it 'returns private cache control headers' do
-      expect(response.headers['Cache-Control']).to include('private, no-store')
     end
   end
 
@@ -36,22 +29,20 @@ describe Settings::Preferences::OtherController do
     end
 
     it 'updates user settings' do
-      user.settings.update('web.reblog_modal': false, 'web.delete_modal': true)
-      user.save
+      user.settings['boost_modal'] = false
+      user.settings['delete_modal'] = true
 
       put :update, params: {
         user: {
-          settings_attributes: {
-            'web.reblog_modal': '1',
-            'web.delete_modal': '0',
-          },
+          setting_boost_modal: '1',
+          setting_delete_modal: '0',
         },
       }
 
       expect(response).to redirect_to(settings_preferences_other_path)
       user.reload
-      expect(user.settings['web.reblog_modal']).to be true
-      expect(user.settings['web.delete_modal']).to be false
+      expect(user.settings['boost_modal']).to be true
+      expect(user.settings['delete_modal']).to be false
     end
   end
 end

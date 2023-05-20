@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import { makeGetAccount } from 'flavours/glitch/selectors';
 import { injectIntl } from 'react-intl';

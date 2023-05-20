@@ -9,13 +9,13 @@ RSpec.describe DomainBlockPolicy do
   let(:john)    { Fabricate(:account) }
 
   permissions :index?, :show?, :create?, :destroy? do
-    context 'when admin' do
+    context 'admin' do
       it 'permits' do
         expect(subject).to permit(admin, DomainBlock)
       end
     end
 
-    context 'when not admin' do
+    context 'not admin' do
       it 'denies' do
         expect(subject).to_not permit(john, DomainBlock)
       end

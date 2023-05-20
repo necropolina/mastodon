@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ActivityPub::OutboxesController do
+RSpec.describe ActivityPub::OutboxesController, type: :controller do
   let!(:account) { Fabricate(:account) }
 
   shared_examples 'cacheable response' do
@@ -35,9 +35,10 @@ RSpec.describe ActivityPub::OutboxesController do
 
   describe 'GET #show' do
     context 'without signature' do
+      subject(:body) { body_as_json }
+
       subject(:response) { get :show, params: { account_username: account.username, page: page } }
 
-      let(:body) { body_as_json }
       let(:remote_account) { nil }
 
       context 'with page not requested' do

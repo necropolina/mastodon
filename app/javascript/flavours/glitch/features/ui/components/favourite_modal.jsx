@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import Button from 'flavours/glitch/components/button';
 import StatusContent from 'flavours/glitch/components/status_content';
-import { Avatar } from 'flavours/glitch/components/avatar';
-import { RelativeTimestamp } from 'flavours/glitch/components/relative_timestamp';
+import Avatar from 'flavours/glitch/components/avatar';
+import RelativeTimestamp from 'flavours/glitch/components/relative_timestamp';
 import DisplayName from 'flavours/glitch/components/display_name';
 import AttachmentList from 'flavours/glitch/components/attachment_list';
-import { Icon } from 'flavours/glitch/components/icon';
+import Icon from 'flavours/glitch/components/icon';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import classNames from 'classnames';
 import VisibilityIcon from 'flavours/glitch/components/status_visibility_icon';
@@ -17,6 +17,7 @@ const messages = defineMessages({
   favourite: { id: 'status.favourite', defaultMessage: 'Favourite' },
 });
 
+export default @injectIntl
 class FavouriteModal extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -98,5 +99,3 @@ class FavouriteModal extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(FavouriteModal);

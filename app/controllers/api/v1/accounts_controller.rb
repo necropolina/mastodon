@@ -18,7 +18,6 @@ class Api::V1::AccountsController < Api::BaseController
   override_rate_limit_headers :follow, family: :follows
 
   def show
-    cache_if_unauthenticated!
     render json: @account, serializer: REST::AccountSerializer
   end
 

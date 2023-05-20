@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe CustomFilterKeyword do
+RSpec.describe CustomFilterKeyword, type: :model do
 end

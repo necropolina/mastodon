@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::AccountModerationNotesController do
+RSpec.describe Admin::AccountModerationNotesController, type: :controller do
   render_views
 
   let(:user) { Fabricate(:user, role: UserRole.find_by(name: 'Admin')) }

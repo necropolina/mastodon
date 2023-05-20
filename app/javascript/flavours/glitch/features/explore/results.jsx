@@ -42,6 +42,8 @@ const renderStatuses = (results, onLoadMore) => appendLoadMore('statuses', resul
   <Status key={`status-${item}`} id={item} />
 )), onLoadMore);
 
+export default @connect(mapStateToProps)
+@injectIntl
 class Results extends React.PureComponent {
 
   static propTypes = {
@@ -122,5 +124,3 @@ class Results extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(injectIntl(Results));

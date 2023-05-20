@@ -73,6 +73,7 @@ module Mastodon
         end
       end
 
+      puts
       say("Imported #{imported}, skipped #{skipped}, failed to import #{failed}", color(imported, skipped, failed))
     end
 

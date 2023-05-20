@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::ActionLogsHelper do
+RSpec.describe Admin::ActionLogsHelper, type: :helper do
 end

@@ -31,7 +31,7 @@ RSpec.describe ActivityPub::Activity::Create do
         subject.perform
       end
 
-      context 'when object has been edited' do
+      context 'object has been edited' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -57,7 +57,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when object has update date equal to creation date' do
+      context 'object has update date equal to creation date' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -83,7 +83,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'with an unknown object type' do
+      context 'unknown object type' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -97,7 +97,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'with a standalone' do
+      context 'standalone' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -121,7 +121,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when public with explicit public address' do
+      context 'public with explicit public address' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -139,7 +139,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when public with as:Public' do
+      context 'public with as:Public' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -157,7 +157,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when public with Public' do
+      context 'public with Public' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -175,7 +175,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when unlisted with explicit public address' do
+      context 'unlisted with explicit public address' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -193,7 +193,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when unlisted with as:Public' do
+      context 'unlisted with as:Public' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -211,7 +211,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when unlisted with Public' do
+      context 'unlisted with Public' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -229,7 +229,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when private' do
+      context 'private' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -247,7 +247,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when private with inlined Collection in audience' do
+      context 'private with inlined Collection in audience' do
         let(:object_json) do
           {
             id: [ActivityPub::TagManager.instance.uri_for(sender), '#bar'].join,
@@ -269,7 +269,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when limited' do
+      context 'limited' do
         let(:recipient) { Fabricate(:account) }
 
         let(:object_json) do
@@ -294,7 +294,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when directMessage attribute is false' do
+      context 'limited when direct message assertion is false' do
         let(:recipient) { Fabricate(:account) }
 
         let(:object_json) do
@@ -311,7 +311,7 @@ RSpec.describe ActivityPub::Activity::Create do
           }
         end
 
-        it 'creates status with limited visibility' do
+        it 'creates status' do
           status = sender.statuses.first
 
           expect(status).to_not be_nil
@@ -319,7 +319,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when direct' do
+      context 'direct' do
         let(:recipient) { Fabricate(:account) }
 
         let(:object_json) do
@@ -335,7 +335,7 @@ RSpec.describe ActivityPub::Activity::Create do
           }
         end
 
-        it 'creates status with direct visibility' do
+        it 'creates status' do
           status = sender.statuses.first
 
           expect(status).to_not be_nil
@@ -343,7 +343,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'when directMessage attribute is true' do
+      context 'direct when direct message assertion is true' do
         let(:recipient) { Fabricate(:account) }
 
         let(:object_json) do
@@ -364,7 +364,7 @@ RSpec.describe ActivityPub::Activity::Create do
         end
       end
 
-      context 'with a reply' do
+      context 'as a reply' do
         let(:original_status) { Fabricate(:status) }
 
         let(:object_json) do

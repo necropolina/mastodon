@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from 'flavours/glitch/components/icon_button';
+import IconButton from 'flavours/glitch/components/icon_button';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import DropdownMenuContainer from 'flavours/glitch/containers/dropdown_menu_container';
 import { defineMessages, injectIntl } from 'react-intl';
@@ -39,6 +39,7 @@ const messages = defineMessages({
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
 });
 
+export default @injectIntl
 class ActionBar extends React.PureComponent {
 
   static contextTypes = {
@@ -227,5 +228,3 @@ class ActionBar extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(ActionBar);

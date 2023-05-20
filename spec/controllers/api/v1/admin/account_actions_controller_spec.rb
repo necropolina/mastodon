@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::Admin::AccountActionsController do
+RSpec.describe Api::V1::Admin::AccountActionsController, type: :controller do
   render_views
 
   let(:role)   { UserRole.find_by(name: 'Moderator') }

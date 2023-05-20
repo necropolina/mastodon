@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { formatTime, getPointerPosition, fileNameFromURL } from 'flavours/glitch/features/video';
-import { Icon } from 'flavours/glitch/components/icon';
+import Icon from 'flavours/glitch/components/icon';
 import classNames from 'classnames';
 import { throttle, debounce } from 'lodash';
 import Visualizer from './visualizer';
 import { displayMedia, useBlurhash } from 'flavours/glitch/initial_state';
-import { Blurhash } from 'flavours/glitch/components/blurhash';
+import Blurhash from 'flavours/glitch/components/blurhash';
 import { is } from 'immutable';
 
 const messages = defineMessages({
@@ -22,6 +22,7 @@ const messages = defineMessages({
 const TICK_SIZE = 10;
 const PADDING   = 180;
 
+export default @injectIntl
 class Audio extends React.PureComponent {
 
   static propTypes = {
@@ -94,7 +95,7 @@ class Audio extends React.PureComponent {
     const width  = this.player.offsetWidth;
     const height = this.props.fullscreen ? this.player.offsetHeight : (width / (16/9));
 
-    if (width && width !== this.state.containerWidth) {
+    if (width && width != this.state.containerWidth) {
       if (this.props.cacheWidth) {
         this.props.cacheWidth(width);
       }
@@ -390,7 +391,7 @@ class Audio extends React.PureComponent {
   }
 
   _getRadius () {
-    return parseInt((this.state.height || this.props.height) / 2 - PADDING * this._getScaleCoefficient());
+    return parseInt(((this.state.height || this.props.height) - (PADDING * this._getScaleCoefficient()) * 2) / 2);
   }
 
   _getScaleCoefficient () {
@@ -402,7 +403,7 @@ class Audio extends React.PureComponent {
   }
 
   _getCY() {
-    return Math.floor((this.state.height || this.props.height) / 2);
+    return Math.floor(this._getRadius() + (PADDING * this._getScaleCoefficient()));
   }
 
   _getAccentColor () {
@@ -476,7 +477,7 @@ class Audio extends React.PureComponent {
     }
 
     return (
-      <div className={classNames('audio-player', { editable, inactive: !revealed })} ref={this.setPlayerRef} style={{ backgroundColor: this._getBackgroundColor(), color: this._getForegroundColor(), aspectRatio: '16 / 9' }} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} tabIndex={0} onKeyDown={this.handleKeyDown}>
+      <div className={classNames('audio-player', { editable, inactive: !revealed })} ref={this.setPlayerRef} style={{ backgroundColor: this._getBackgroundColor(), color: this._getForegroundColor(), width: '100%', height: this.props.fullscreen ? '100%' : (this.state.height || this.props.height) }} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} tabIndex='0' onKeyDown={this.handleKeyDown}>
 
         <Blurhash
           hash={blurhash}
@@ -499,7 +500,7 @@ class Audio extends React.PureComponent {
 
         <canvas
           role='button'
-          tabIndex={0}
+          tabIndex='0'
           className='audio-player__canvas'
           width={this.state.width}
           height={this.state.height}
@@ -521,16 +522,9 @@ class Audio extends React.PureComponent {
         {(revealed || editable) && <img
           src={this.props.poster}
           alt=''
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            height: `calc(${(100 - 2 * 100 * PADDING / 982)}% - ${TICK_SIZE * 2}px)`,
-            aspectRatio: '1',
-            transform: 'translate(-50%, -50%)',
-            borderRadius: '50%',
-            pointerEvents: 'none',
-          }}
+          width={(this._getRadius() - TICK_SIZE) * 2}
+          height={(this._getRadius() - TICK_SIZE) * 2}
+          style={{ position: 'absolute', left: this._getCX(), top: this._getCY(), transform: 'translate(-50%, -50%)', borderRadius: '50%', pointerEvents: 'none' }}
         />}
 
         <div className='video-player__seek' onMouseDown={this.handleMouseDown} ref={this.setSeekRef}>
@@ -539,7 +533,7 @@ class Audio extends React.PureComponent {
 
           <span
             className={classNames('video-player__seek__handle', { active: dragging })}
-            tabIndex={0}
+            tabIndex='0'
             style={{ left: `${progress}%`, backgroundColor: this._getAccentColor() }}
             onKeyDown={this.handleAudioKeyDown}
           />
@@ -556,7 +550,7 @@ class Audio extends React.PureComponent {
 
                 <span
                   className='video-player__volume__handle'
-                  tabIndex={0}
+                  tabIndex='0'
                   style={{ left: `${volume * 100}%`, backgroundColor: this._getAccentColor() }}
                 />
               </div>
@@ -581,5 +575,3 @@ class Audio extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(Audio);

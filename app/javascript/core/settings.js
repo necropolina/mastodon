@@ -3,7 +3,7 @@
 import 'packs/public-path';
 import escapeTextContentForBrowser from 'escape-html';
 
-import { delegate } from '@rails/ujs';
+const { delegate } = require('@rails/ujs');
 
 import emojify from '../mastodon/features/emoji/emoji';
 

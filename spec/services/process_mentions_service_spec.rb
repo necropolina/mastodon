@@ -33,10 +33,10 @@ RSpec.describe ProcessMentionsService, type: :service do
     end
   end
 
-  context 'with resolving a mention to a remote account' do
+  context 'resolving a mention to a remote account' do
     let(:status) { Fabricate(:status, account: account, text: "Hello @#{remote_user.acct}", visibility: :public) }
 
-    context 'with ActivityPub' do
+    context 'ActivityPub' do
       context do
         let!(:remote_user) { Fabricate(:account, username: 'remote_user', protocol: :activitypub, domain: 'example.com', inbox_url: 'http://example.com/inbox') }
 
@@ -49,7 +49,7 @@ RSpec.describe ProcessMentionsService, type: :service do
         end
       end
 
-      context 'when mentioning a user several times when not saving records' do
+      context 'mentioning a user several times when not saving records' do
         let!(:remote_user) { Fabricate(:account, username: 'remote_user', protocol: :activitypub, domain: 'example.com', inbox_url: 'http://example.com/inbox') }
         let(:status)       { Fabricate(:status, account: account, text: "Hello @#{remote_user.acct} @#{remote_user.acct} @#{remote_user.acct}", visibility: :public) }
 
@@ -89,7 +89,7 @@ RSpec.describe ProcessMentionsService, type: :service do
       end
     end
 
-    context 'with a Temporarily-unreachable ActivityPub user' do
+    context 'Temporarily-unreachable ActivityPub user' do
       let!(:remote_user) { Fabricate(:account, username: 'remote_user', protocol: :activitypub, domain: 'example.com', inbox_url: 'http://example.com/inbox', last_webfingered_at: nil) }
 
       before do

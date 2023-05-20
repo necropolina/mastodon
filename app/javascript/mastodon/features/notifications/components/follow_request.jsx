@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { Avatar } from 'mastodon/components/avatar';
+import Avatar from 'mastodon/components/avatar';
 import DisplayName from 'mastodon/components/display_name';
 import { Link } from 'react-router-dom';
-import { IconButton } from 'mastodon/components/icon_button';
+import IconButton from 'mastodon/components/icon_button';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
@@ -13,6 +13,7 @@ const messages = defineMessages({
   reject: { id: 'follow_request.reject', defaultMessage: 'Reject' },
 });
 
+export default @injectIntl
 class FollowRequest extends ImmutablePureComponent {
 
   static propTypes = {
@@ -31,10 +32,10 @@ class FollowRequest extends ImmutablePureComponent {
 
     if (hidden) {
       return (
-        <React.Fragment>
+        <Fragment>
           {account.get('display_name')}
           {account.get('username')}
-        </React.Fragment>
+        </Fragment>
       );
     }
 
@@ -56,5 +57,3 @@ class FollowRequest extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(FollowRequest);

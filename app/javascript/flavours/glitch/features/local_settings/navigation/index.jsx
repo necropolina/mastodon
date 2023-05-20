@@ -19,6 +19,7 @@ const messages = defineMessages({
   close: { id: 'settings.close', defaultMessage: 'Close' },
 });
 
+export default @injectIntl
 class LocalSettingsNavigation extends React.PureComponent {
 
   static propTypes = {
@@ -89,5 +90,3 @@ class LocalSettingsNavigation extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(LocalSettingsNavigation);

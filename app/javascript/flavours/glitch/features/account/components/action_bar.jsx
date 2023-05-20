@@ -1,13 +1,19 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
+import DropdownMenuContainer from 'flavours/glitch/containers/dropdown_menu_container';
 import { NavLink } from 'react-router-dom';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { Icon } from 'flavours/glitch/components/icon';
+import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
+import { me, isStaff } from 'flavours/glitch/initial_state';
+import { profileLink, accountAdminLink } from 'flavours/glitch/utils/backend_links';
+import Icon from 'flavours/glitch/components/icon';
 
+export default @injectIntl
 class ActionBar extends React.PureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
+    intl: PropTypes.object.isRequired,
   };
 
   isStatusesPageActive = (match, location) => {
@@ -18,7 +24,7 @@ class ActionBar extends React.PureComponent {
   };
 
   render () {
-    const { account } = this.props;
+    const { account, intl } = this.props;
 
     if (account.get('suspended')) {
       return (
@@ -77,5 +83,3 @@ class ActionBar extends React.PureComponent {
   }
 
 }
-
-export default ActionBar;

@@ -15,6 +15,7 @@ const DefaultNavigation = () => (
   </>
 );
 
+export default @withRouter
 class NavigationPortal extends React.PureComponent {
 
   render () {
@@ -32,4 +33,3 @@ class NavigationPortal extends React.PureComponent {
   }
 
 }
-export default withRouter(NavigationPortal);

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Notification do
+RSpec.describe Notification, type: :model do
   describe '#target_status' do
     let(:notification) { Fabricate(:notification, activity: activity) }
     let(:status)       { Fabricate(:status) }
@@ -10,7 +10,7 @@ RSpec.describe Notification do
     let(:favourite)    { Fabricate(:favourite, status: status) }
     let(:mention)      { Fabricate(:mention, status: status) }
 
-    context 'when Activity is reblog' do
+    context 'activity is reblog' do
       let(:activity) { reblog }
 
       it 'returns status' do
@@ -18,7 +18,7 @@ RSpec.describe Notification do
       end
     end
 
-    context 'when Activity is favourite' do
+    context 'activity is favourite' do
       let(:type)     { :favourite }
       let(:activity) { favourite }
 
@@ -27,7 +27,7 @@ RSpec.describe Notification do
       end
     end
 
-    context 'when Activity is mention' do
+    context 'activity is mention' do
       let(:activity) { mention }
 
       it 'returns status' do
@@ -66,7 +66,7 @@ RSpec.describe Notification do
       end
     end
 
-    context 'when notifications are empty' do
+    context 'notifications are empty' do
       let(:notifications) { [] }
 
       it 'returns []' do
@@ -74,7 +74,7 @@ RSpec.describe Notification do
       end
     end
 
-    context 'when notifications are present' do
+    context 'notifications are present' do
       before do
         notifications.each(&:reload)
       end

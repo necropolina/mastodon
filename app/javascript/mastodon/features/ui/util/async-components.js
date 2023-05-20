@@ -82,6 +82,10 @@ export function FollowRequests () {
   return import(/* webpackChunkName: "features/follow_requests" */'../../follow_requests');
 }
 
+export function GenericNotFound () {
+  return import(/* webpackChunkName: "features/generic_not_found" */'../../generic_not_found');
+}
+
 export function FavouritedStatuses () {
   return import(/* webpackChunkName: "features/favourited_statuses" */'../../favourited_statuses');
 }
@@ -150,8 +154,8 @@ export function Directory () {
   return import(/* webpackChunkName: "features/directory" */'../../directory');
 }
 
-export function Onboarding () {
-  return import(/* webpackChunkName: "features/onboarding" */'../../onboarding');
+export function FollowRecommendations () {
+  return import(/* webpackChunkName: "features/follow_recommendations" */'../../follow_recommendations');
 }
 
 export function CompareHistoryModal () {

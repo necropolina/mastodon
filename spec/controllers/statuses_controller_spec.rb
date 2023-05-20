@@ -15,10 +15,6 @@ describe StatusesController do
       expect(session).to be_empty
     end
 
-    it 'returns Vary header' do
-      expect(response.headers['Vary']).to include 'Accept, Accept-Language, Cookie'
-    end
-
     it 'returns public Cache-Control header' do
       expect(response.headers['Cache-Control']).to include 'public'
     end
@@ -72,7 +68,7 @@ describe StatusesController do
         get :show, params: { account_username: status.account.username, id: status.id, format: format }
       end
 
-      context 'with HTML' do
+      context 'as HTML' do
         let(:format) { 'html' }
 
         it 'returns http success' do
@@ -84,7 +80,7 @@ describe StatusesController do
         end
 
         it 'returns Vary header' do
-          expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+          expect(response.headers['Vary']).to eq 'Accept'
         end
 
         it 'returns public Cache-Control header' do
@@ -97,7 +93,7 @@ describe StatusesController do
         end
       end
 
-      context 'with JSON' do
+      context 'as JSON' do
         let(:format) { 'json' }
 
         it 'returns http success' do
@@ -109,7 +105,7 @@ describe StatusesController do
         end
 
         it 'returns Vary header' do
-          expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+          expect(response.headers['Vary']).to eq 'Accept'
         end
 
         it_behaves_like 'cacheable response'
@@ -132,7 +128,7 @@ describe StatusesController do
         get :show, params: { account_username: status.account.username, id: status.id, format: format }
       end
 
-      context 'with JSON' do
+      context 'as JSON' do
         let(:format) { 'json' }
 
         it 'returns http not found' do
@@ -140,7 +136,7 @@ describe StatusesController do
         end
       end
 
-      context 'with HTML' do
+      context 'as HTML' do
         let(:format) { 'html' }
 
         it 'returns http not found' do
@@ -156,7 +152,7 @@ describe StatusesController do
         get :show, params: { account_username: status.account.username, id: status.id, format: format }
       end
 
-      context 'with JSON' do
+      context 'as JSON' do
         let(:format) { 'json' }
 
         it 'returns http not found' do
@@ -164,7 +160,7 @@ describe StatusesController do
         end
       end
 
-      context 'with HTML' do
+      context 'as HTML' do
         let(:format) { 'html' }
 
         it 'returns http not found' do
@@ -196,7 +192,7 @@ describe StatusesController do
           get :show, params: { account_username: status.account.username, id: status.id, format: format }
         end
 
-        context 'with HTML' do
+        context 'as HTML' do
           let(:format) { 'html' }
 
           it 'returns http success' do
@@ -208,11 +204,11 @@ describe StatusesController do
           end
 
           it 'returns Vary header' do
-            expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+            expect(response.headers['Vary']).to eq 'Accept'
           end
 
-          it 'returns private Cache-Control header' do
-            expect(response.headers['Cache-Control']).to include 'private'
+          it 'returns no Cache-Control header' do
+            expect(response.headers).to_not include 'Cache-Control'
           end
 
           it 'renders status' do
@@ -221,7 +217,7 @@ describe StatusesController do
           end
         end
 
-        context 'with JSON' do
+        context 'as JSON' do
           let(:format) { 'json' }
 
           it 'returns http success' do
@@ -233,11 +229,11 @@ describe StatusesController do
           end
 
           it 'returns Vary header' do
-            expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+            expect(response.headers['Vary']).to eq 'Accept'
           end
 
-          it 'returns private Cache-Control header' do
-            expect(response.headers['Cache-Control']).to include 'private'
+          it 'returns public Cache-Control header' do
+            expect(response.headers['Cache-Control']).to include 'public'
           end
 
           it 'returns Content-Type header' do
@@ -260,7 +256,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http success' do
@@ -272,11 +268,11 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
-            it 'returns private Cache-Control header' do
-              expect(response.headers['Cache-Control']).to include 'private'
+            it 'returns no Cache-Control header' do
+              expect(response.headers).to_not include 'Cache-Control'
             end
 
             it 'renders status' do
@@ -285,7 +281,7 @@ describe StatusesController do
             end
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http success' do
@@ -297,7 +293,7 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
             it 'returns private Cache-Control header' do
@@ -320,7 +316,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http not found' do
@@ -328,7 +324,7 @@ describe StatusesController do
             end
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http not found' do
@@ -347,7 +343,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http success' do
@@ -359,11 +355,11 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
-            it 'returns private Cache-Control header' do
-              expect(response.headers['Cache-Control']).to include 'private'
+            it 'returns no Cache-Control header' do
+              expect(response.headers).to_not include 'Cache-Control'
             end
 
             it 'renders status' do
@@ -372,7 +368,7 @@ describe StatusesController do
             end
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http success' do
@@ -384,7 +380,7 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
             it 'returns private Cache-Control header' do
@@ -407,7 +403,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http not found' do
@@ -415,7 +411,7 @@ describe StatusesController do
             end
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http not found' do
@@ -460,7 +456,7 @@ describe StatusesController do
           get :show, params: { account_username: status.account.username, id: status.id, format: format }
         end
 
-        context 'with HTML' do
+        context 'as HTML' do
           let(:format) { 'html' }
 
           it 'returns http success' do
@@ -472,11 +468,11 @@ describe StatusesController do
           end
 
           it 'returns Vary header' do
-            expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+            expect(response.headers['Vary']).to eq 'Accept'
           end
 
-          it 'returns private Cache-Control header' do
-            expect(response.headers['Cache-Control']).to include 'private'
+          it 'returns no Cache-Control header' do
+            expect(response.headers).to_not include 'Cache-Control'
           end
 
           it 'renders status' do
@@ -485,7 +481,7 @@ describe StatusesController do
           end
         end
 
-        context 'with JSON' do
+        context 'as JSON' do
           let(:format) { 'json' }
 
           it 'returns http success' do
@@ -497,7 +493,7 @@ describe StatusesController do
           end
 
           it 'returns Vary header' do
-            expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+            expect(response.headers['Vary']).to eq 'Accept'
           end
 
           it_behaves_like 'cacheable response'
@@ -522,7 +518,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http success' do
@@ -534,11 +530,11 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
-            it 'returns private Cache-Control header' do
-              expect(response.headers['Cache-Control']).to include 'private'
+            it 'returns no Cache-Control header' do
+              expect(response.headers).to_not include 'Cache-Control'
             end
 
             it 'renders status' do
@@ -547,7 +543,7 @@ describe StatusesController do
             end
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http success' do
@@ -559,7 +555,7 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
             it 'returns private Cache-Control header' do
@@ -582,7 +578,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http not found' do
@@ -590,7 +586,7 @@ describe StatusesController do
             end
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http not found' do
@@ -609,7 +605,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http success' do
@@ -621,11 +617,11 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
-            it 'returns private Cache-Control header' do
-              expect(response.headers['Cache-Control']).to include 'private'
+            it 'returns no Cache-Control header' do
+              expect(response.headers).to_not include 'Cache-Control'
             end
 
             it 'renders status' do
@@ -634,7 +630,7 @@ describe StatusesController do
             end
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http success' do
@@ -646,7 +642,7 @@ describe StatusesController do
             end
 
             it 'returns Vary header' do
-              expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+              expect(response.headers['Vary']).to eq 'Accept'
             end
 
             it 'returns private Cache-Control header' do
@@ -669,7 +665,7 @@ describe StatusesController do
             get :show, params: { account_username: status.account.username, id: status.id, format: format }
           end
 
-          context 'with JSON' do
+          context 'as JSON' do
             let(:format) { 'json' }
 
             it 'returns http not found' do
@@ -677,7 +673,7 @@ describe StatusesController do
             end
           end
 
-          context 'with HTML' do
+          context 'as HTML' do
             let(:format) { 'html' }
 
             it 'returns http not found' do
@@ -827,7 +823,7 @@ describe StatusesController do
       end
 
       it 'returns Vary header' do
-        expect(response.headers['Vary']).to eq 'Accept, Accept-Language, Cookie'
+        expect(response.headers['Vary']).to eq 'Accept'
       end
 
       it 'returns public Cache-Control header' do

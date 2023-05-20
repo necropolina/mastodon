@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe Device do
+RSpec.describe Device, type: :model do
 end

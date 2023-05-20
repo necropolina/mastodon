@@ -18,7 +18,6 @@
 #
 
 class PreviewCardProvider < ApplicationRecord
-  include Paginable
   include DomainNormalizable
   include Attachmentable
 

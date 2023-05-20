@@ -1,6 +1,6 @@
 require Rails.root.join('lib', 'mastodon', 'migration_helpers')
 
-class AddNotifyToFollows < ActiveRecord::Migration[5.2]
+class AddNotifyToFollows < ActiveRecord::Migration[5.1]
   include Mastodon::MigrationHelpers
 
   disable_ddl_transaction!

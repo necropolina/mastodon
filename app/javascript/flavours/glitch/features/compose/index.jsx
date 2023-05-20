@@ -2,6 +2,7 @@ import React from 'react';
 import ComposeFormContainer from './containers/compose_form_container';
 import NavigationContainer from './containers/navigation_container';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { mountCompose, unmountCompose, cycleElefriendCompose } from 'flavours/glitch/actions/compose';
 import { injectIntl, defineMessages } from 'react-intl';
@@ -10,7 +11,7 @@ import SearchContainer from './containers/search_container';
 import Motion from '../ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
 import SearchResultsContainer from './containers/search_results_container';
-import { mascot } from 'flavours/glitch/initial_state';
+import { me, mascot } from 'flavours/glitch/initial_state';
 import HeaderContainer from './containers/header_container';
 import Column from 'flavours/glitch/components/column';
 import { Helmet } from 'react-helmet';
@@ -24,7 +25,7 @@ const mapStateToProps = (state, ownProps) => ({
   showSearch: ownProps.multiColumn ? state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']) : false,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch, { intl }) => ({
   onClickElefriend () {
     dispatch(cycleElefriendCompose());
   },
@@ -38,6 +39,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
+export default @connect(mapStateToProps, mapDispatchToProps)
+@injectIntl
 class Compose extends React.PureComponent {
 
   static propTypes = {
@@ -111,5 +114,3 @@ class Compose extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Compose));

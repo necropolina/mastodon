@@ -9,7 +9,7 @@ import { addColumn, removeColumn, moveColumn, changeColumnParams } from 'flavour
 import { fetchDirectory, expandDirectory } from 'flavours/glitch/actions/directory';
 import { List as ImmutableList } from 'immutable';
 import AccountCard from './components/account_card';
-import { RadioButton } from 'flavours/glitch/components/radio_button';
+import RadioButton from 'flavours/glitch/components/radio_button';
 import LoadMore from 'flavours/glitch/components/load_more';
 import ScrollContainer from 'flavours/glitch/containers/scroll_container';
 import LoadingIndicator from 'flavours/glitch/components/loading_indicator';
@@ -29,6 +29,8 @@ const mapStateToProps = state => ({
   domain: state.getIn(['meta', 'domain']),
 });
 
+export default @connect(mapStateToProps)
+@injectIntl
 class Directory extends React.PureComponent {
 
   static contextTypes = {
@@ -174,5 +176,3 @@ class Directory extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(injectIntl(Directory));

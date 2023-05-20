@@ -3,10 +3,8 @@
 require 'rails_helper'
 
 describe 'Localization' do
-  around do |example|
-    I18n.with_locale(I18n.locale) do
-      example.run
-    end
+  after(:all) do
+    I18n.locale = I18n.default_locale
   end
 
   it 'uses a specific region when provided' do

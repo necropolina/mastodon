@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe ScheduledStatus do
+RSpec.describe ScheduledStatus, type: :model do
 end

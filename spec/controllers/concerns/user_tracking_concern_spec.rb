@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ApplicationController do
+describe ApplicationController, type: :controller do
   controller do
     include UserTrackingConcern
 

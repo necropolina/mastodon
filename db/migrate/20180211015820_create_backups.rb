@@ -1,4 +1,4 @@
-class CreateBackups < ActiveRecord::Migration[5.2]
+class CreateBackups < ActiveRecord::Migration[5.1]
   def change
     create_table :backups do |t|
       t.references :user, foreign_key: { on_delete: :nullify }

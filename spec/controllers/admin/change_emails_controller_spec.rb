@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::ChangeEmailsController do
+RSpec.describe Admin::ChangeEmailsController, type: :controller do
   render_views
 
   let(:admin) { Fabricate(:user, role: UserRole.find_by(name: 'Admin')) }

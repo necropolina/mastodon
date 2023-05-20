@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
-import { store } from 'flavours/glitch/store';
+import configureStore from 'flavours/glitch/store/configureStore';
 import { hydrateStore } from 'flavours/glitch/actions/store';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { getLocale } from 'mastodon/locales';
@@ -11,6 +11,8 @@ import { fetchCustomEmojis } from 'flavours/glitch/actions/custom_emojis';
 
 const { localeData, messages } = getLocale();
 addLocaleData(localeData);
+
+const store = configureStore();
 
 if (initialState) {
   store.dispatch(hydrateStore(initialState));

@@ -10,18 +10,10 @@ module Admin
       @webhooks = Webhook.page(params[:page])
     end
 
-    def show
-      authorize @webhook, :show?
-    end
-
     def new
       authorize :webhook, :create?
 
       @webhook = Webhook.new
-    end
-
-    def edit
-      authorize @webhook, :update?
     end
 
     def create
@@ -34,6 +26,14 @@ module Admin
       else
         render :new
       end
+    end
+
+    def show
+      authorize @webhook, :show?
+    end
+
+    def edit
+      authorize @webhook, :update?
     end
 
     def update

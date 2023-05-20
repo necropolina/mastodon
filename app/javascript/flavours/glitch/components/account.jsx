@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { Avatar } from './avatar';
+import Avatar from './avatar';
 import DisplayName from './display_name';
 import Permalink from './permalink';
-import { IconButton } from './icon_button';
+import IconButton from './icon_button';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { me } from 'flavours/glitch/initial_state';
-import { RelativeTimestamp } from './relative_timestamp';
+import RelativeTimestamp from './relative_timestamp';
 import Skeleton from 'flavours/glitch/components/skeleton';
 
 const messages = defineMessages({
@@ -23,6 +23,7 @@ const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
 });
 
+export default @injectIntl
 class Account extends ImmutablePureComponent {
 
   static propTypes = {
@@ -183,5 +184,3 @@ class Account extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(Account);

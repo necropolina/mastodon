@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { setupBrowserNotifications } from 'mastodon/actions/notifications';
-import Mastodon from 'mastodon/containers/mastodon';
-import { store } from 'mastodon/store';
+import Mastodon, { store } from 'mastodon/containers/mastodon';
 import { me } from 'mastodon/initial_state';
 import ready from 'mastodon/ready';
-import * as perf from 'mastodon/performance';
+
+const perf = require('mastodon/performance');
 
 /**
  * @returns {Promise<void>}

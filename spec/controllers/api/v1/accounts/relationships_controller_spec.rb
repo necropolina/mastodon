@@ -21,7 +21,7 @@ describe Api::V1::Accounts::RelationshipsController do
       lewis.follow!(user.account)
     end
 
-    context 'when provided only one ID' do
+    context 'provided only one ID' do
       before do
         get :index, params: { id: simon.id }
       end
@@ -39,7 +39,7 @@ describe Api::V1::Accounts::RelationshipsController do
       end
     end
 
-    context 'when provided multiple IDs' do
+    context 'provided multiple IDs' do
       before do
         get :index, params: { id: [simon.id, lewis.id] }
       end

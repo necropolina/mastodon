@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe CustomFilter do
+RSpec.describe CustomFilter, type: :model do
 end

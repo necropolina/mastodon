@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe UnavailableDomain do
+RSpec.describe UnavailableDomain, type: :model do
 end

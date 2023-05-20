@@ -6,7 +6,7 @@ import AccountContainer from 'flavours/glitch/containers/account_container';
 import StatusContainer from 'flavours/glitch/containers/status_container';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { ImmutableHashtag as Hashtag } from 'flavours/glitch/components/hashtag';
-import { Icon } from 'flavours/glitch/components/icon';
+import Icon from 'flavours/glitch/components/icon';
 import { searchEnabled } from 'flavours/glitch/initial_state';
 import LoadMore from 'flavours/glitch/components/load_more';
 
@@ -14,6 +14,7 @@ const messages = defineMessages({
   dismissSuggestion: { id: 'suggestions.dismiss', defaultMessage: 'Dismiss suggestion' },
 });
 
+export default @injectIntl
 class SearchResults extends ImmutablePureComponent {
 
   static propTypes = {
@@ -127,7 +128,7 @@ class SearchResults extends ImmutablePureComponent {
       <div className='drawer--results'>
         <header className='search-results__header'>
           <Icon id='search' fixedWidth />
-          <FormattedMessage id='search_results.total' defaultMessage='{count, plural, one {# result} other {# results}}' values={{ count }} />
+          <FormattedMessage id='search_results.total' defaultMessage='{count, number} {count, plural, one {result} other {results}}' values={{ count }} />
         </header>
 
         {accounts}
@@ -138,5 +139,3 @@ class SearchResults extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(SearchResults);
