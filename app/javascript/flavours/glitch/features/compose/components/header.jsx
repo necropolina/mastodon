@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 //  Components.
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 
 //  Utils.
 import { conditionalRender } from 'flavours/glitch/utils/react_helpers';
@@ -77,7 +77,7 @@ class Header extends ImmutablePureComponent {
 
     //  The result.
     return (
-      <nav className='drawer--header'>
+      <nav className='drawer__header'>
         <Link
           aria-label={intl.formatMessage(messages.start)}
           title={intl.formatMessage(messages.start)}
