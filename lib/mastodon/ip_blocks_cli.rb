@@ -11,7 +11,7 @@ module Mastodon
       true
     end
 
-    option :severity, required: true, enum: %w(no_access sign_up_requires_approval sign_up_block), desc: 'Severity of the block'
+    option :severity, required: true, enum: %w(no_access sign_up_requires_approval), desc: 'Severity of the block'
     option :comment, aliases: [:c], desc: 'Optional comment'
     option :duration, aliases: [:d], type: :numeric, desc: 'Duration of the block in seconds'
     option :force, type: :boolean, aliases: [:f], desc: 'Overwrite existing blocks'
@@ -36,12 +36,6 @@ module Mastodon
       failed    = 0
 
       addresses.each do |address|
-        unless valid_ip_address?(address)
-          say("#{address} is invalid", :red)
-          failed += 1
-          next
-        end
-
         ip_block = IpBlock.find_by(ip: address)
 
         if ip_block.present? && !options[:force]
@@ -85,12 +79,6 @@ module Mastodon
       skipped   = 0
 
       addresses.each do |address|
-        unless valid_ip_address?(address)
-          say("#{address} is invalid", :yellow)
-          skipped += 1
-          next
-        end
-
         ip_blocks = if options[:force]
                       IpBlock.where('ip >>= ?', address)
                     else
@@ -120,9 +108,9 @@ module Mastodon
       IpBlock.where(severity: :no_access).find_each do |ip_block|
         case options[:format]
         when 'nginx'
-          say "deny #{ip_block.ip}/#{ip_block.ip.prefix};"
+          puts "deny #{ip_block.ip}/#{ip_block.ip.prefix};"
         else
-          say "#{ip_block.ip}/#{ip_block.ip.prefix}"
+          puts "#{ip_block.ip}/#{ip_block.ip.prefix}"
         end
       end
     end
@@ -137,13 +125,6 @@ module Mastodon
       else
         :red
       end
-    end
-
-    def valid_ip_address?(ip_address)
-      IPAddr.new(ip_address)
-      true
-    rescue IPAddr::InvalidAddressError
-      false
     end
   end
 end

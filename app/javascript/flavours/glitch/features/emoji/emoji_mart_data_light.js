@@ -1,17 +1,15 @@
 // The output of this module is designed to mimic emoji-mart's
 // "data" object, such that we can use it for a light version of emoji-mart's
 // emojiIndex.search functionality.
-import { unicodeToUnifiedName } from './unicode_to_unified_name';
-import emojiCompressed from './emoji_compressed';
-
-const [ shortCodesToEmojiData, skins, categories, short_names ] = emojiCompressed;
+const { unicodeToUnifiedName } = require('./unicode_to_unified_name');
+const [ shortCodesToEmojiData, skins, categories, short_names ] = require('./emoji_compressed');
 
 const emojis = {};
 
 // decompress
 Object.keys(shortCodesToEmojiData).forEach((shortCode) => {
   let [
-    filenameData, // eslint-disable-line @typescript-eslint/no-unused-vars
+    filenameData, // eslint-disable-line no-unused-vars
     searchData,
   ] = shortCodesToEmojiData[shortCode];
   let [
@@ -35,7 +33,7 @@ Object.keys(shortCodesToEmojiData).forEach((shortCode) => {
   };
 });
 
-export {
+module.exports = {
   emojis,
   skins,
   categories,

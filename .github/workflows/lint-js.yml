@@ -6,28 +6,22 @@ on:
     paths:
       - 'package.json'
       - 'yarn.lock'
-      - 'tsconfig.json'
       - '.nvmrc'
       - '.prettier*'
       - '.eslint*'
       - '**/*.js'
       - '**/*.jsx'
-      - '**/*.ts'
-      - '**/*.tsx'
       - '.github/workflows/lint-js.yml'
 
   pull_request:
     paths:
       - 'package.json'
       - 'yarn.lock'
-      - 'tsconfig.json'
       - '.nvmrc'
       - '.prettier*'
       - '.eslint*'
       - '**/*.js'
       - '**/*.jsx'
-      - '**/*.ts'
-      - '**/*.tsx'
       - '.github/workflows/lint-js.yml'
 
 jobs:
@@ -48,7 +42,4 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: ESLint
-        run: yarn test:lint:js --max-warnings 0
-
-      - name: Typecheck
-        run: yarn test:typecheck
+        run: yarn test:lint:js

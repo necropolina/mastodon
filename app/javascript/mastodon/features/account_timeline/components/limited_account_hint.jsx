@@ -14,6 +14,7 @@ const mapDispatchToProps = (dispatch, { accountId }) => ({
 
 });
 
+export default @connect(() => {}, mapDispatchToProps)
 class LimitedAccountHint extends React.PureComponent {
 
   static propTypes = {
@@ -33,5 +34,3 @@ class LimitedAccountHint extends React.PureComponent {
   }
 
 }
-
-export default connect(() => {}, mapDispatchToProps)(LimitedAccountHint);

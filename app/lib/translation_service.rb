@@ -21,8 +21,8 @@ class TranslationService
     ENV['DEEPL_API_KEY'].present? || ENV['LIBRE_TRANSLATE_ENDPOINT'].present?
   end
 
-  def languages
-    {}
+  def supported?(_source_language, _target_language)
+    false
   end
 
   def translate(_text, _source_language, _target_language)

@@ -5,9 +5,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl } from 'react-intl';
 
 //  Mastodon imports.
-import { IconButton } from './icon_button';
+import IconButton from './icon_button';
 import VisibilityIcon from './status_visibility_icon';
-import { Icon } from 'flavours/glitch/components/icon';
+import Icon from 'flavours/glitch/components/icon';
 import { languages } from 'flavours/glitch/initial_state';
 
 //  Messages for use with internationalization stuff.
@@ -40,6 +40,7 @@ LanguageIcon.propTypes = {
   language: PropTypes.string.isRequired,
 };
 
+export default @injectIntl
 class StatusIcons extends React.PureComponent {
 
   static propTypes = {
@@ -64,15 +65,18 @@ class StatusIcons extends React.PureComponent {
   mediaIconTitleText (mediaIcon) {
     const { intl } = this.props;
 
-    const message = {
-      'link': messages.previewCard,
-      'picture-o': messages.pictures,
-      'tasks': messages.poll,
-      'video-camera': messages.video,
-      'music': messages.audio,
-    }[mediaIcon];
-
-    return message && intl.formatMessage(message);
+    switch (mediaIcon) {
+    case 'link':
+      return intl.formatMessage(messages.previewCard);
+    case 'picture-o':
+      return intl.formatMessage(messages.pictures);
+    case 'tasks':
+      return intl.formatMessage(messages.poll);
+    case 'video-camera':
+      return intl.formatMessage(messages.video);
+    case 'music':
+      return intl.formatMessage(messages.audio);
+    }
   }
 
   renderIcon (mediaIcon) {
@@ -139,5 +143,3 @@ class StatusIcons extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(StatusIcons);

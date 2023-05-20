@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Auth::RegistrationsController do
+RSpec.describe Auth::RegistrationsController, type: :controller do
   render_views
 
   shared_examples 'checks for enabled registrations' do |path|
@@ -33,42 +33,27 @@ RSpec.describe Auth::RegistrationsController do
   end
 
   describe 'GET #edit' do
-    before do
+    it 'returns http success' do
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in(Fabricate(:user))
       get :edit
-    end
-
-    it 'returns http success' do
       expect(response).to have_http_status(200)
-    end
-
-    it 'returns private cache control header' do
-      expect(response.headers['Cache-Control']).to include('private, no-store')
     end
   end
 
   describe 'GET #update' do
-    let(:user) { Fabricate(:user) }
-
-    before do
-      request.env['devise.mapping'] = Devise.mappings[:user]
-      sign_in(user, scope: :user)
-      post :update
-    end
-
     it 'returns http success' do
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      sign_in(Fabricate(:user), scope: :user)
+      post :update
       expect(response).to have_http_status(200)
     end
 
-    it 'returns private cache control headers' do
-      expect(response.headers['Cache-Control']).to include('private, no-store')
-    end
-
     context 'when suspended' do
-      let(:user) { Fabricate(:user, account_attributes: { username: 'test', suspended_at: Time.now.utc }) }
-
       it 'returns http forbidden' do
+        request.env['devise.mapping'] = Devise.mappings[:user]
+        sign_in(Fabricate(:user, account_attributes: { username: 'test', suspended_at: Time.now.utc }), scope: :user)
+        post :update
         expect(response).to have_http_status(403)
       end
     end
@@ -104,9 +89,9 @@ RSpec.describe Auth::RegistrationsController do
     end
 
     around do |example|
-      I18n.with_locale(I18n.locale) do
-        example.run
-      end
+      current_locale = I18n.locale
+      example.run
+      I18n.locale = current_locale
     end
 
     before { request.env['devise.mapping'] = Devise.mappings[:user] }
@@ -157,7 +142,7 @@ RSpec.describe Auth::RegistrationsController do
       end
     end
 
-    context 'with Approval-based registrations without invite' do
+    context 'approval-based registrations without invite' do
       subject do
         Setting.registrations_mode = 'approved'
         request.headers['Accept-Language'] = accept_language
@@ -184,7 +169,7 @@ RSpec.describe Auth::RegistrationsController do
       end
     end
 
-    context 'with Approval-based registrations with expired invite' do
+    context 'approval-based registrations with expired invite' do
       subject do
         Setting.registrations_mode = 'approved'
         request.headers['Accept-Language'] = accept_language
@@ -212,7 +197,7 @@ RSpec.describe Auth::RegistrationsController do
       end
     end
 
-    context 'with Approval-based registrations with valid invite and required invite text' do
+    context 'approval-based registrations with valid invite and required invite text' do
       subject do
         inviter = Fabricate(:user, confirmed_at: 2.days.ago)
         Setting.registrations_mode = 'approved'

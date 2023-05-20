@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
   isLoadingHashtags: state.getIn(['trends', 'tags', 'isLoading']),
 });
 
+export default @connect(mapStateToProps)
 class Tags extends React.PureComponent {
 
   static propTypes = {
@@ -59,5 +60,3 @@ class Tags extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(Tags);

@@ -67,7 +67,7 @@ class ActivityPub::FetchRemoteActorService < BaseService
   end
 
   def split_acct(acct)
-    acct.delete_prefix('acct:').split('@')
+    acct.gsub(/\Aacct:/, '').split('@')
   end
 
   def supported_context?

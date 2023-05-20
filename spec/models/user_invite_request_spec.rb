@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe UserInviteRequest do
+RSpec.describe UserInviteRequest, type: :model do
 end

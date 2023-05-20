@@ -7,23 +7,24 @@ class Themes
   include Singleton
 
   def initialize
-    core = YAML.load_file(Rails.root.join('app', 'javascript', 'core', 'theme.yml'))
-    core['pack'] = {} unless core['pack']
 
-    result = {}
-    Rails.root.glob('app/javascript/flavours/*/theme.yml') do |pathname|
-      data = YAML.load_file(pathname)
+    core = YAML.load_file(Rails.root.join('app', 'javascript', 'core', 'theme.yml'))
+    core['pack'] = Hash.new unless core['pack']
+
+    result = Hash.new
+    Dir.glob(Rails.root.join('app', 'javascript', 'flavours', '*', 'theme.yml')) do |path|
+      data = YAML.load_file(path)
       next unless data['pack']
 
-      dir = pathname.dirname
-      name = dir.basename.to_s
+      dir = File.dirname(path)
+      name = File.basename(dir)
       locales = []
       screenshots = []
 
       if data['locales']
         Dir.glob(File.join(dir, data['locales'], '*.{js,json}')) do |locale|
-          locale_name = File.basename(locale, File.extname(locale))
-          locales.push(locale_name) unless /defaultMessages|whitelist|index/.match?(locale_name)
+          localeName = File.basename(locale, File.extname(locale))
+          locales.push(localeName) unless localeName.match(/defaultMessages|whitelist|index/)
         end
       end
 
@@ -42,30 +43,34 @@ class Themes
       result[name] = data
     end
 
-    Rails.root.glob('app/javascript/skins/*/*') do |pathname|
-      ext = pathname.extname.to_s
-      skin = pathname.basename.to_s
-      name = pathname.dirname.basename.to_s
+    Dir.glob(Rails.root.join('app', 'javascript', 'skins', '*', '*')) do |path|
+      ext = File.extname(path)
+      skin = File.basename(path)
+      name = File.basename(File.dirname(path))
       next unless result[name]
 
-      if pathname.directory?
+      if File.directory?(path)
         pack = []
-        pathname.glob('*.{css,scss}') do |sheet|
-          pack.push(sheet.basename(sheet.extname).to_s)
+        Dir.glob(File.join(path, '*.{css,scss}')) do |sheet|
+          pack.push(File.basename(sheet, File.extname(sheet)))
         end
-      elsif /^\.s?css$/i.match?(ext)
-        skin = pathname.basename(ext).to_s
+      elsif ext.match(/^\.s?css$/i)
+        skin = File.basename(path, ext)
         pack = ['common']
       end
 
-      result[name]['skin'][skin] = pack if skin != 'default'
+      if skin != 'default'
+        result[name]['skin'][skin] = pack
+      end
     end
 
     @core = core
     @conf = result
   end
 
-  attr_reader :core
+  def core
+    @core
+  end
 
   def flavour(name)
     @conf[name]
@@ -81,7 +86,7 @@ class Themes
 
   def flavours_and_skins
     flavours.map do |flavour|
-      [flavour, skins_for(flavour).map { |skin| [flavour, skin] }]
+      [flavour, skins_for(flavour).map{ |skin| [flavour, skin] }]
     end
   end
 end

@@ -8,11 +8,11 @@
   flex: none;
 
   &:first-child {
-    padding-inline-start: 10px;
+    padding-left: 10px;
   }
 
   &:last-child {
-    padding-inline-end: 10px;
+    padding-right: 10px;
   }
 
   @include single-column('screen and (max-width: 630px)') {
@@ -49,15 +49,13 @@
   }
 }
 
-.drawer__header {
-  flex: none;
-  font-size: 16px;
-  background: lighten($ui-base-color, 8%);
-  margin-bottom: 10px;
+.drawer--header {
   display: flex;
   flex-direction: row;
-  border-radius: 4px;
-  overflow: hidden;
+  margin-bottom: 10px;
+  flex: none;
+  background: lighten($ui-base-color, 8%);
+  font-size: 16px;
 
   & > * {
     display: block;
@@ -126,7 +124,7 @@
 
 .navigation-bar__profile {
   flex: 1 1 auto;
-  margin-inline-start: 8px;
+  margin-left: 8px;
   overflow: hidden;
 }
 
@@ -150,7 +148,7 @@
 
     .fa {
       display: inline-block;
-      margin-inline-end: 5px;
+      margin-right: 5px;
     }
   }
 
@@ -181,13 +179,12 @@
   position: relative;
   overflow: hidden;
   display: flex;
-  border-radius: 4px;
 }
 
 .drawer__inner {
   position: absolute;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   background: lighten($ui-base-color, 13%);
   box-sizing: border-box;
   padding: 0;
@@ -218,6 +215,7 @@
     width: 85%;
     height: 100%;
     pointer-events: none;
+    user-drag: none;
     user-select: none;
   }
 
@@ -229,7 +227,7 @@
     cursor: inherit;
   }
 
-  @media screen and (height >= 640px) {
+  @media screen and (min-height: 640px) {
     display: block;
   }
 }
@@ -237,14 +235,14 @@
 .pseudo-drawer {
   background: lighten($ui-base-color, 13%);
   font-size: 13px;
-  text-align: start;
+  text-align: left;
 }
 
 .drawer__backdrop {
   cursor: pointer;
   position: absolute;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba($base-overlay-background, 0.5);

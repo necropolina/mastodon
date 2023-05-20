@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe AccountAlias do
+RSpec.describe AccountAlias, type: :model do
 end

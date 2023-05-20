@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::DomainAllowsController do
+RSpec.describe Admin::DomainAllowsController, type: :controller do
   render_views
 
   before do

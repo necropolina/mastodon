@@ -9,9 +9,9 @@ import {
   enterNotificationClearingMode,
   expandNotifications,
   scrollTopNotifications,
-  loadPending,
   mountNotifications,
   unmountNotifications,
+  loadPending,
   markNotificationsAsRead,
 } from 'flavours/glitch/actions/notifications';
 import { addColumn, removeColumn, moveColumn } from 'flavours/glitch/actions/columns';
@@ -25,10 +25,10 @@ import { List as ImmutableList } from 'immutable';
 import { debounce } from 'lodash';
 import ScrollableList from 'flavours/glitch/components/scrollable_list';
 import LoadGap from 'flavours/glitch/components/load_gap';
-import { Icon } from 'flavours/glitch/components/icon';
-import { compareId } from 'flavours/glitch/compare_id';
+import Icon from 'flavours/glitch/components/icon';
+import compareId from 'flavours/glitch/compare_id';
 import NotificationsPermissionBanner from './components/notifications_permission_banner';
-import { NotSignedInIndicator } from 'flavours/glitch/components/not_signed_in_indicator';
+import NotSignedInIndicator from 'flavours/glitch/components/not_signed_in_indicator';
 import { Helmet } from 'react-helmet';
 
 import NotificationPurgeButtonsContainer from 'flavours/glitch/containers/notification_purge_buttons_container';
@@ -79,9 +79,21 @@ const mapDispatchToProps = dispatch => ({
   onEnterCleaningMode(yes) {
     dispatch(enterNotificationClearingMode(yes));
   },
+  onMarkAsRead() {
+    dispatch(markNotificationsAsRead());
+    dispatch(submitMarkers({ immediate: true }));
+  },
+  onMount() {
+    dispatch(mountNotifications());
+  },
+  onUnmount() {
+    dispatch(unmountNotifications());
+  },
   dispatch,
 });
 
+export default @connect(mapStateToProps, mapDispatchToProps)
+@injectIntl
 class Notifications extends React.PureComponent {
 
   static contextTypes = {
@@ -102,6 +114,8 @@ class Notifications extends React.PureComponent {
     localSettings: ImmutablePropTypes.map,
     notifCleaningActive: PropTypes.bool,
     onEnterCleaningMode: PropTypes.func,
+    onMount: PropTypes.func,
+    onUnmount: PropTypes.func,
     lastReadId: PropTypes.string,
     canMarkAsRead: PropTypes.bool,
     needsNotificationPermission: PropTypes.bool,
@@ -114,18 +128,6 @@ class Notifications extends React.PureComponent {
   state = {
     animatingNCD: false,
   };
-
-  componentDidMount() {
-    this.props.dispatch(mountNotifications());
-  }
-
-  componentWillUnmount () {
-    this.handleLoadOlder.cancel();
-    this.handleScrollToTop.cancel();
-    this.handleScroll.cancel();
-    // this.props.dispatch(scrollTopNotifications(false));
-    this.props.dispatch(unmountNotifications());
-  }
 
   handleLoadGap = (maxId) => {
     this.props.dispatch(expandNotifications({ maxId }));
@@ -195,6 +197,20 @@ class Notifications extends React.PureComponent {
     }
   }
 
+  componentDidMount () {
+    const { onMount } = this.props;
+    if (onMount) {
+      onMount();
+    }
+  }
+
+  componentWillUnmount () {
+    const { onUnmount } = this.props;
+    if (onUnmount) {
+      onUnmount();
+    }
+  }
+
   handleTransitionEndNCD = () => {
     this.setState({ animatingNCD: false });
   };
@@ -205,13 +221,12 @@ class Notifications extends React.PureComponent {
   };
 
   handleMarkAsRead = () => {
-    this.props.dispatch(markNotificationsAsRead());
-    this.props.dispatch(submitMarkers({ immediate: true }));
+    this.props.onMarkAsRead();
   };
 
   render () {
     const { intl, notifications, isLoading, isUnread, columnId, multiColumn, hasMore, numPending, showFilterBar, lastReadId, canMarkAsRead, needsNotificationPermission } = this.props;
-    const { notifCleaningActive } = this.props;
+    const { notifCleaning, notifCleaningActive } = this.props;
     const { animatingNCD } = this.state;
     const pinned = !!columnId;
     const emptyMessage = <FormattedMessage id='empty_column.notifications' defaultMessage="You don't have any notifications yet. When other people interact with you, you will see it here." />;
@@ -365,5 +380,3 @@ class Notifications extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Notifications));

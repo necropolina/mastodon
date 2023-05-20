@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ReblogService, type: :service do
   let(:alice)  { Fabricate(:account, username: 'alice') }
 
-  context 'when creates a reblog with appropriate visibility' do
+  context 'creates a reblog with appropriate visibility' do
     subject { ReblogService.new }
 
     let(:visibility)        { :public }
@@ -35,25 +35,10 @@ RSpec.describe ReblogService, type: :service do
   end
 
   context 'when the reblogged status is discarded in the meantime' do
-    let(:status) { Fabricate(:status, account: alice, visibility: :public, text: 'discard-status-text') }
+    let(:status) { Fabricate(:status, account: alice, visibility: :public) }
 
-    # Add a callback to discard the status being reblogged after the
-    # validations pass but before the database commit is executed.
     before do
-      Status.class_eval do
-        before_save :discard_status
-        def discard_status
-          Status
-            .where(id: reblog_of_id)
-            .where(text: 'discard-status-text')
-            .update_all(deleted_at: Time.now.utc) # rubocop:disable Rails/SkipsModelValidations
-        end
-      end
-    end
-
-    # Remove race condition simulating `discard_status` callback.
-    after do
-      Status._save_callbacks.delete(:discard_status)
+      status.discard
     end
 
     it 'raises an exception' do
@@ -61,7 +46,7 @@ RSpec.describe ReblogService, type: :service do
     end
   end
 
-  context 'with ActivityPub' do
+  context 'ActivityPub' do
     subject { ReblogService.new }
 
     let(:bob)    { Fabricate(:account, username: 'bob', protocol: :activitypub, domain: 'example.com', inbox_url: 'http://example.com/inbox') }

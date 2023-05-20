@@ -43,7 +43,7 @@ class ActivityTracker
 
     case @type
     when :basic
-      redis.mget(*keys).sum(&:to_i)
+      redis.mget(*keys).map(&:to_i).sum
     when :unique
       redis.pfcount(*keys)
     end

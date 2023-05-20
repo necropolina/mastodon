@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Avatar } from '../../../components/avatar';
+import Avatar from '../../../components/avatar';
 import DisplayName from '../../../components/display_name';
 import StatusContent from '../../../components/status_content';
 import MediaGallery from '../../../components/media_gallery';
 import { Link } from 'react-router-dom';
-import { injectIntl, defineMessages, FormattedDate, FormattedMessage } from 'react-intl';
+import { injectIntl, defineMessages, FormattedDate } from 'react-intl';
 import Card from './card';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import Video from '../../video';
 import Audio from '../../audio';
 import scheduleIdleTask from '../../ui/util/schedule_idle_task';
 import classNames from 'classnames';
-import { Icon }  from 'mastodon/components/icon';
-import { AnimatedNumber } from 'mastodon/components/animated_number';
+import Icon from 'mastodon/components/icon';
+import AnimatedNumber from 'mastodon/components/animated_number';
 import PictureInPicturePlaceholder from 'mastodon/components/picture_in_picture_placeholder';
 import EditedTimestamp from 'mastodon/components/edited_timestamp';
 
@@ -25,6 +25,7 @@ const messages = defineMessages({
   direct_short: { id: 'privacy.direct.short', defaultMessage: 'Direct' },
 });
 
+export default  @injectIntl
 class DetailedStatus extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -262,13 +263,7 @@ class DetailedStatus extends ImmutablePureComponent {
 
     return (
       <div style={outerStyle}>
-        <div ref={this.setRef} className={classNames('detailed-status', { compact })}>
-          {status.get('visibility') === 'direct' && (
-            <div className='status__prepend'>
-              <div className='status__prepend-icon-wrapper'><Icon id='at' className='status__prepend-icon' fixedWidth /></div>
-              <FormattedMessage id='status.direct_indicator' defaultMessage='Private mention' />
-            </div>
-          )}
+        <div ref={this.setRef} className={classNames('detailed-status', `detailed-status-${status.get('visibility')}`, { compact })}>
           <a href={`/@${status.getIn(['account', 'acct'])}`} onClick={this.handleAccountClick} className='detailed-status__display-name'>
             <div className='detailed-status__display-avatar'><Avatar account={status.get('account')} size={46} /></div>
             <DisplayName account={status.get('account')} localDomain={this.props.domain} />
@@ -294,5 +289,3 @@ class DetailedStatus extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(DetailedStatus);

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Webhook do
+RSpec.describe Webhook, type: :model do
   let(:webhook) { Fabricate(:webhook) }
 
   describe '#rotate_secret!' do

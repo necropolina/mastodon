@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe InstanceActorsController do
+RSpec.describe InstanceActorsController, type: :controller do
   describe 'GET #show' do
-    context 'with JSON' do
+    context 'as JSON' do
       let(:format) { 'json' }
 
       shared_examples 'shared behavior' do

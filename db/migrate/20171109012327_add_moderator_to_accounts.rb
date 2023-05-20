@@ -1,6 +1,6 @@
 require Rails.root.join('lib', 'mastodon', 'migration_helpers')
 
-class AddModeratorToAccounts < ActiveRecord::Migration[5.2]
+class AddModeratorToAccounts < ActiveRecord::Migration[5.1]
   include Mastodon::MigrationHelpers
 
   disable_ddl_transaction!

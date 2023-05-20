@@ -10,8 +10,8 @@
 .modal-root__overlay {
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
   background: rgba($base-overlay-background, 0.7);
   transition: background 0.5s;
@@ -20,7 +20,7 @@
 .modal-root__container {
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -41,7 +41,7 @@
 
 .media-modal__zoom-button {
   position: absolute;
-  inset-inline-end: 64px;
+  right: 64px;
   top: 8px;
   z-index: 100;
   pointer-events: auto;
@@ -93,7 +93,7 @@
   & > div {
     position: absolute;
     top: 0;
-    inset-inline-start: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -115,7 +115,7 @@
   text-align: center;
 }
 
-@media screen and (width <= 550px) {
+@media screen and (max-width: 550px) {
   .onboarding-modal {
     width: 100%;
     height: 100%;
@@ -292,8 +292,8 @@
   }
 
   &__extra {
-    padding-inline-end: 65px;
-    padding-inline-start: 185px;
+    padding-right: 65px;
+    padding-left: 185px;
     text-align: center;
   }
 }
@@ -325,7 +325,7 @@
 .onboarding-modal__page-four,
 .onboarding-modal__page-five {
   p {
-    text-align: start;
+    text-align: left;
   }
 
   .figure {
@@ -345,7 +345,7 @@
 
     &.non-interactive {
       pointer-events: none;
-      text-align: start;
+      text-align: left;
     }
   }
 }
@@ -360,11 +360,11 @@
       margin: 0 10px;
 
       &:first-child {
-        margin-inline-start: 0;
+        margin-left: 0;
       }
 
       &:last-child {
-        margin-inline-end: 0;
+        margin-right: 0;
       }
 
       p {
@@ -382,7 +382,7 @@
   }
 }
 
-@media screen and (width <= 320px) and (height <= 600px) {
+@media screen and (max-width: 320px) and (max-height: 600px) {
   .onboarding-modal__page p {
     font-size: 14px;
     line-height: 20px;
@@ -410,10 +410,9 @@
   display: inline-block;
   max-width: 30px;
   max-height: auto;
-  margin-inline-start: 10px;
+  margin-left: 10px;
 }
 
-.doodle-modal,
 .boost-modal,
 .confirmation-modal,
 .report-modal,
@@ -486,7 +485,6 @@
   }
 }
 
-.doodle-modal__action-bar,
 .boost-modal__action-bar,
 .confirmation-modal__action-bar,
 .mute-modal__action-bar,
@@ -499,9 +497,9 @@
 
   & > div {
     flex: 1 1 auto;
-    text-align: end;
+    text-align: right;
     color: $lighter-text-color;
-    padding-inline-end: 10px;
+    padding-right: 10px;
   }
 
   .button {
@@ -562,7 +560,7 @@
     font-weight: 700;
     margin-bottom: 15px;
 
-    @media screen and (height <= 800px) {
+    @media screen and (max-height: 800px) {
       font-size: 22px;
     }
   }
@@ -713,7 +711,7 @@
     & > span {
       font-size: 17px;
       font-weight: 500;
-      margin-inline-start: 10px;
+      margin-left: 10px;
     }
   }
 
@@ -737,11 +735,11 @@
   }
 
   .emoji-mart-search {
-    padding-inline-end: 10px;
+    padding-right: 10px;
   }
 
   .emoji-mart-search-icon {
-    inset-inline-end: 10px + 5px;
+    right: 10px + 5px;
   }
 }
 
@@ -749,7 +747,7 @@
   display: flex;
   border-top: 1px solid $ui-secondary-color;
 
-  @media screen and (width <= 480px) {
+  @media screen and (max-width: 480px) {
     flex-wrap: wrap;
     overflow-y: auto;
   }
@@ -760,7 +758,7 @@
   box-sizing: border-box;
   width: 50%;
 
-  @media screen and (width <= 480px) {
+  @media screen and (max-width: 480px) {
     width: 100%;
   }
 }
@@ -777,13 +775,13 @@
     color: $highlight-text-color;
   }
 
-  @media screen and (width <= 480px) {
+  @media screen and (max-width: 480px) {
     max-height: 10vh;
   }
 }
 
 .focal-point-modal__content {
-  @media screen and (width <= 480px) {
+  @media screen and (max-width: 480px) {
     max-height: 40vh;
   }
 }
@@ -799,7 +797,7 @@
 
 .report-modal__comment {
   padding: 20px;
-  border-inline-end: 1px solid $ui-secondary-color;
+  border-right: 1px solid $ui-secondary-color;
   max-width: 320px;
 
   p {
@@ -879,7 +877,7 @@
     }
   }
 
-  @media screen and (width <= 480px) {
+  @media screen and (max-width: 480px) {
     padding: 10px;
     max-width: 100%;
     order: 2;
@@ -949,7 +947,7 @@
         & > .react-toggle,
         & > .icon,
         button:first-child {
-          margin-inline-end: 10px;
+          margin-right: 10px;
         }
       }
     }
@@ -982,8 +980,8 @@
 }
 
 .confirmation-modal__do_not_ask_again {
-  padding-inline-start: 20px;
-  padding-inline-end: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 10px;
   font-size: 14px;
 
@@ -1025,7 +1023,7 @@
     border: 1px solid darken($simple-background-color, 14%);
     border-radius: 4px;
     padding: 6px 10px;
-    padding-inline-end: 30px;
+    padding-right: 30px;
   }
 }
 
@@ -1049,7 +1047,7 @@
     &__label {
       color: $inverted-text-color;
       margin: 0;
-      margin-inline-start: 8px;
+      margin-left: 8px;
     }
   }
 }
@@ -1060,7 +1058,7 @@
   .report-modal__close {
     position: absolute;
     top: 10px;
-    inset-inline-end: 10px;
+    right: 10px;
   }
 }
 
@@ -1154,7 +1152,7 @@
         background: lighten($ui-base-color, 4%);
       }
 
-      @media screen and (width <= 600px) {
+      @media screen and (max-width: 600px) {
         font-size: 16px;
       }
     }
@@ -1206,13 +1204,13 @@
     width: 100%;
     height: 100%;
     top: 0;
-    inset-inline-start: 0;
+    left: 0;
   }
 
   &__preview {
     position: absolute;
     bottom: 10px;
-    inset-inline-end: 10px;
+    right: 10px;
     z-index: 2;
     cursor: move;
     transition: opacity 0.1s ease;
@@ -1235,7 +1233,7 @@
     }
   }
 
-  @media screen and (width <= 480px) {
+  @media screen and (max-width: 480px) {
     img,
     video {
       max-height: 100%;
@@ -1272,7 +1270,7 @@
 
   ul {
     padding: 10px;
-    margin-inline-start: 12px;
+    margin-left: 12px;
     list-style: disc inside;
   }
 

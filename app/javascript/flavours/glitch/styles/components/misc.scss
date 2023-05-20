@@ -281,15 +281,13 @@
     display: inline-flex;
     align-items: center;
     width: auto !important;
-    padding: 0;
-    padding-inline-end: 4px;
-    padding-inline-start: 2px;
+    padding: 0 4px 0 2px;
   }
 
   &__counter {
     display: inline-block;
     width: auto;
-    margin-inline-start: 4px;
+    margin-left: 4px;
     font-size: 12px;
     font-weight: 500;
   }
@@ -377,7 +375,7 @@ body > [data-popper-placement] {
 }
 
 .notification__favourite-icon-wrapper {
-  inset-inline-start: 0;
+  left: 0;
   position: absolute;
 
   .fa.star-icon {
@@ -656,7 +654,7 @@ body > [data-popper-placement] {
   }
 
   &.right {
-    inset-inline-start: -9px;
+    left: -9px;
 
     &::before {
       transform: rotate(-90deg);
@@ -668,7 +666,7 @@ body > [data-popper-placement] {
   }
 
   &.left {
-    inset-inline-end: -9px;
+    right: -9px;
 
     &::before {
       transform: rotate(90deg);
@@ -738,7 +736,7 @@ body > [data-popper-placement] {
   vertical-align: top;
 
   .account__avatar {
-    margin-inline-end: 5px;
+    margin-right: 5px;
     border-radius: 50%;
   }
 
@@ -751,8 +749,8 @@ body > [data-popper-placement] {
   display: block;
   line-height: 18px;
   max-width: 311px;
-  inset-inline-end: 0;
-  text-align: start;
+  right: 0;
+  text-align: left;
   z-index: 9999;
 
   & > ul {
@@ -766,12 +764,12 @@ body > [data-popper-placement] {
   }
 
   &.dropdown__right {
-    inset-inline-end: 0;
+    right: 0;
   }
 
   &.dropdown__left {
     & > ul {
-      inset-inline-start: -98px;
+      left: -98px;
     }
   }
 
@@ -827,7 +825,7 @@ body > [data-popper-placement] {
   overflow: hidden;
 }
 
-@media screen and (width >= 631px) {
+@media screen and (min-width: 631px) {
   .columns-area {
     padding: 0;
   }
@@ -836,23 +834,23 @@ body > [data-popper-placement] {
   .drawer {
     flex: 0 0 auto;
     padding: 10px;
-    padding-inline-start: 5px;
-    padding-inline-end: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
 
     &:first-child {
-      padding-inline-start: 10px;
+      padding-left: 10px;
     }
 
     &:last-child {
-      padding-inline-end: 10px;
+      padding-right: 10px;
     }
   }
 
   .columns-area > div {
     .column,
     .drawer {
-      padding-inline-start: 5px;
-      padding-inline-end: 5px;
+      padding-left: 5px;
+      padding-right: 5px;
     }
   }
 }
@@ -899,12 +897,12 @@ body > [data-popper-placement] {
   }
 
   span {
-    margin-inline-start: 5px;
+    margin-left: 5px;
     display: none;
   }
 
   span.icon {
-    margin-inline-start: 0;
+    margin-left: 0;
     display: inline;
   }
 }
@@ -914,7 +912,7 @@ body > [data-popper-placement] {
 
   &__badge {
     position: absolute;
-    inset-inline-start: 9px;
+    left: 9px;
     top: -13px;
     background: $ui-highlight-color;
     border: 2px solid lighten($ui-base-color, 8%);
@@ -928,7 +926,7 @@ body > [data-popper-placement] {
 
   &__issue-badge {
     position: absolute;
-    inset-inline-start: 11px;
+    left: 11px;
     bottom: 1px;
     display: block;
     background: $error-red;
@@ -1041,7 +1039,7 @@ body > [data-popper-placement] {
   margin-top: auto;
   margin-bottom: auto;
   line-height: 0;
-  inset-inline-start: 8px;
+  left: 8px;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -1060,7 +1058,7 @@ body > [data-popper-placement] {
   margin-top: auto;
   margin-bottom: auto;
   line-height: 0;
-  inset-inline-end: 10px;
+  right: 10px;
   opacity: 1;
   transition: opacity 0.25s ease;
 }
@@ -1072,7 +1070,7 @@ body > [data-popper-placement] {
 .react-toggle-thumb {
   position: absolute;
   top: 1px;
-  inset-inline-start: 1px;
+  left: 1px;
   width: 22px;
   height: 22px;
   border: 1px solid $ui-base-color;
@@ -1084,7 +1082,7 @@ body > [data-popper-placement] {
 }
 
 .react-toggle--checked .react-toggle-thumb {
-  inset-inline-start: 27px;
+  left: 27px;
   border-color: $ui-highlight-color;
 }
 
@@ -1134,19 +1132,19 @@ body > [data-popper-placement] {
       }
     }
 
-    @media screen and (height <= 810px) {
+    @media screen and (max-height: 810px) {
       .trends__item:nth-of-type(3) {
         display: none;
       }
     }
 
-    @media screen and (height <= 720px) {
+    @media screen and (max-height: 720px) {
       .trends__item:nth-of-type(2) {
         display: none;
       }
     }
 
-    @media screen and (height <= 670px) {
+    @media screen and (max-height: 670px) {
       display: none;
     }
 
@@ -1178,7 +1176,7 @@ body > [data-popper-placement] {
 
   thead {
     position: absolute;
-    inset-inline-start: -9999px;
+    left: -9999px;
   }
 
   td {
@@ -1320,9 +1318,9 @@ button.icon-button.active i.fa-retweet {
   overflow: hidden;
   position: absolute;
   top: 0;
-  inset-inline-end: 0;
+  right: 0;
   bottom: -1px;
-  padding-inline-start: 15px; // space for the box shadow to be visible
+  padding-left: 15px; // space for the box shadow to be visible
   z-index: 999;
   align-items: center;
   justify-content: flex-end;
@@ -1337,7 +1335,7 @@ button.icon-button.active i.fa-retweet {
     align-items: center;
     justify-content: center;
     background: lighten($ui-base-color, 8%);
-    border-inline-start: 1px solid lighten($ui-base-color, 20%);
+    border-left: 1px solid lighten($ui-base-color, 20%);
     box-shadow: 0 0 5px black;
     border-bottom: 1px solid $ui-base-color;
   }
@@ -1383,7 +1381,7 @@ button.icon-button.active i.fa-retweet {
   overflow: visible;
   position: absolute;
   top: 50%;
-  inset-inline-start: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
@@ -1475,7 +1473,7 @@ button.icon-button.active i.fa-retweet {
 
 .spoiler-button {
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -1483,7 +1481,7 @@ button.icon-button.active i.fa-retweet {
 
   &--minified {
     display: flex;
-    inset-inline-start: 4px;
+    left: 4px;
     top: 4px;
     width: auto;
     height: auto;
@@ -1541,7 +1539,7 @@ button.icon-button.active i.fa-retweet {
   color: $darker-text-color;
   display: inline-block;
   margin-bottom: 14px;
-  margin-inline-start: 8px;
+  margin-left: 8px;
   vertical-align: middle;
 }
 
@@ -1591,7 +1589,7 @@ button.icon-button.active i.fa-retweet {
   display: flex;
   height: 100vh;
   justify-content: center;
-  inset-inline-start: 0;
+  left: 0;
   opacity: 0;
   position: fixed;
   top: 0;
@@ -1616,9 +1614,9 @@ button.icon-button.active i.fa-retweet {
 .upload-area__background {
   position: absolute;
   top: 0;
-  inset-inline-end: 0;
+  right: 0;
   bottom: 0;
-  inset-inline-start: 0;
+  left: 0;
   z-index: -1;
   border-radius: 4px;
   background: $ui-base-color;
@@ -1648,7 +1646,7 @@ button.icon-button.active i.fa-retweet {
   height: 3px;
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   z-index: 9999;
 }
 
@@ -1659,7 +1657,7 @@ button.icon-button.active i.fa-retweet {
 .icon-badge {
   position: absolute;
   display: block;
-  inset-inline-end: -0.25em;
+  right: -0.25em;
   top: -0.25em;
   background-color: $ui-highlight-color;
   border-radius: 50%;
@@ -1699,7 +1697,7 @@ button.icon-button.active i.fa-retweet {
   &__content {
     flex: 1 1 auto;
     padding: 10px 5px;
-    padding-inline-end: 15px;
+    padding-right: 15px;
     overflow: hidden;
 
     &__info {
@@ -1712,7 +1710,7 @@ button.icon-button.active i.fa-retweet {
     &__relative-time {
       font-size: 15px;
       color: $darker-text-color;
-      padding-inline-start: 15px;
+      padding-left: 15px;
     }
 
     &__names {
@@ -1761,8 +1759,8 @@ button.icon-button.active i.fa-retweet {
 
 .ui .flash-message {
   margin-top: 10px;
-  margin-inline-start: auto;
-  margin-inline-end: auto;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 0;
   min-width: 75%;
 }

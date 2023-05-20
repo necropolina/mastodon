@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe HomeController do
+RSpec.describe HomeController, type: :controller do
   render_views
 
   describe 'GET #index' do

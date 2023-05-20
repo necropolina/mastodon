@@ -3,46 +3,47 @@
 require 'rails_helper'
 
 RSpec.describe Remotable do
-  let(:foo_class) do
-    Class.new do
-      def initialize
-        @attrs = {}
-      end
+  class Foo
+    def initialize
+      @attrs = {}
+    end
 
-      def [](arg)
-        @attrs[arg]
-      end
+    def [](arg)
+      @attrs[arg]
+    end
 
-      def []=(arg1, arg2)
-        @attrs[arg1] = arg2
-      end
+    def []=(arg1, arg2)
+      @attrs[arg1] = arg2
+    end
 
-      def hoge=(arg); end
+    def hoge=(arg); end
 
-      def hoge_file_name; end
+    def hoge_file_name; end
 
-      def hoge_file_name=(arg); end
+    def hoge_file_name=(arg); end
 
-      def has_attribute?(arg); end
+    def has_attribute?(arg); end
 
-      def self.attachment_definitions
-        { hoge: nil }
-      end
+    def self.attachment_definitions
+      { hoge: nil }
+    end
+  end
+
+  before do
+    class Foo
+      include Remotable
+
+      remotable_attachment :hoge, 1.kilobyte
     end
   end
 
   let(:attribute_name) { "#{hoge}_remote_url".to_sym }
   let(:code)           { 200 }
   let(:file)           { 'filename="foo.txt"' }
-  let(:foo)            { foo_class.new }
+  let(:foo)            { Foo.new }
   let(:headers)        { { 'content-disposition' => file } }
   let(:hoge)           { :hoge }
   let(:url)            { 'https://google.com' }
-
-  before do
-    foo_class.include described_class
-    foo_class.remotable_attachment :hoge, 1.kilobyte
-  end
 
   it 'defines a method #hoge_remote_url=' do
     expect(foo).to respond_to(:hoge_remote_url=)
@@ -156,7 +157,7 @@ RSpec.describe Remotable do
       context 'when the response is successful' do
         let(:code) { 200 }
 
-        context 'when contains Content-Disposition header' do
+        context 'and contains Content-Disposition header' do
           let(:file)      { 'filename="foo.txt"' }
           let(:headers)   { { 'content-disposition' => file } }
 

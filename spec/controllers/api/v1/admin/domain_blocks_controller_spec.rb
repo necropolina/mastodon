@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::Admin::DomainBlocksController do
+RSpec.describe Api::V1::Admin::DomainBlocksController, type: :controller do
   render_views
 
   let(:role)   { UserRole.find_by(name: 'Admin') }
@@ -84,7 +84,7 @@ RSpec.describe Api::V1::Admin::DomainBlocksController do
       BlockDomainService.new.call(domain_block)
     end
 
-    context 'when downgrading a domain suspension to silence' do
+    context 'downgrading a domain suspension to silence' do
       let(:original_severity) { 'suspend' }
       let(:new_severity)      { 'silence' }
 
@@ -101,7 +101,7 @@ RSpec.describe Api::V1::Admin::DomainBlocksController do
       end
     end
 
-    context 'when upgrading a domain silence to suspend' do
+    context 'upgrading a domain silence to suspend' do
       let(:original_severity) { 'silence' }
       let(:new_severity)      { 'suspend' }
 

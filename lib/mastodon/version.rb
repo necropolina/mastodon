@@ -13,15 +13,15 @@ module Mastodon
     end
 
     def patch
-      2
+      0
     end
 
     def flags
-      ENV.fetch('MASTODON_VERSION_FLAGS', '')
+      ''
     end
 
     def suffix
-      "+glitch#{ENV.fetch('MASTODON_VERSION_SUFFIX', '')}"
+      '+glitch'
     end
 
     def to_a

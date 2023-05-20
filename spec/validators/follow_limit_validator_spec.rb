@@ -18,7 +18,7 @@ RSpec.describe FollowLimitValidator, type: :validator do
     let(:_nil)    { true }
     let(:local)   { false }
 
-    context 'with follow.account.nil? || !follow.account.local?' do
+    context 'follow.account.nil? || !follow.account.local?' do
       let(:_nil)    { true }
 
       it 'not calls errors.add' do
@@ -26,11 +26,11 @@ RSpec.describe FollowLimitValidator, type: :validator do
       end
     end
 
-    context 'with !(follow.account.nil? || !follow.account.local?)' do
+    context '!(follow.account.nil? || !follow.account.local?)' do
       let(:_nil)    { false }
       let(:local)   { true }
 
-      context 'when limit_reached?' do
+      context 'limit_reached?' do
         let(:limit_reached) { true }
 
         it 'calls errors.add' do
@@ -39,7 +39,7 @@ RSpec.describe FollowLimitValidator, type: :validator do
         end
       end
 
-      context 'with !limit_reached?' do
+      context '!limit_reached?' do
         let(:limit_reached) { false }
 
         it 'not calls errors.add' do

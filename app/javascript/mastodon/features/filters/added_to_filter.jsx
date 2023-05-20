@@ -10,6 +10,7 @@ const mapStateToProps = (state, { filterId }) => ({
   filter: state.getIn(['filters', filterId]),
 });
 
+export default @connect(mapStateToProps)
 class AddedToFilter extends React.PureComponent {
 
   static propTypes = {
@@ -99,5 +100,3 @@ class AddedToFilter extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(AddedToFilter);

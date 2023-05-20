@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe InstancePresenter do
-  let(:instance_presenter) { described_class.new }
+  let(:instance_presenter) { InstancePresenter.new }
 
   describe '#description' do
     around do |example|

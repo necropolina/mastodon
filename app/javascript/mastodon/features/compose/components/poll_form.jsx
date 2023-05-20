@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import { IconButton } from 'mastodon/components/icon_button';
-import { Icon }  from 'mastodon/components/icon';
+import IconButton from 'mastodon/components/icon_button';
+import Icon from 'mastodon/components/icon';
 import AutosuggestInput from 'mastodon/components/autosuggest_input';
 import classNames from 'classnames';
 
@@ -20,7 +20,8 @@ const messages = defineMessages({
   days: { id: 'intervals.full.days', defaultMessage: '{number, plural, one {# day} other {# days}}' },
 });
 
-class OptionIntl extends React.PureComponent {
+@injectIntl
+class Option extends React.PureComponent {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -82,7 +83,7 @@ class OptionIntl extends React.PureComponent {
             onClick={this.handleToggleMultiple}
             onKeyPress={this.handleCheckboxKeypress}
             role='button'
-            tabIndex={0}
+            tabIndex='0'
             title={intl.formatMessage(isPollMultiple ? messages.switchToSingle : messages.switchToMultiple)}
             aria-label={intl.formatMessage(isPollMultiple ? messages.switchToSingle : messages.switchToMultiple)}
           />
@@ -112,8 +113,8 @@ class OptionIntl extends React.PureComponent {
 
 }
 
-const Option = injectIntl(OptionIntl);
-
+export default
+@injectIntl
 class PollForm extends ImmutablePureComponent {
 
   static propTypes = {
@@ -179,5 +180,3 @@ class PollForm extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(PollForm);

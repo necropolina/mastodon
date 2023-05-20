@@ -28,6 +28,8 @@ const mapDispatchToProps = dispatch => ({
   onReset: () => dispatch(resetListAdder()),
 });
 
+export default @connect(mapStateToProps, mapDispatchToProps)
+@injectIntl
 class ListAdder extends ImmutablePureComponent {
 
   static propTypes = {
@@ -69,5 +71,3 @@ class ListAdder extends ImmutablePureComponent {
   }
 
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ListAdder));

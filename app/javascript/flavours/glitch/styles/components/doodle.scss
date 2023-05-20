@@ -1,6 +1,8 @@
 $doodle-background: #d9e1e8;
 
 .doodle-modal {
+  @extend .boost-modal;
+
   width: unset;
 }
 
@@ -14,6 +16,8 @@ $doodle-background: #d9e1e8;
 }
 
 .doodle-modal__action-bar {
+  @extend .boost-modal__action-bar;
+
   .filler {
     flex-grow: 1;
     margin: 0;
@@ -31,8 +35,8 @@ $doodle-background: #d9e1e8;
       label {
         display: inline-block;
         width: 70px;
-        text-align: end;
-        margin-inline-end: 2px;
+        text-align: right;
+        margin-right: 2px;
       }
 
       input[type='number'],
@@ -42,14 +46,14 @@ $doodle-background: #d9e1e8;
 
       span.val {
         display: inline-block;
-        text-align: start;
+        text-align: left;
         width: 50px;
       }
     }
   }
 
   .doodle-palette {
-    padding-inline-end: 0 !important;
+    padding-right: 0 !important;
     border: 1px solid black;
     line-height: 0.2rem;
     flex-grow: 0;

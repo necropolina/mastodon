@@ -9,8 +9,6 @@ on:
       - '.nvmrc'
       - '**/*.js'
       - '**/*.jsx'
-      - '**/*.ts'
-      - '**/*.tsx'
       - '**/*.snap'
       - '.github/workflows/test-js.yml'
 
@@ -21,8 +19,6 @@ on:
       - '.nvmrc'
       - '**/*.js'
       - '**/*.jsx'
-      - '**/*.ts'
-      - '**/*.tsx'
       - '**/*.snap'
       - '.github/workflows/test-js.yml'
 

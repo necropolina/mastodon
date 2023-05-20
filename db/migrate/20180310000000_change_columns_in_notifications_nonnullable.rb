@@ -1,4 +1,4 @@
-class ChangeColumnsInNotificationsNonnullable < ActiveRecord::Migration[5.2]
+class ChangeColumnsInNotificationsNonnullable < ActiveRecord::Migration[5.1]
   def change
     safety_assured do
       change_column_null :notifications, :activity_id, false

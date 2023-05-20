@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 //  Components.
-import { Icon } from 'flavours/glitch/components/icon';
+import Icon from 'flavours/glitch/components/icon';
 
 //  Utils.
 import { conditionalRender } from 'flavours/glitch/utils/react_helpers';
@@ -45,6 +45,7 @@ const messages = defineMessages({
   },
 });
 
+export default @injectIntl
 class Header extends ImmutablePureComponent {
 
   static propTypes = {
@@ -77,7 +78,7 @@ class Header extends ImmutablePureComponent {
 
     //  The result.
     return (
-      <nav className='drawer__header'>
+      <nav className='drawer--header'>
         <Link
           aria-label={intl.formatMessage(messages.start)}
           title={intl.formatMessage(messages.start)}
@@ -133,5 +134,3 @@ class Header extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(Header);

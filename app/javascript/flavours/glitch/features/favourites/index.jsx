@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import ColumnHeader from 'flavours/glitch/components/column_header';
-import { Icon } from 'flavours/glitch/components/icon';
+import Icon from 'flavours/glitch/components/icon';
 import { fetchFavourites } from 'flavours/glitch/actions/interactions';
 import LoadingIndicator from 'flavours/glitch/components/loading_indicator';
 import ScrollableList from 'flavours/glitch/components/scrollable_list';
@@ -22,6 +22,8 @@ const mapStateToProps = (state, props) => ({
   accountIds: state.getIn(['user_lists', 'favourited_by', props.params.statusId]),
 });
 
+export default @connect(mapStateToProps)
+@injectIntl
 class Favourites extends ImmutablePureComponent {
 
   static propTypes = {
@@ -99,5 +101,3 @@ class Favourites extends ImmutablePureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(injectIntl(Favourites));

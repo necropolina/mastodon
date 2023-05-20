@@ -664,7 +664,9 @@ module Mastodon
 
     def remove_index_if_exists!(table, name)
       ActiveRecord::Base.connection.remove_index(table, name: name)
-    rescue ArgumentError, ActiveRecord::StatementInvalid
+    rescue ArgumentError
+      nil
+    rescue ActiveRecord::StatementInvalid
       nil
     end
   end

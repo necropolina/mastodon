@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::MarkersController do
+RSpec.describe Api::V1::MarkersController, type: :controller do
   render_views
 
   let!(:user)  { Fabricate(:user) }

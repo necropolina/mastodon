@@ -19,6 +19,7 @@ const mapStateToProps = state => ({
   isLoading: state.getIn(['suggestions', 'isLoading']),
 });
 
+export default @connect(mapStateToProps)
 class FollowRecommendations extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -113,5 +114,3 @@ class FollowRecommendations extends ImmutablePureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(FollowRecommendations);

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'mastodon/migration_helpers'
 
 class AddApplyToMentionsFlagToKeywordMutes < ActiveRecord::Migration[5.2]

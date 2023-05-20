@@ -3,14 +3,14 @@
 namespace :assets do
   desc 'Generate static pages'
   task generate_static_pages: :environment do
-    def render_static_page(action, dest:, **opts)
-      renderer = Class.new(ApplicationController) do
-        def current_user
-          nil
-        end
+    class StaticApplicationController < ApplicationController
+      def current_user
+        nil
       end
+    end
 
-      html = renderer.render(action, opts)
+    def render_static_page(action, dest:, **opts)
+      html = StaticApplicationController.render(action, opts)
       File.write(dest, html)
     end
 

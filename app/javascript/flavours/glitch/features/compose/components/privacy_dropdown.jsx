@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl } from 'react-intl';
 import Dropdown from './dropdown';
 
@@ -15,6 +16,7 @@ const messages = defineMessages({
   change_privacy: { id: 'privacy.change', defaultMessage: 'Adjust status privacy' },
 });
 
+export default @injectIntl
 class PrivacyDropdown extends React.PureComponent {
 
   static propTypes = {
@@ -84,5 +86,3 @@ class PrivacyDropdown extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(PrivacyDropdown);

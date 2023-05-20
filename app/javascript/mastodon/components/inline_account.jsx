@@ -2,7 +2,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { makeGetAccount } from 'mastodon/selectors';
-import { Avatar } from 'mastodon/components/avatar';
+import Avatar from 'mastodon/components/avatar';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -14,6 +14,7 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
+export default @connect(makeMapStateToProps)
 class InlineAccount extends React.PureComponent {
 
   static propTypes = {
@@ -31,5 +32,3 @@ class InlineAccount extends React.PureComponent {
   }
 
 }
-
-export default connect(makeMapStateToProps)(InlineAccount);
