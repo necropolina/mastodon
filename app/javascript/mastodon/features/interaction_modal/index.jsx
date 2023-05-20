@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { registrationsOpen } from 'mastodon/initial_state';
 import { connect } from 'react-redux';
-import Icon from 'mastodon/components/icon';
+import { Icon }  from 'mastodon/components/icon';
 import classNames from 'classnames';
 import { openModal, closeModal } from 'mastodon/actions/modal';
 
@@ -74,7 +74,6 @@ class Copypaste extends React.PureComponent {
 
 }
 
-export default @connect(mapStateToProps, mapDispatchToProps)
 class InteractionModal extends React.PureComponent {
 
   static propTypes = {
@@ -159,3 +158,5 @@ class InteractionModal extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(InteractionModal);

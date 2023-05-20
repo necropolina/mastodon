@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeGetAccount } from 'mastodon/selectors';
-import Avatar from 'mastodon/components/avatar';
+import { Avatar } from 'mastodon/components/avatar';
 import DisplayName from 'mastodon/components/display_name';
 import { Link } from 'react-router-dom';
 import Button from 'mastodon/components/button';
@@ -91,9 +91,6 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
 
 });
 
-export default
-@injectIntl
-@connect(makeMapStateToProps, mapDispatchToProps)
 class AccountCard extends ImmutablePureComponent {
 
   static propTypes = {
@@ -233,3 +230,5 @@ class AccountCard extends ImmutablePureComponent {
   }
 
 }
+
+export default injectIntl(connect(makeMapStateToProps, mapDispatchToProps)(AccountCard));

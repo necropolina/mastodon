@@ -1,12 +1,12 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import IconButton from './icon_button';
+import { IconButton } from './icon_button';
 import DropdownMenuContainer from 'flavours/glitch/containers/dropdown_menu_container';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { me } from 'flavours/glitch/initial_state';
-import RelativeTimestamp from './relative_timestamp';
+import { RelativeTimestamp } from './relative_timestamp';
 import { accountAdminLink, statusAdminLink } from 'flavours/glitch/utils/backend_links';
 import classNames from 'classnames';
 import { PERMISSION_MANAGE_USERS, PERMISSION_MANAGE_FEDERATION } from 'flavours/glitch/permissions';
@@ -46,7 +46,6 @@ const messages = defineMessages({
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
 });
 
-export default @injectIntl
 class StatusActionBar extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -339,3 +338,5 @@ class StatusActionBar extends ImmutablePureComponent {
   }
 
 }
+
+export default injectIntl(StatusActionBar);

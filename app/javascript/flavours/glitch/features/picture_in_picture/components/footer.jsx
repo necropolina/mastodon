@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import IconButton from 'flavours/glitch/components/icon_button';
+import { IconButton } from 'flavours/glitch/components/icon_button';
 import classNames from 'classnames';
 import { me, boostModal } from 'flavours/glitch/initial_state';
 import { defineMessages, injectIntl } from 'react-intl';
@@ -38,8 +38,6 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-export default @connect(makeMapStateToProps)
-@injectIntl
 class Footer extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -215,3 +213,5 @@ class Footer extends ImmutablePureComponent {
   }
 
 }
+
+export default connect(makeMapStateToProps)(injectIntl(Footer));

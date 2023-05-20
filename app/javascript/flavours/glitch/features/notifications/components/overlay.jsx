@@ -9,13 +9,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { defineMessages, injectIntl } from 'react-intl';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 
 const messages = defineMessages({
   markForDeletion: { id: 'notification.markForDeletion', defaultMessage: 'Mark for deletion' },
 });
 
-export default @injectIntl
 class NotificationOverlay extends ImmutablePureComponent {
 
   static propTypes = {
@@ -56,3 +55,5 @@ class NotificationOverlay extends ImmutablePureComponent {
   }
 
 }
+
+export default injectIntl(NotificationOverlay);

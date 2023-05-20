@@ -6,7 +6,7 @@ import LoadingIndicator from 'flavours/glitch/components/loading_indicator';
 import { fetchReblogs } from 'flavours/glitch/actions/interactions';
 import AccountContainer from 'flavours/glitch/containers/account_container';
 import Column from 'flavours/glitch/features/ui/components/column';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 import ColumnHeader from 'flavours/glitch/components/column_header';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
@@ -22,8 +22,6 @@ const mapStateToProps = (state, props) => ({
   accountIds: state.getIn(['user_lists', 'reblogged_by', props.params.statusId]),
 });
 
-export default @connect(mapStateToProps)
-@injectIntl
 class Reblogs extends ImmutablePureComponent {
 
   static propTypes = {
@@ -102,3 +100,5 @@ class Reblogs extends ImmutablePureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(Reblogs));

@@ -10,13 +10,12 @@ import { openModal } from 'flavours/glitch/actions/modal';
 import { connectListStream } from 'flavours/glitch/actions/streaming';
 import { expandListTimeline } from 'flavours/glitch/actions/timelines';
 import Column from 'flavours/glitch/components/column';
-import ColumnBackButton from 'flavours/glitch/components/column_back_button';
 import ColumnHeader from 'flavours/glitch/components/column_header';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 import LoadingIndicator from 'flavours/glitch/components/loading_indicator';
-import MissingIndicator from 'flavours/glitch/components/missing_indicator';
-import RadioButton from 'flavours/glitch/components/radio_button';
+import { RadioButton } from 'flavours/glitch/components/radio_button';
 import StatusListContainer from 'flavours/glitch/features/ui/containers/status_list_container';
+import BundleColumnError from 'flavours/glitch/features/ui/components/bundle_column_error';
 import Toggle from 'react-toggle';
 
 const messages = defineMessages({
@@ -33,8 +32,6 @@ const mapStateToProps = (state, props) => ({
   hasUnread: state.getIn(['timelines', `list:${props.params.id}`, 'unread']) > 0,
 });
 
-export default @connect(mapStateToProps)
-@injectIntl
 class ListTimeline extends React.PureComponent {
 
   static contextTypes = {
@@ -167,11 +164,7 @@ class ListTimeline extends React.PureComponent {
       );
     } else if (list === false) {
       return (
-        <Column>
-          <div className='scrollable'>
-            <MissingIndicator />
-          </div>
-        </Column>
+        <BundleColumnError multiColumn={multiColumn} errorType='routing' />
       );
     }
 
@@ -188,11 +181,11 @@ class ListTimeline extends React.PureComponent {
           multiColumn={multiColumn}
         >
           <div className='column-settings__row column-header__links'>
-            <button className='text-btn column-header__setting-btn' tabIndex='0' onClick={this.handleEditClick}>
+            <button type='button' className='text-btn column-header__setting-btn' tabIndex={0} onClick={this.handleEditClick}>
               <Icon id='pencil' /> <FormattedMessage id='lists.edit' defaultMessage='Edit list' />
             </button>
 
-            <button className='text-btn column-header__setting-btn' tabIndex='0' onClick={this.handleDeleteClick}>
+            <button type='button' className='text-btn column-header__setting-btn' tabIndex={0} onClick={this.handleDeleteClick}>
               <Icon id='trash' /> <FormattedMessage id='lists.delete' defaultMessage='Delete list' />
             </button>
           </div>
@@ -225,7 +218,7 @@ class ListTimeline extends React.PureComponent {
           scrollKey={`list_timeline-${columnId}`}
           timelineId={`list:${id}`}
           onLoadMore={this.handleLoadMore}
-          emptyMessage={<FormattedMessage id='empty_column.list' defaultMessage='There is nothing in this list yet.' />}
+          emptyMessage={<FormattedMessage id='empty_column.list' defaultMessage='There is nothing in this list yet. When members of this list post new statuses, they will appear here.' />}
           bindToDocument={!multiColumn}
         />
 
@@ -238,3 +231,5 @@ class ListTimeline extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(ListTimeline));

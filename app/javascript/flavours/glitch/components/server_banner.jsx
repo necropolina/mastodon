@@ -7,7 +7,7 @@ import ShortNumber from 'flavours/glitch/components/short_number';
 import Skeleton from 'flavours/glitch/components/skeleton';
 import Account from 'flavours/glitch/containers/account_container';
 import { domain } from 'flavours/glitch/initial_state';
-import Image from 'flavours/glitch/components/image';
+import { Image } from 'flavours/glitch/components/image';
 import { Link } from 'react-router-dom';
 
 const messages = defineMessages({
@@ -18,8 +18,6 @@ const mapStateToProps = state => ({
   server: state.getIn(['server', 'server']),
 });
 
-export default @connect(mapStateToProps)
-@injectIntl
 class ServerBanner extends React.PureComponent {
 
   static propTypes = {
@@ -91,3 +89,5 @@ class ServerBanner extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(ServerBanner));

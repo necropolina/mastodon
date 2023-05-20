@@ -4,10 +4,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
 import { makeGetAccount } from 'flavours/glitch/selectors';
-import Avatar from 'flavours/glitch/components/avatar';
+import { Avatar } from 'flavours/glitch/components/avatar';
 import DisplayName from 'flavours/glitch/components/display_name';
 import Permalink from 'flavours/glitch/components/permalink';
-import IconButton from 'flavours/glitch/components/icon_button';
+import { IconButton } from 'flavours/glitch/components/icon_button';
 import { injectIntl, defineMessages } from 'react-intl';
 import { followAccount, unfollowAccount } from 'flavours/glitch/actions/accounts';
 
@@ -32,8 +32,6 @@ const getFirstSentence = str => {
   return arr[0];
 };
 
-export default @connect(makeMapStateToProps)
-@injectIntl
 class Account extends ImmutablePureComponent {
 
   static propTypes = {
@@ -83,3 +81,5 @@ class Account extends ImmutablePureComponent {
   }
 
 }
+
+export default connect(makeMapStateToProps)(injectIntl(Account));

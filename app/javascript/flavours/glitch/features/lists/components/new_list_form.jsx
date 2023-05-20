@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { changeListEditorTitle, submitListEditor } from 'flavours/glitch/actions/lists';
-import IconButton from 'flavours/glitch/components/icon_button';
+import { IconButton } from 'flavours/glitch/components/icon_button';
 import { defineMessages, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
@@ -20,8 +20,6 @@ const mapDispatchToProps = dispatch => ({
   onSubmit: () => dispatch(submitListEditor(true)),
 });
 
-export default @connect(mapStateToProps, mapDispatchToProps)
-@injectIntl
 class NewListForm extends React.PureComponent {
 
   static propTypes = {
@@ -76,3 +74,5 @@ class NewListForm extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NewListForm));

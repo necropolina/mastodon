@@ -1,7 +1,7 @@
 import React from 'react';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 import Button from 'flavours/glitch/components/button';
-import IconButton from 'flavours/glitch/components/icon_button';
+import { IconButton } from 'flavours/glitch/components/icon_button';
 import { requestBrowserPermission } from 'flavours/glitch/actions/notifications';
 import { changeSetting } from 'flavours/glitch/actions/settings';
 import { connect } from 'react-redux';
@@ -12,8 +12,6 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
 });
 
-export default @connect()
-@injectIntl
 class NotificationsPermissionBanner extends React.PureComponent {
 
   static propTypes = {
@@ -46,3 +44,5 @@ class NotificationsPermissionBanner extends React.PureComponent {
   }
 
 }
+
+export default connect()(injectIntl(NotificationsPermissionBanner));

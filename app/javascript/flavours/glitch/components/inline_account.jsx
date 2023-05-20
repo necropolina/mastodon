@@ -2,7 +2,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { makeGetAccount } from 'flavours/glitch/selectors';
-import Avatar from 'flavours/glitch/components/avatar';
+import { Avatar } from 'flavours/glitch/components/avatar';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -14,7 +14,6 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-export default @connect(makeMapStateToProps)
 class InlineAccount extends React.PureComponent {
 
   static propTypes = {
@@ -32,3 +31,5 @@ class InlineAccount extends React.PureComponent {
   }
 
 }
+
+export default connect(makeMapStateToProps)(InlineAccount);

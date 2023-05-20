@@ -7,7 +7,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 
 //  Components.
 import AccountContainer from 'flavours/glitch/containers/account_container';
-import IconButton from 'flavours/glitch/components/icon_button';
+import { IconButton } from 'flavours/glitch/components/icon_button';
 import AttachmentList from 'flavours/glitch/components/attachment_list';
 
 //  Messages.
@@ -19,7 +19,6 @@ const messages = defineMessages({
 });
 
 
-export default @injectIntl
 class ReplyIndicator extends ImmutablePureComponent {
 
   static propTypes = {
@@ -80,3 +79,5 @@ class ReplyIndicator extends ImmutablePureComponent {
   }
 
 }
+
+export default injectIntl(ReplyIndicator);

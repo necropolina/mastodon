@@ -11,12 +11,7 @@ const mapStateToProps = (state, { statusId }) => ({
   language: state.getIn(['statuses', statusId, 'language']),
 });
 
-export default @connect(mapStateToProps, null, null, { forwardRef: true })
 class VideoModal extends ImmutablePureComponent {
-
-  static contextTypes = {
-    router: PropTypes.object,
-  };
 
   static propTypes = {
     media: ImmutablePropTypes.map.isRequired,
@@ -32,7 +27,7 @@ class VideoModal extends ImmutablePureComponent {
   };
 
   componentDidMount () {
-    const { media, onChangeBackgroundColor, onClose } = this.props;
+    const { media, onChangeBackgroundColor } = this.props;
 
     const backgroundColor = getAverageFromBlurhash(media.get('blurhash'));
 
@@ -72,3 +67,5 @@ class VideoModal extends ImmutablePureComponent {
   }
 
 }
+
+export default connect(mapStateToProps, null, null, { forwardRef: true })(VideoModal);
