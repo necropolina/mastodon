@@ -7,7 +7,7 @@ import Motion from '../../ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import classNames from 'classnames';
-import Icon from 'mastodon/components/icon';
+import { Icon } from 'mastodon/components/icon';
 import { assetHost } from 'mastodon/utils/config';
 
 const messages = defineMessages({
