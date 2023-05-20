@@ -36,8 +36,8 @@ class SessionActivation < ApplicationRecord
     detection.platform.id
   end
 
-  before_save   :assign_user_agent
   before_create :assign_access_token
+  before_save   :assign_user_agent
 
   class << self
     def active?(id)

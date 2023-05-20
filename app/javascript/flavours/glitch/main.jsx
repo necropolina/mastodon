@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { setupBrowserNotifications } from 'flavours/glitch/actions/notifications';
-import Mastodon from 'flavours/glitch/containers/mastodon';
-import { store } from 'flavours/glitch/store';
+import Mastodon, { store } from 'flavours/glitch/containers/mastodon';
 import { me } from 'flavours/glitch/initial_state';
 import ready from 'flavours/glitch/ready';
 
-import * as perf from 'flavours/glitch/performance';
+const perf = require('flavours/glitch/performance');
 
 /**
  * @returns {Promise<void>}

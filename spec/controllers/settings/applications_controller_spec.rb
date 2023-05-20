@@ -13,17 +13,13 @@ describe Settings::ApplicationsController do
   end
 
   describe 'GET #index' do
-    before do
-      Fabricate(:application)
+    let!(:other_app) { Fabricate(:application) }
+
+    it 'shows apps' do
       get :index
-    end
-
-    it 'returns http success' do
       expect(response).to have_http_status(200)
-    end
-
-    it 'returns private cache control headers' do
-      expect(response.headers['Cache-Control']).to include('private, no-store')
+      expect(assigns(:applications)).to include(app)
+      expect(assigns(:applications)).to_not include(other_app)
     end
   end
 
@@ -50,7 +46,7 @@ describe Settings::ApplicationsController do
   end
 
   describe 'POST #create' do
-    context 'when success (passed scopes as a String)' do
+    context 'success (passed scopes as a String)' do
       def call_create
         post :create, params: {
           doorkeeper_application: {
@@ -72,7 +68,7 @@ describe Settings::ApplicationsController do
       end
     end
 
-    context 'when success (passed scopes as an Array)' do
+    context 'success (passed scopes as an Array)' do
       def call_create
         post :create, params: {
           doorkeeper_application: {
@@ -94,7 +90,7 @@ describe Settings::ApplicationsController do
       end
     end
 
-    context 'with failure request' do
+    context 'failure' do
       before do
         post :create, params: {
           doorkeeper_application: {
@@ -117,7 +113,7 @@ describe Settings::ApplicationsController do
   end
 
   describe 'PATCH #update' do
-    context 'when success' do
+    context 'success' do
       let(:opts) do
         {
           website: 'https://foo.bar/',
@@ -142,7 +138,7 @@ describe Settings::ApplicationsController do
       end
     end
 
-    context 'with failure request' do
+    context 'failure' do
       before do
         patch :update, params: {
           id: app.id,

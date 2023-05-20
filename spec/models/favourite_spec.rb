@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Favourite do
+RSpec.describe Favourite, type: :model do
   let(:account) { Fabricate(:account) }
 
   context 'when status is a reblog' do

@@ -12,6 +12,7 @@ const messages = defineMessages({
   noOptions: { id: 'hashtag.column_settings.select.no_options_message', defaultMessage: 'No suggestions found' },
 });
 
+export default @injectIntl
 class ColumnSettings extends React.PureComponent {
 
   static propTypes = {
@@ -130,5 +131,3 @@ class ColumnSettings extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(ColumnSettings);

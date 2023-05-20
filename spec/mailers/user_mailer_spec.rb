@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe UserMailer do
+describe UserMailer, type: :mailer do
   let(:receiver) { Fabricate(:user) }
 
   shared_examples 'localized subject' do |*args, **kwrest|

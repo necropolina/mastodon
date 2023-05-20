@@ -4,7 +4,7 @@
   .emoji-picker-dropdown {
     position: absolute;
     top: 0;
-    inset-inline-end: 0;
+    right: 0;
 
     ::-webkit-scrollbar-track:hover,
     ::-webkit-scrollbar-track:active {
@@ -113,8 +113,8 @@
     width: 18px;
     height: 18px;
     flex: 0 0 auto;
-    margin-inline-start: 5px;
-    margin-inline-end: 10px;
+    margin-left: 5px;
+    margin-right: 10px;
     top: -1px;
     border-radius: 4px;
     vertical-align: middle;
@@ -254,14 +254,13 @@
   display: block;
   position: absolute;
   top: 29px;
-  inset-inline-end: 5px;
+  right: 5px;
   bottom: 5px;
   overflow: hidden;
 
   & > .textarea_icon {
     display: block;
-    margin-top: 2px;
-    margin-inline-start: 2px;
+    margin: 2px 0 0 2px;
     width: 24px;
     height: 24px;
     color: $lighter-text-color;
@@ -335,7 +334,7 @@
 
     &__uses {
       flex: 0 0 auto;
-      text-align: end;
+      text-align: right;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -404,8 +403,8 @@
     position: absolute;
     z-index: 2;
     bottom: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
+    left: 0;
+    right: 0;
     box-sizing: border-box;
     background: linear-gradient(
       0deg,
@@ -436,7 +435,7 @@
 
   .fa {
     font-size: 34px;
-    margin-inline-end: 10px;
+    margin-right: 10px;
   }
 
   span {
@@ -463,7 +462,7 @@
 .upload-progress__tracker {
   position: absolute;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   height: 6px;
   border-radius: 6px;
   background: $ui-highlight-color;
@@ -516,7 +515,7 @@
 
 .character-counter__wrapper {
   align-self: center;
-  margin-inline-end: 4px;
+  margin-right: 4px;
 }
 
 .privacy-dropdown.active {
@@ -568,7 +567,7 @@
     color: $lighter-text-color;
 
     &:not(:first-child) {
-      margin-inline-start: 10px;
+      margin-left: 10px;
     }
 
     strong {
@@ -636,11 +635,11 @@
     }
 
     .emoji-mart-search {
-      padding-inline-end: 10px;
+      padding-right: 10px;
     }
 
     .emoji-mart-search-icon {
-      inset-inline-end: 10px + 5px;
+      right: 10px + 5px;
     }
 
     .emoji-mart-scroll {

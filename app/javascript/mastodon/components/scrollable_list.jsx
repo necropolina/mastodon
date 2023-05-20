@@ -8,7 +8,6 @@ import IntersectionObserverWrapper from '../features/ui/util/intersection_observ
 import { throttle } from 'lodash';
 import { List as ImmutableList } from 'immutable';
 import classNames from 'classnames';
-import { supportsPassiveEvents } from 'detect-passive-events';
 import { attachFullscreenListener, detachFullscreenListener, isFullscreen } from '../features/ui/util/fullscreen';
 import LoadingIndicator from './loading_indicator';
 import { connect } from 'react-redux';
@@ -21,6 +20,7 @@ const mapStateToProps = (state, { scrollKey }) => {
   };
 };
 
+export default @connect(mapStateToProps, null, null, { forwardRef: true })
 class ScrollableList extends PureComponent {
 
   static contextTypes = {
@@ -237,10 +237,10 @@ class ScrollableList extends PureComponent {
   attachScrollListener () {
     if (this.props.bindToDocument) {
       document.addEventListener('scroll', this.handleScroll);
-      document.addEventListener('wheel', this.handleWheel, supportsPassiveEvents ? { passive: true } : undefined);
+      document.addEventListener('wheel', this.handleWheel);
     } else {
       this.node.addEventListener('scroll', this.handleScroll);
-      this.node.addEventListener('wheel', this.handleWheel, supportsPassiveEvents ? { passive: true } : undefined);
+      this.node.addEventListener('wheel', this.handleWheel);
     }
   }
 
@@ -365,5 +365,3 @@ class ScrollableList extends PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps, null, null, { forwardRef: true })(ScrollableList);

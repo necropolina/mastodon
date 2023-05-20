@@ -226,12 +226,12 @@ RSpec.describe ActivityPub::FetchRemoteStatusService, type: :service do
     end
   end
 
-  context 'with statuses referencing other statuses' do
+  context 'statuses referencing other statuses' do
     before do
       stub_const 'ActivityPub::FetchRemoteStatusService::DISCOVERIES_PER_REQUEST', 5
     end
 
-    context 'when using inReplyTo' do
+    context 'using inReplyTo' do
       let(:object) do
         {
           '@context': 'https://www.w3.org/ns/activitystreams',
@@ -267,7 +267,7 @@ RSpec.describe ActivityPub::FetchRemoteStatusService, type: :service do
       end
     end
 
-    context 'when using replies' do
+    context 'using replies' do
       let(:object) do
         {
           '@context': 'https://www.w3.org/ns/activitystreams',

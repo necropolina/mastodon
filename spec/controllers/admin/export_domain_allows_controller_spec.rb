@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::ExportDomainAllowsController do
+RSpec.describe Admin::ExportDomainAllowsController, type: :controller do
   render_views
 
   before do

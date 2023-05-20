@@ -40,7 +40,7 @@ PageOne.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-const PageTwo = ({ myAccount }) => (
+const PageTwo = ({ intl, myAccount }) => (
   <div className='onboarding-modal__page onboarding-modal__page-two'>
     <div className='figure non-interactive'>
       <div className='pseudo-drawer'>
@@ -63,7 +63,7 @@ PageTwo.propTypes = {
   myAccount: ImmutablePropTypes.map.isRequired,
 };
 
-const PageThree = ({ myAccount }) => (
+const PageThree = ({ intl, myAccount }) => (
   <div className='onboarding-modal__page onboarding-modal__page-three'>
     <div className='figure non-interactive'>
       <Search
@@ -170,6 +170,8 @@ const mapStateToProps = state => ({
   domain: state.getIn(['meta', 'domain']),
 });
 
+export default @connect(mapStateToProps)
+@injectIntl
 class OnboardingModal extends React.PureComponent {
 
   static propTypes = {
@@ -187,11 +189,11 @@ class OnboardingModal extends React.PureComponent {
   componentWillMount() {
     const { myAccount, admin, domain, intl } = this.props;
     this.pages = [
-      <PageOne key='1' acct={myAccount.get('acct')} domain={domain} />,
-      <PageTwo key='2' myAccount={myAccount} intl={intl} />,
-      <PageThree key='3' myAccount={myAccount} intl={intl} />,
-      <PageFour key='4' domain={domain} intl={intl} />,
-      <PageSix key='6' admin={admin} domain={domain} />,
+      <PageOne acct={myAccount.get('acct')} domain={domain} />,
+      <PageTwo myAccount={myAccount} intl={intl} />,
+      <PageThree myAccount={myAccount} intl={intl} />,
+      <PageFour domain={domain} intl={intl} />,
+      <PageSix admin={admin} domain={domain} />,
     ];
   }
 
@@ -299,7 +301,7 @@ class OnboardingModal extends React.PureComponent {
                 <div
                   key={`dot-${i}`}
                   role='button'
-                  tabIndex={0}
+                  tabIndex='0'
                   data-index={i}
                   onClick={this.handleDot}
                   className={className}
@@ -317,5 +319,3 @@ class OnboardingModal extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(injectIntl(OnboardingModal));

@@ -8,7 +8,6 @@ class Api::V1::Statuses::RebloggedByAccountsController < Api::BaseController
   after_action :insert_pagination_headers
 
   def index
-    cache_if_unauthenticated!
     @accounts = load_accounts
     render json: @accounts, each_serializer: REST::AccountSerializer
   end

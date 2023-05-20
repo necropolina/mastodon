@@ -62,9 +62,10 @@ $ui-header-height: 55px;
   height: $ui-header-height;
   position: sticky;
   top: 0;
-  z-index: 3;
+  z-index: 2;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
 
   &__logo {
     display: inline-flex;
@@ -73,20 +74,6 @@ $ui-header-height: 55px;
     .logo {
       height: $ui-header-height - 30px;
       width: auto;
-    }
-
-    .logo--wordmark {
-      display: none;
-    }
-
-    @media screen and (width >= 320px) {
-      .logo--wordmark {
-        display: block;
-      }
-
-      .logo--icon {
-        display: none;
-      }
     }
   }
 
@@ -195,8 +182,7 @@ $ui-header-height: 55px;
   cursor: pointer;
   flex: 0 0 auto;
   font-size: 16px;
-  padding: 0;
-  padding-inline-end: 5px;
+  padding: 0 5px 0 0;
   z-index: 3;
 
   &:hover {
@@ -204,14 +190,13 @@ $ui-header-height: 55px;
   }
 
   &:last-child {
-    padding: 0;
-    padding-inline-end: 15px;
+    padding: 0 15px 0 0;
   }
 }
 
 .column-back-button__icon {
   display: inline-block;
-  margin-inline-end: 5px;
+  margin-right: 5px;
 }
 
 .column-back-button--slim {
@@ -224,7 +209,7 @@ $ui-header-height: 55px;
   font-size: 16px;
   padding: 15px;
   position: absolute;
-  inset-inline-end: 0;
+  right: 0;
   top: -48px;
 }
 
@@ -278,7 +263,7 @@ $ui-header-height: 55px;
 
 .column-link__icon {
   display: inline-block;
-  margin-inline-end: 5px;
+  margin-right: 5px;
 }
 
 .column-subheading {
@@ -304,8 +289,8 @@ $ui-header-height: 55px;
       content: '';
       position: absolute;
       bottom: -13px;
-      inset-inline-start: 0;
-      inset-inline-end: 0;
+      left: 0;
+      right: 0;
       margin: 0 auto;
       width: 60%;
       pointer-events: none;
@@ -344,7 +329,7 @@ $ui-header-height: 55px;
     color: inherit;
     background: transparent;
     font: inherit;
-    text-align: start;
+    text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -392,7 +377,7 @@ $ui-header-height: 55px;
 .column-header__buttons {
   height: 48px;
   display: flex;
-  margin-inline-start: 0;
+  margin-left: 0;
 }
 
 .column-header__links {
@@ -400,7 +385,7 @@ $ui-header-height: 55px;
 }
 
 .column-header__links .text-btn {
-  margin-inline-end: 10px;
+  margin-right: 10px;
 }
 
 .column-header__button {
@@ -441,7 +426,9 @@ $ui-header-height: 55px;
   align-items: stretch;
   justify-content: space-around;
 
-  .column-header__button {
+  button {
+    @extend .column-header__button;
+
     background: transparent;
     text-align: center;
     padding: 10px 5px;
@@ -457,7 +444,7 @@ $ui-header-height: 55px;
   @media screen and (min-width: $no-gap-breakpoint) {
     b,
     i {
-      margin-inline-end: 5px;
+      margin-right: 5px;
     }
 
     br {
@@ -543,12 +530,12 @@ $ui-header-height: 55px;
     padding: 5px;
 
     &:first-child {
-      padding-inline-end: 7px;
+      padding-right: 7px;
     }
 
     &:last-child {
-      padding-inline-start: 7px;
-      margin-inline-start: 5px;
+      padding-left: 7px;
+      margin-left: 5px;
     }
   }
 }
@@ -572,7 +559,7 @@ $ui-header-height: 55px;
 
 .column-header__icon {
   display: inline-block;
-  margin-inline-end: 5px;
+  margin-right: 5px;
 }
 
 .column-settings__pillbar {
@@ -663,7 +650,6 @@ $ui-header-height: 55px;
 .follow_requests-unlocked_explanation {
   background: darken($ui-base-color, 4%);
   contain: initial;
-  flex-grow: 0;
 }
 
 .error-column {
@@ -711,9 +697,34 @@ $ui-header-height: 55px;
   }
 }
 
+// more fixes for the navbar-under mode
+@mixin fix-margins-for-navbar-under {
+  .tabs-bar {
+    margin-top: 0 !important;
+    margin-bottom: -6px !important;
+  }
+}
+
+.single-column.navbar-under {
+  @include fix-margins-for-navbar-under;
+}
+
+.auto-columns.navbar-under {
+  @media screen and (max-width: $no-gap-breakpoint) {
+    @include fix-margins-for-navbar-under;
+  }
+}
+
+.auto-columns.navbar-under .react-swipeable-view-container .columns-area,
+.single-column.navbar-under .react-swipeable-view-container .columns-area {
+  @media screen and (max-width: $no-gap-breakpoint) {
+    height: 100% !important;
+  }
+}
+
 .column-inline-form {
   padding: 7px 15px;
-  padding-inline-end: 5px;
+  padding-right: 5px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -782,19 +793,19 @@ $ui-header-height: 55px;
         background: lighten($ui-base-color, 4%);
       }
 
-      @media screen and (width <= 600px) {
+      @media screen and (max-width: 600px) {
         font-size: 16px;
       }
     }
 
     &__placeholder {
       color: $dark-text-color;
-      padding-inline-start: 2px;
+      padding-left: 2px;
       font-size: 12px;
     }
 
     &__value-container {
-      padding-inline-start: 6px;
+      padding-left: 6px;
     }
 
     &__multi-value {
@@ -877,7 +888,7 @@ $ui-header-height: 55px;
   &__close {
     position: absolute;
     top: 10px;
-    inset-inline-end: 10px;
+    right: 10px;
   }
 
   h2 {
@@ -936,7 +947,7 @@ $ui-header-height: 55px;
 
   &__background {
     position: absolute;
-    inset-inline-start: 0;
+    left: 0;
     bottom: 0;
     height: 220px;
     width: auto;

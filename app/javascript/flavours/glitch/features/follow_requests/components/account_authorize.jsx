@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Permalink from 'flavours/glitch/components/permalink';
-import { Avatar } from 'flavours/glitch/components/avatar';
+import Avatar from 'flavours/glitch/components/avatar';
 import DisplayName from 'flavours/glitch/components/display_name';
-import { IconButton } from 'flavours/glitch/components/icon_button';
+import IconButton from 'flavours/glitch/components/icon_button';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
@@ -13,6 +13,7 @@ const messages = defineMessages({
   reject: { id: 'follow_request.reject', defaultMessage: 'Reject' },
 });
 
+export default @injectIntl
 class AccountAuthorize extends ImmutablePureComponent {
 
   static propTypes = {
@@ -46,5 +47,3 @@ class AccountAuthorize extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(AccountAuthorize);

@@ -5,7 +5,7 @@ import { fetchFilters, createFilter, createFilterStatus } from 'flavours/glitch/
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import { IconButton } from 'flavours/glitch/components/icon_button';
+import IconButton from 'flavours/glitch/components/icon_button';
 import SelectFilter from 'flavours/glitch/features/filters/select_filter';
 import AddedToFilter from 'flavours/glitch/features/filters/added_to_filter';
 
@@ -13,6 +13,8 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
 });
 
+export default @connect(undefined)
+@injectIntl
 class FilterModal extends ImmutablePureComponent {
 
   static propTypes = {
@@ -130,5 +132,3 @@ class FilterModal extends ImmutablePureComponent {
   }
 
 }
-
-export default connect()(injectIntl(FilterModal));

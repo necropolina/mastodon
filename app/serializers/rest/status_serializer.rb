@@ -4,7 +4,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   include FormattingHelper
 
   attributes :id, :created_at, :in_reply_to_id, :in_reply_to_account_id,
-             :sensitive, :spoiler_text, :visibility, :language,
+             :sensitive, :spoiler_text, :visibility, :language, :translatable,
              :uri, :url, :replies_count, :reblogs_count,
              :favourites_count, :edited_at
 
@@ -13,7 +13,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   attribute :muted, if: :current_user?
   attribute :bookmarked, if: :current_user?
   attribute :pinned, if: :pinnable?
-  attribute :local_only, if: :local?
+  attribute :local_only if :local?
   has_many :filtered, serializer: REST::FilterResultSerializer, if: :current_user?
 
   attribute :content, unless: :source_requested?
@@ -31,8 +31,6 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   has_one :preview_card, key: :card, serializer: REST::PreviewCardSerializer
   has_one :preloadable_poll, key: :poll, serializer: REST::PollSerializer
-
-  delegate :local?, to: :object
 
   def id
     object.id.to_s
@@ -52,6 +50,10 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   def show_application?
     object.account.user_shows_application? || (current_user? && current_user.account_id == object.account_id)
+  end
+
+  def translatable
+    current_user? && object.translatable?
   end
 
   def visibility

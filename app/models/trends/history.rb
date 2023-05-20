@@ -11,7 +11,7 @@ class Trends::History
     end
 
     def uses
-      with_redis { |redis| redis.mget(*@days.map { |day| day.key_for(:uses) }).sum(&:to_i) }
+      with_redis { |redis| redis.mget(*@days.map { |day| day.key_for(:uses) }).map(&:to_i).sum }
     end
 
     def accounts

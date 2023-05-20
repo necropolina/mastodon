@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccountDomainBlock do
+RSpec.describe AccountDomainBlock, type: :model do
   it 'removes blocking cache after creation' do
     account = Fabricate(:account)
     Rails.cache.write("exclude_domains_for:#{account.id}", 'a.domain.already.blocked')

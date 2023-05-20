@@ -1,4 +1,4 @@
-class CreateReportNotes < ActiveRecord::Migration[5.2]
+class CreateReportNotes < ActiveRecord::Migration[5.1]
   def change
     create_table :report_notes do |t|
       t.text :content, null: false

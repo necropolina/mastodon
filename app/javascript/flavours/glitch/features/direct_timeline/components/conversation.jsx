@@ -8,8 +8,8 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import DropdownMenuContainer from 'flavours/glitch/containers/dropdown_menu_container';
 import AvatarComposite from 'flavours/glitch/components/avatar_composite';
 import Permalink from 'flavours/glitch/components/permalink';
-import { IconButton } from 'flavours/glitch/components/icon_button';
-import { RelativeTimestamp } from 'flavours/glitch/components/relative_timestamp';
+import IconButton from 'flavours/glitch/components/icon_button';
+import RelativeTimestamp from 'flavours/glitch/components/relative_timestamp';
 import { HotKeys } from 'react-hotkeys';
 import { autoPlayGif } from 'flavours/glitch/initial_state';
 import classNames from 'classnames';
@@ -24,6 +24,7 @@ const messages = defineMessages({
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
 });
 
+export default @injectIntl
 class Conversation extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -182,7 +183,7 @@ class Conversation extends ImmutablePureComponent {
 
     return (
       <HotKeys handlers={handlers}>
-        <div className={classNames('conversation focusable muted', { 'conversation--unread': unread })} tabIndex={0}>
+        <div className={classNames('conversation focusable muted', { 'conversation--unread': unread })} tabIndex='0'>
           <div className='conversation__avatar' onClick={this.handleClick} role='presentation'>
             <AvatarComposite accounts={accounts} size={48} />
           </div>
@@ -203,7 +204,7 @@ class Conversation extends ImmutablePureComponent {
               parseClick={this.parseClick}
               expanded={isExpanded}
               onExpandedToggle={this.handleShowMore}
-              collapsible
+              collapsable
               media={media}
             />
 
@@ -229,5 +230,3 @@ class Conversation extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(Conversation);

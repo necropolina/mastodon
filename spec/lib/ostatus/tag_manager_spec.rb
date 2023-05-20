@@ -40,7 +40,7 @@ describe OStatus::TagManager do
   describe '#uri_for' do
     subject { OStatus::TagManager.instance.uri_for(target) }
 
-    context 'with comment object' do
+    context 'comment object' do
       let(:target) { Fabricate(:status, created_at: '2000-01-01T00:00:00Z', reply: true) }
 
       it 'returns the unique tag for status' do
@@ -49,7 +49,7 @@ describe OStatus::TagManager do
       end
     end
 
-    context 'with note object' do
+    context 'note object' do
       let(:target) { Fabricate(:status, created_at: '2000-01-01T00:00:00Z', reply: false, thread: nil) }
 
       it 'returns the unique tag for status' do
@@ -58,7 +58,7 @@ describe OStatus::TagManager do
       end
     end
 
-    context 'when person object' do
+    context 'person object' do
       let(:target) { Fabricate(:account, username: 'alice') }
 
       it 'returns the URL for account' do

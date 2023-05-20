@@ -52,16 +52,14 @@ module Mastodon
 
             progress.log("Processing #{item.id}") if options[:verbose]
 
-            Chewy.strategy(:mastodon) do
-              result = ActiveRecord::Base.connection_pool.with_connection do
-                yield(item)
-              ensure
-                RedisConfiguration.pool.checkin if Thread.current[:redis]
-                Thread.current[:redis] = nil
-              end
-
-              aggregate.increment(result) if result.is_a?(Integer)
+            result = ActiveRecord::Base.connection_pool.with_connection do
+              yield(item)
+            ensure
+              RedisConfiguration.pool.checkin if Thread.current[:redis]
+              Thread.current[:redis] = nil
             end
+
+            aggregate.increment(result) if result.is_a?(Integer)
           rescue => e
             progress.log pastel.red("Error processing #{item.id}: #{e}")
           ensure

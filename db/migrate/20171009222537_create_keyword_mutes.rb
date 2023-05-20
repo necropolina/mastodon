@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateKeywordMutes < ActiveRecord::Migration[5.1]
   def change
     create_table :keyword_mutes do |t|

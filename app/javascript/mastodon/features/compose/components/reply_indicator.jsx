@@ -1,8 +1,8 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { Avatar } from '../../../components/avatar';
-import { IconButton } from '../../../components/icon_button';
+import Avatar from '../../../components/avatar';
+import IconButton from '../../../components/icon_button';
 import DisplayName from '../../../components/display_name';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
@@ -12,6 +12,7 @@ const messages = defineMessages({
   cancel: { id: 'reply_indicator.cancel', defaultMessage: 'Cancel' },
 });
 
+export default @injectIntl
 class ReplyIndicator extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -68,5 +69,3 @@ class ReplyIndicator extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(ReplyIndicator);

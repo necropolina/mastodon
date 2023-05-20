@@ -9,6 +9,7 @@ const messages = defineMessages({
   filter_regex: { id: 'home.column_settings.filter_regex', defaultMessage: 'Filter out by regular expressions' },
 });
 
+export default @injectIntl
 class ColumnSettings extends React.PureComponent {
 
   static propTypes = {
@@ -39,5 +40,3 @@ class ColumnSettings extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(ColumnSettings);

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::DomainBlocksController do
+RSpec.describe Admin::DomainBlocksController, type: :controller do
   render_views
 
   before do
@@ -83,7 +83,7 @@ RSpec.describe Admin::DomainBlocksController do
       BlockDomainService.new.call(domain_block)
     end
 
-    context 'when downgrading a domain suspension to silence' do
+    context 'downgrading a domain suspension to silence' do
       let(:original_severity) { 'suspend' }
       let(:new_severity)      { 'silence' }
 
@@ -100,7 +100,7 @@ RSpec.describe Admin::DomainBlocksController do
       end
     end
 
-    context 'when upgrading a domain silence to suspend' do
+    context 'upgrading a domain silence to suspend' do
       let(:original_severity) { 'silence' }
       let(:new_severity)      { 'suspend' }
 

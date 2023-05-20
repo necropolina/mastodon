@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe EncryptedMessage do
+RSpec.describe EncryptedMessage, type: :model do
 end

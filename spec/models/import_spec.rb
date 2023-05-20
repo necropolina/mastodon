@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Import do
+RSpec.describe Import, type: :model do
   let(:account) { Fabricate(:account) }
   let(:type) { 'following' }
   let(:data) { attachment_fixture('imports.txt') }
@@ -20,6 +20,21 @@ RSpec.describe Import do
 
     it 'is invalid without a data' do
       import = Import.create(account: account, type: type)
+      expect(import).to model_have_error_on_field(:data)
+    end
+
+    it 'is invalid with malformed data' do
+      import = Import.create(account: account, type: type, data: StringIO.new('\"test'))
+      expect(import).to model_have_error_on_field(:data)
+    end
+
+    it 'is invalid with too many rows in data' do
+      import = Import.create(account: account, type: type, data: StringIO.new("foo@bar.com\n" * (ImportService::ROWS_PROCESSING_LIMIT + 10)))
+      expect(import).to model_have_error_on_field(:data)
+    end
+
+    it 'is invalid when there are more rows when following limit' do
+      import = Import.create(account: account, type: type, data: StringIO.new("foo@bar.com\n" * (FollowLimitValidator.limit_for_account(account) + 10)))
       expect(import).to model_have_error_on_field(:data)
     end
   end

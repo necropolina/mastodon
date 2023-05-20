@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 class MigrateFilters < ActiveRecord::Migration[5.2]
   class GlitchKeywordMute < ApplicationRecord
     # Dummy class, as we removed Glitch::KeywordMute
-    belongs_to :account, optional: false
+    belongs_to :account, required: true
     validates_presence_of :keyword
   end
 
@@ -17,7 +15,7 @@ class MigrateFilters < ActiveRecord::Migration[5.2]
     private
 
     def clean_up_contexts
-      self.context = Array(context).map(&:strip).filter_map(&:presence)
+      self.context = Array(context).map(&:strip).map(&:presence).compact
     end
   end
 
@@ -29,8 +27,7 @@ class MigrateFilters < ActiveRecord::Migration[5.2]
         phrase: filter.keyword,
         context: filter.apply_to_mentions ? %w(home public notifications) : %w(home public),
         whole_word: filter.whole_word,
-        irreversible: true
-      )
+        irreversible: true)
     end
   end
 
@@ -51,8 +48,7 @@ class MigrateFilters < ActiveRecord::Migration[5.2]
       GlitchKeywordMute.where(account: filter.account).create!(
         keyword: filter.phrase,
         whole_word: filter.whole_word,
-        apply_to_mentions: filter.context.include?('notifications')
-      )
+        apply_to_mentions: filter.context.include?('notifications'))
     end
   end
 end

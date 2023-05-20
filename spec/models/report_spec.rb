@@ -89,13 +89,13 @@ describe Report do
 
     let(:report) { Fabricate(:report, action_taken_at: action_taken) }
 
-    context 'when action is taken' do
+    context 'if action is taken' do
       let(:action_taken) { Time.now.utc }
 
       it { is_expected.to be false }
     end
 
-    context 'when action not is taken' do
+    context 'if action not is taken' do
       let(:action_taken) { nil }
 
       it { is_expected.to be true }

@@ -16,6 +16,7 @@ import {
   translateStatus,
   undoStatusTranslation,
 } from '../../actions/statuses';
+import MissingIndicator from '../../components/missing_indicator';
 import LoadingIndicator from 'mastodon/components/loading_indicator';
 import DetailedStatus from './components/detailed_status';
 import ActionBar from './components/action_bar';
@@ -49,6 +50,7 @@ import { initBoostModal } from '../../actions/boosts';
 import { initReport } from '../../actions/reports';
 import { makeGetStatus, makeGetPictureInPicture } from '../../selectors';
 import ScrollContainer from 'mastodon/containers/scroll_container';
+import ColumnBackButton from '../../components/column_back_button';
 import ColumnHeader from '../../components/column_header';
 import StatusContainer from '../../containers/status_container';
 import { openModal } from '../../actions/modal';
@@ -58,9 +60,8 @@ import { HotKeys } from 'react-hotkeys';
 import { boostModal, deleteModal } from '../../initial_state';
 import { attachFullscreenListener, detachFullscreenListener, isFullscreen } from '../ui/util/fullscreen';
 import { textForScreenReader, defaultMediaVisibility } from '../../components/status';
-import { Icon }  from 'mastodon/components/icon';
+import Icon from 'mastodon/components/icon';
 import { Helmet } from 'react-helmet';
-import BundleColumnError from 'mastodon/features/ui/components/bundle_column_error';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
@@ -69,7 +70,6 @@ const messages = defineMessages({
   redraftMessage: { id: 'confirmations.redraft.message', defaultMessage: 'Are you sure you want to delete this status and re-draft it? Favourites and boosts will be lost, and replies to the original post will be orphaned.' },
   revealAll: { id: 'status.show_more_all', defaultMessage: 'Show more for all' },
   hideAll: { id: 'status.show_less_all', defaultMessage: 'Show less for all' },
-  statusTitleWithAttachments: { id: 'status.title.with_attachments', defaultMessage: '{user} posted {attachmentCount, plural, one {an attachment} other {# attachments}}' },
   detailedStatus: { id: 'status.detailed_status', defaultMessage: 'Detailed conversation view' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
@@ -167,16 +167,17 @@ const truncate = (str, num) => {
   }
 };
 
-const titleFromStatus = (intl, status) => {
+const titleFromStatus = status => {
   const displayName = status.getIn(['account', 'display_name']);
   const username = status.getIn(['account', 'username']);
-  const user = displayName.trim().length === 0 ? username : displayName;
+  const prefix = displayName.trim().length === 0 ? username : displayName;
   const text = status.get('search_index');
-  const attachmentCount = status.get('media_attachments').size;
 
-  return text ? `${user}: "${truncate(text, 30)}"` : intl.formatMessage(messages.statusTitleWithAttachments, { user, attachmentCount });
+  return `${prefix}: "${truncate(text, 30)}"`;
 };
 
+export default @injectIntl
+@connect(makeMapStateToProps)
 class Status extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -529,19 +530,14 @@ class Status extends ImmutablePureComponent {
     }
   }
 
-  renderChildren (list, ancestors) {
-    const { params: { statusId } } = this.props;
-
-    return list.map((id, i) => (
+  renderChildren (list) {
+    return list.map(id => (
       <StatusContainer
         key={id}
         id={id}
         onMoveUp={this.handleMoveUp}
         onMoveDown={this.handleMoveDown}
         contextType='thread'
-        previousId={i > 0 && list.get(i - 1)}
-        nextId={list.get(i + 1) || (ancestors && statusId)}
-        rootId={statusId}
       />
     ));
   }
@@ -590,16 +586,19 @@ class Status extends ImmutablePureComponent {
 
     if (status === null) {
       return (
-        <BundleColumnError multiColumn={multiColumn} errorType='routing' />
+        <Column>
+          <ColumnBackButton multiColumn={multiColumn} />
+          <MissingIndicator />
+        </Column>
       );
     }
 
     if (ancestorsIds && ancestorsIds.size > 0) {
-      ancestors = <>{this.renderChildren(ancestorsIds, true)}</>;
+      ancestors = <div>{this.renderChildren(ancestorsIds)}</div>;
     }
 
     if (descendantsIds && descendantsIds.size > 0) {
-      descendants = <>{this.renderChildren(descendantsIds)}</>;
+      descendants = <div>{this.renderChildren(descendantsIds)}</div>;
     }
 
     const isLocal = status.getIn(['account', 'acct'], '').indexOf('@') === -1;
@@ -633,7 +632,7 @@ class Status extends ImmutablePureComponent {
             {ancestors}
 
             <HotKeys handlers={handlers}>
-              <div className={classNames('focusable', 'detailed-status__wrapper', `detailed-status__wrapper-${status.get('visibility')}`)} tabIndex={0} aria-label={textForScreenReader(intl, status, false)}>
+              <div className={classNames('focusable', 'detailed-status__wrapper')} tabIndex='0' aria-label={textForScreenReader(intl, status, false)}>
                 <DetailedStatus
                   key={`details-${status.get('id')}`}
                   status={status}
@@ -677,7 +676,7 @@ class Status extends ImmutablePureComponent {
         </ScrollContainer>
 
         <Helmet>
-          <title>{titleFromStatus(intl, status)}</title>
+          <title>{titleFromStatus(status)}</title>
           <meta name='robots' content={(isLocal && isIndexable) ? 'all' : 'noindex'} />
         </Helmet>
       </Column>
@@ -685,5 +684,3 @@ class Status extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(connect(makeMapStateToProps)(Status));

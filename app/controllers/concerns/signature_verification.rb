@@ -138,7 +138,7 @@ module SignatureVerification
   end
 
   def signed_headers
-    signature_params.fetch('headers', signature_algorithm == 'hs2019' ? '(created)' : 'date').downcase.split
+    signature_params.fetch('headers', signature_algorithm == 'hs2019' ? '(created)' : 'date').downcase.split(' ')
   end
 
   def verify_signature_strength!
@@ -180,15 +180,14 @@ module SignatureVerification
 
   def build_signed_string
     signed_headers.map do |signed_header|
-      case signed_header
-      when Request::REQUEST_TARGET
+      if signed_header == Request::REQUEST_TARGET
         "#{Request::REQUEST_TARGET}: #{request.method.downcase} #{request.path}"
-      when '(created)'
+      elsif signed_header == '(created)'
         raise SignatureVerificationError, 'Invalid pseudo-header (created) for rsa-sha256' unless signature_algorithm == 'hs2019'
         raise SignatureVerificationError, 'Pseudo-header (created) used but corresponding argument missing' if signature_params['created'].blank?
 
         "(created): #{signature_params['created']}"
-      when '(expires)'
+      elsif signed_header == '(expires)'
         raise SignatureVerificationError, 'Invalid pseudo-header (expires) for rsa-sha256' unless signature_algorithm == 'hs2019'
         raise SignatureVerificationError, 'Pseudo-header (expires) used but corresponding argument missing' if signature_params['expires'].blank?
 
@@ -245,7 +244,7 @@ module SignatureVerification
     end
 
     if key_id.start_with?('acct:')
-      stoplight_wrap_request { ResolveAccountService.new.call(key_id.delete_prefix('acct:'), suppress_errors: false) }
+      stoplight_wrap_request { ResolveAccountService.new.call(key_id.gsub(/\Aacct:/, ''), suppress_errors: false) }
     elsif !ActivityPub::TagManager.instance.local_uri?(key_id)
       account   = ActivityPub::TagManager.instance.uri_to_actor(key_id)
       account ||= stoplight_wrap_request { ActivityPub::FetchRemoteKeyService.new.call(key_id, id: false, suppress_errors: false) }

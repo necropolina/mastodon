@@ -24,6 +24,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 
 /**
  * Component that renders short big number to a shorter version
+ *
  * @param {ShortNumberProps} param0 Props for the component
  * @returns {JSX.Element} Rendered number
  */
@@ -31,14 +32,17 @@ function ShortNumber({ value, renderer, children }) {
   const shortNumber = toShortNumber(value);
   const [, division] = shortNumber;
 
+  // eslint-disable-next-line eqeqeq
   if (children != null && renderer != null) {
     console.warn('Both renderer prop and renderer as a child provided. This is a mistake and you really should fix that. Only renderer passed as a child will be used.');
   }
 
+  // eslint-disable-next-line eqeqeq
   const customRenderer = children != null ? children : renderer;
 
   const displayNumber = <ShortNumberCounter value={shortNumber} />;
 
+  // eslint-disable-next-line eqeqeq
   return customRenderer != null
     ? customRenderer(displayNumber, pluralReady(value, division))
     : displayNumber;
@@ -57,6 +61,7 @@ ShortNumber.propTypes = {
 
 /**
  * Renders short number into corresponding localizable react fragment
+ *
  * @param {ShortNumberCounterProps} param0 Props for the component
  * @returns {JSX.Element} FormattedMessage ready to be embedded in code
  */

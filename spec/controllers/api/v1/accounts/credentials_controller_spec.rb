@@ -46,7 +46,6 @@ describe Api::V1::Accounts::CredentialsController do
         end
 
         it 'updates account info' do
-          user.reload
           user.account.reload
 
           expect(user.account.display_name).to eq("Alice Isn't Dead")
@@ -75,10 +74,10 @@ describe Api::V1::Accounts::CredentialsController do
         end
       end
 
-      describe 'with a too long profile bio' do
+      describe 'with invalid data' do
         before do
           note = 'This is too long. '
-          note += 'a' * (Account::MAX_NOTE_LENGTH - note.length + 1)
+          note = note + 'a' * (Account::MAX_NOTE_LENGTH - note.length + 1)
           patch :update, params: { note: note }
         end
 

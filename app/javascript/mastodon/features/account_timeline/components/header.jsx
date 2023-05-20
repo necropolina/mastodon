@@ -3,7 +3,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import InnerHeader from '../../account/components/header';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import MemorialNote from './memorial_note';
 import MovedNote from './moved_note';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
@@ -26,7 +25,6 @@ export default class Header extends ImmutablePureComponent {
     onChangeLanguages: PropTypes.func.isRequired,
     onInteractionModal: PropTypes.func.isRequired,
     onOpenAvatar: PropTypes.func.isRequired,
-    onOpenURL: PropTypes.func.isRequired,
     hideTabs: PropTypes.bool,
     domain: PropTypes.string.isRequired,
     hidden: PropTypes.bool,
@@ -117,7 +115,6 @@ export default class Header extends ImmutablePureComponent {
 
     return (
       <div className='account-timeline__header'>
-        {(!hidden && account.get('memorial')) && <MemorialNote />}
         {(!hidden && account.get('moved')) && <MovedNote from={account} to={account.get('moved')} />}
 
         <InnerHeader
@@ -138,7 +135,6 @@ export default class Header extends ImmutablePureComponent {
           onChangeLanguages={this.handleChangeLanguages}
           onInteractionModal={this.handleInteractionModal}
           onOpenAvatar={this.handleOpenAvatar}
-          onOpenURL={this.props.onOpenURL}
           domain={this.props.domain}
           hidden={hidden}
         />

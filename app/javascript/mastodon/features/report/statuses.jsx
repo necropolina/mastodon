@@ -13,6 +13,7 @@ const mapStateToProps = (state, { accountId }) => ({
   isLoading: state.getIn(['timelines', `account:${accountId}:with_replies`, 'isLoading']),
 });
 
+export default @connect(mapStateToProps)
 class Statuses extends React.PureComponent {
 
   static propTypes = {
@@ -58,5 +59,3 @@ class Statuses extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(Statuses);

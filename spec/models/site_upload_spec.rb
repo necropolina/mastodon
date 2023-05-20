@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SiteUpload do
+RSpec.describe SiteUpload, type: :model do
   describe '#cache_key' do
     let(:site_upload) { SiteUpload.new(var: 'var') }
 

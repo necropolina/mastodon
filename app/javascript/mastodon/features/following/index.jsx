@@ -17,11 +17,11 @@ import Column from '../ui/components/column';
 import HeaderContainer from '../account_timeline/containers/header_container';
 import ColumnBackButton from '../../components/column_back_button';
 import ScrollableList from '../../components/scrollable_list';
+import MissingIndicator from 'mastodon/components/missing_indicator';
 import TimelineHint from 'mastodon/components/timeline_hint';
 import LimitedAccountHint from '../account_timeline/components/limited_account_hint';
 import { getAccountHidden } from 'mastodon/selectors';
 import { normalizeForLookup } from 'mastodon/reducers/accounts_map';
-import BundleColumnError from 'mastodon/features/ui/components/bundle_column_error';
 
 const mapStateToProps = (state, { params: { acct, id } }) => {
   const accountId = id || state.getIn(['accounts_map', normalizeForLookup(acct)]);
@@ -54,6 +54,7 @@ RemoteHint.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
+export default @connect(mapStateToProps)
 class Following extends ImmutablePureComponent {
 
   static propTypes = {
@@ -111,7 +112,9 @@ class Following extends ImmutablePureComponent {
 
     if (!isAccount) {
       return (
-        <BundleColumnError multiColumn={multiColumn} errorType='routing' />
+        <Column>
+          <MissingIndicator />
+        </Column>
       );
     }
 
@@ -165,5 +168,3 @@ class Following extends ImmutablePureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(Following);

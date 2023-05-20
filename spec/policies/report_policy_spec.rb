@@ -9,13 +9,13 @@ RSpec.describe ReportPolicy do
   let(:john)    { Fabricate(:account) }
 
   permissions :update?, :index?, :show? do
-    context 'when staff?' do
+    context 'staff?' do
       it 'permits' do
         expect(subject).to permit(admin, Report)
       end
     end
 
-    context 'with !staff?' do
+    context '!staff?' do
       it 'denies' do
         expect(subject).to_not permit(john, Report)
       end
