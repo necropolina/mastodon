@@ -8,8 +8,8 @@ import Motion from 'mastodon/features/ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
 import escapeTextContentForBrowser from 'escape-html';
 import emojify from 'mastodon/features/emoji/emoji';
-import RelativeTimestamp from './relative_timestamp';
-import Icon from 'mastodon/components/icon';
+import { RelativeTimestamp } from './relative_timestamp';
+import { Icon }  from 'mastodon/components/icon';
 
 const messages = defineMessages({
   closed: {
@@ -154,7 +154,7 @@ class Poll extends ImmutablePureComponent {
           {!showResults && (
             <span
               className={classNames('poll__input', { checkbox: poll.get('multiple'), active })}
-              tabIndex='0'
+              tabIndex={0}
               role={poll.get('multiple') ? 'checkbox' : 'radio'}
               onKeyPress={this.handleOptionKeyPress}
               aria-checked={active}
