@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Permalink from './permalink';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 import { autoPlayGif, languages as preloadedLanguages } from 'flavours/glitch/initial_state';
 import { decode as decodeIDNA } from 'flavours/glitch/utils/idna';
 import StatusExpandButton from './status_expand_button';
@@ -372,7 +372,7 @@ class StatusContent extends React.PureComponent {
       }
 
       return (
-        <div className={classNames} tabIndex='0' onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+        <div className={classNames} tabIndex={0} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
           <p
             style={{ marginBottom: hidden && status.get('mentions').isEmpty() ? '0px' : null }}
           >
@@ -411,14 +411,14 @@ class StatusContent extends React.PureComponent {
           className={classNames}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
-          tabIndex='0'
+          tabIndex={0}
         >
           <div
             ref={this.setContentsRef}
             key={`contents-${tagLinks}-${rewriteMentions}`}
             dangerouslySetInnerHTML={content}
             className='status__content__text translate'
-            tabIndex='0'
+            tabIndex={0}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
             lang={lang}
@@ -432,14 +432,14 @@ class StatusContent extends React.PureComponent {
       return (
         <div
           className='status__content'
-          tabIndex='0'
+          tabIndex={0}
         >
           <div
             ref={this.setContentsRef}
             key={`contents-${tagLinks}`}
             className='status__content__text translate'
             dangerouslySetInnerHTML={content}
-            tabIndex='0'
+            tabIndex={0}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
             lang={lang}

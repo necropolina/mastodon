@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages } from 'react-intl';
 import classNames from 'classnames';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 
 const messages = defineMessages({
   search: { id: 'lists.search', defaultMessage: 'Search among people you follow' },
@@ -51,7 +51,7 @@ export default class Search extends React.PureComponent {
           />
         </label>
 
-        <div role='button' tabIndex='0' className='search__icon' onClick={this.handleClear}>
+        <div role='button' tabIndex={0} className='search__icon' onClick={this.handleClear}>
           <Icon id='search' className={classNames({ active: !hasValue })} />
           <Icon id='times-circle' aria-label={intl.formatMessage(messages.search)} className={classNames({ active: hasValue })} />
         </div>

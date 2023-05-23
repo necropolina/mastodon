@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import Permalink from 'flavours/glitch/components/permalink';
 import AccountContainer from 'flavours/glitch/containers/account_container';
 import NotificationOverlayContainer from '../containers/overlay_container';
-import Icon from 'flavours/glitch/components/icon';
+import { Icon } from 'flavours/glitch/components/icon';
 
 export default class NotificationFollow extends ImmutablePureComponent {
 
@@ -78,7 +78,7 @@ export default class NotificationFollow extends ImmutablePureComponent {
     //  Renders.
     return (
       <HotKeys handlers={this.getHandlers()}>
-        <div className={classNames('notification notification-admin-sign-up focusable', { unread })} tabIndex='0'>
+        <div className={classNames('notification notification-admin-sign-up focusable', { unread })} tabIndex={0}>
           <div className='notification__message'>
             <div className='notification__favourite-icon-wrapper'>
               <Icon fixedWidth id='user-plus' />

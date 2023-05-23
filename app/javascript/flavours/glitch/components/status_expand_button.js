@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from './icon';
+import { Icon } from './icon';
 
 
 const StatusExpandButton=(

@@ -7,7 +7,7 @@ import ShortNumber from 'mastodon/components/short_number';
 import Skeleton from 'mastodon/components/skeleton';
 import Account from 'mastodon/containers/account_container';
 import { domain } from 'mastodon/initial_state';
-import Image from 'mastodon/components/image';
+import { Image } from 'mastodon/components/image';
 import { Link } from 'react-router-dom';
 
 const messages = defineMessages({
@@ -59,7 +59,7 @@ class ServerBanner extends React.PureComponent {
           <div className='server-banner__meta__column'>
             <h4><FormattedMessage id='server_banner.administered_by' defaultMessage='Administered by:' /></h4>
 
-            <Account id={server.getIn(['contact', 'account', 'id'])} size={36} />
+            <Account id={server.getIn(['contact', 'account', 'id'])} size={36} minimal />
           </div>
 
           <div className='server-banner__meta__column'>

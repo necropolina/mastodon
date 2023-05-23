@@ -3,15 +3,15 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import ReactSwipeableViews from 'react-swipeable-views';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import IconButton from 'flavours/glitch/components/icon_button';
-import Icon from 'flavours/glitch/components/icon';
+import { IconButton } from 'flavours/glitch/components/icon_button';
+import { Icon } from 'flavours/glitch/components/icon';
 import { defineMessages, injectIntl, FormattedMessage, FormattedDate } from 'react-intl';
 import { autoPlayGif, reduceMotion, disableSwiping, mascot } from 'flavours/glitch/initial_state';
 import elephantUIPlane from 'mastodon/../images/elephant_ui_plane.svg';
 import unicodeMapping from 'flavours/glitch/features/emoji/emoji_unicode_mapping_light';
 import classNames from 'classnames';
 import EmojiPickerDropdown from 'flavours/glitch/features/compose/containers/emoji_picker_dropdown_container';
-import AnimatedNumber from 'flavours/glitch/components/animated_number';
+import { AnimatedNumber } from 'flavours/glitch/components/animated_number';
 import TransitionMotion from 'react-motion/lib/TransitionMotion';
 import spring from 'react-motion/lib/spring';
 import { assetHost } from 'flavours/glitch/utils/config';
@@ -418,7 +418,7 @@ class Announcements extends ImmutablePureComponent {
         <img className='announcements__mastodon' alt='' draggable='false' src={mascot || elephantUIPlane} />
 
         <div className='announcements__container'>
-          <ReactSwipeableViews animateHeight={!reduceMotion} adjustHeight={reduceMotion} index={index} onChangeIndex={this.handleChangeIndex}>
+          <ReactSwipeableViews animateHeight animateTransitions={!reduceMotion} index={index} onChangeIndex={this.handleChangeIndex}>
             {announcements.map((announcement, idx) => (
               <Announcement
                 key={announcement.get('id')}

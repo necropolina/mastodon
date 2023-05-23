@@ -6,11 +6,11 @@ import Video from 'flavours/glitch/features/video';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { defineMessages, injectIntl } from 'react-intl';
-import IconButton from 'flavours/glitch/components/icon_button';
+import { IconButton } from 'flavours/glitch/components/icon_button';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import ImageLoader from './image_loader';
-import Icon from 'flavours/glitch/components/icon';
-import GIFV from 'flavours/glitch/components/gifv';
+import { Icon } from 'flavours/glitch/components/icon';
+import { GIFV } from 'flavours/glitch/components/gifv';
 import Footer from 'flavours/glitch/features/picture_in_picture/components/footer';
 import { getAverageFromBlurhash } from 'flavours/glitch/blurhash';
 import { disableSwiping } from 'flavours/glitch/initial_state';
@@ -140,8 +140,8 @@ class MediaModal extends ImmutablePureComponent {
 
     const index = this.getIndex();
 
-    const leftNav  = media.size > 1 && <button tabIndex='0' className='media-modal__nav media-modal__nav--left' onClick={this.handlePrevClick} aria-label={intl.formatMessage(messages.previous)}><Icon id='chevron-left' fixedWidth /></button>;
-    const rightNav = media.size > 1 && <button tabIndex='0' className='media-modal__nav  media-modal__nav--right' onClick={this.handleNextClick} aria-label={intl.formatMessage(messages.next)}><Icon id='chevron-right' fixedWidth /></button>;
+    const leftNav  = media.size > 1 && <button tabIndex={0} className='media-modal__nav media-modal__nav--left' onClick={this.handlePrevClick} aria-label={intl.formatMessage(messages.previous)}><Icon id='chevron-left' fixedWidth /></button>;
+    const rightNav = media.size > 1 && <button tabIndex={0} className='media-modal__nav  media-modal__nav--right' onClick={this.handleNextClick} aria-label={intl.formatMessage(messages.next)}><Icon id='chevron-right' fixedWidth /></button>;
 
     const content = media.map((image) => {
       const width  = image.getIn(['meta', 'original', 'width']) || null;
@@ -188,7 +188,7 @@ class MediaModal extends ImmutablePureComponent {
             src={image.get('url')}
             width={width}
             height={height}
-            key={image.get('preview_url')}
+            key={image.get('url')}
             alt={image.get('description')}
             lang={language}
             onClick={this.toggleNavigation}

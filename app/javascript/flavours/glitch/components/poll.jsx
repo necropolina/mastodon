@@ -8,8 +8,8 @@ import Motion from 'flavours/glitch/features/ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
 import escapeTextContentForBrowser from 'escape-html';
 import emojify from 'flavours/glitch/features/emoji/emoji';
-import RelativeTimestamp from './relative_timestamp';
-import Icon from 'flavours/glitch/components/icon';
+import { RelativeTimestamp } from './relative_timestamp';
+import { Icon } from 'flavours/glitch/components/icon';
 
 const messages = defineMessages({
   closed: {
@@ -154,7 +154,7 @@ class Poll extends ImmutablePureComponent {
           {!showResults && (
             <span
               className={classNames('poll__input', { checkbox: poll.get('multiple'), active })}
-              tabIndex='0'
+              tabIndex={0}
               role={poll.get('multiple') ? 'checkbox' : 'radio'}
               onKeyPress={this.handleOptionKeyPress}
               aria-checked={active}
