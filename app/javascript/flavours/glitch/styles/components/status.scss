@@ -333,7 +333,8 @@
       max-height: 6em;
       overflow: hidden;
       text-overflow: ellipsis;
-      //padding-top: 0;
+
+      // padding-top: 0;
 
       &::after {
         content: '';
