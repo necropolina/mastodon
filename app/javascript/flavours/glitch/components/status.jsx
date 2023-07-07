@@ -1,35 +1,42 @@
-import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import StatusPrepend from './status_prepend';
+
+import { injectIntl, FormattedMessage } from 'react-intl';
+
+import classNames from 'classnames';
+
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import ImmutablePureComponent from 'react-immutable-pure-component';
+
+import PictureInPicturePlaceholder from 'flavours/glitch/components/picture_in_picture_placeholder';
+import PollContainer from 'flavours/glitch/containers/poll_container';
+import NotificationOverlayContainer from 'flavours/glitch/features/notifications/containers/overlay_container';
+import { displayMedia } from 'flavours/glitch/initial_state';
+import { autoUnfoldCW } from 'flavours/glitch/utils/content_warning';
+import { HotKeys } from 'react-hotkeys';
+
+import Card from '../features/status/components/card';
+import Bundle from '../features/ui/components/bundle';
+import { MediaGallery, Video, Audio } from '../features/ui/util/async-components';
+
+import AttachmentList from './attachment_list';
+import StatusActionBar from './status_action_bar';
+import StatusContent from './status_content';
+import StatusExpandButton from './status_expand_button';
 import StatusHeader from './status_header';
 import StatusIcons from './status_icons';
-import StatusContent from './status_content';
-import StatusActionBar from './status_action_bar';
-import StatusExpandButton from './status_expand_button';
-import AttachmentList from './attachment_list';
-import Card from '../features/status/components/card';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import ImmutablePureComponent from 'react-immutable-pure-component';
-import { MediaGallery, Video, Audio } from '../features/ui/util/async-components';
-import { HotKeys } from 'react-hotkeys';
-import NotificationOverlayContainer from 'flavours/glitch/features/notifications/containers/overlay_container';
-import classNames from 'classnames';
-import { autoUnfoldCW } from 'flavours/glitch/utils/content_warning';
-import PollContainer from 'flavours/glitch/containers/poll_container';
-import { displayMedia } from 'flavours/glitch/initial_state';
-import PictureInPicturePlaceholder from 'flavours/glitch/components/picture_in_picture_placeholder';
 
-// We use the component (and not the container) since we do not want
-// to use the progress bar to show download progress
-import Bundle from '../features/ui/components/bundle';
+const domParser = new DOMParser();
 
 export const textForScreenReader = (intl, status, rebloggedByText = false, expanded = false) => {
   const displayName = status.getIn(['account', 'display_name']);
 
+  const spoilerText = status.getIn(['translation', 'spoiler_text']) || status.get('spoiler_text');
+  const contentHtml = status.getIn(['translation', 'contentHtml']) || status.get('contentHtml');
+  const contentText = domParser.parseFromString(contentHtml, 'text/html').documentElement.textContent;
+
   const values = [
     displayName.length === 0 ? status.getIn(['account', 'acct']).split('@')[0] : displayName,
-    status.get('spoiler_text') && !expanded ? status.get('spoiler_text') : status.get('search_index').slice(status.get('spoiler_text').length),
+    spoilerText && !expanded ? spoilerText : contentText,
     intl.formatDate(status.get('created_at'), { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }),
     status.getIn(['account', 'acct']),
   ];
@@ -369,9 +376,7 @@ class Status extends ImmutablePureComponent {
             status.getIn(['reblog', 'id'], status.get('id'))
           }`;
         }
-        let state = { ...router.history.location.state };
-        state.mastodonBackSteps = (state.mastodonBackSteps || 0) + 1;
-        router.history.push(destination, state);
+        router.history.push(destination);
       }
       e.preventDefault();
     }
@@ -391,11 +396,14 @@ class Status extends ImmutablePureComponent {
 
   handleOpenVideo = (options) => {
     const { status } = this.props;
-    this.props.onOpenVideo(status.get('id'), status.getIn(['media_attachments', 0]), options);
+    const lang = status.getIn(['translation', 'language']) || status.get('language');
+    this.props.onOpenVideo(status.get('id'), status.getIn(['media_attachments', 0]), lang, options);
   };
 
   handleOpenMedia = (media, index) => {
-    this.props.onOpenMedia(this.props.status.get('id'), media, index);
+    const { status } = this.props;
+    const lang = status.getIn(['translation', 'language']) || status.get('language');
+    this.props.onOpenMedia(status.get('id'), media, index, lang);
   };
 
   handleHotkeyOpenMedia = e => {
@@ -405,10 +413,11 @@ class Status extends ImmutablePureComponent {
     e.preventDefault();
 
     if (status.get('media_attachments').size > 0) {
+      const lang = status.getIn(['translation', 'language']) || status.get('language');
       if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
-        onOpenVideo(statusId, status.getIn(['media_attachments', 0]), { startTime: 0 });
+        onOpenVideo(statusId, status.getIn(['media_attachments', 0]), lang, { startTime: 0 });
       } else {
-        onOpenMedia(statusId, status.get('media_attachments'), 0);
+        onOpenMedia(statusId, status.get('media_attachments'), 0, lang);
       }
     }
   };
@@ -442,16 +451,12 @@ class Status extends ImmutablePureComponent {
   };
 
   handleHotkeyOpen = () => {
-    let state = { ...this.context.router.history.location.state };
-    state.mastodonBackSteps = (state.mastodonBackSteps || 0) + 1;
     const status = this.props.status;
-    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`, state);
+    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
   };
 
   handleHotkeyOpenProfile = () => {
-    let state = { ...this.context.router.history.location.state };
-    state.mastodonBackSteps = (state.mastodonBackSteps || 0) + 1;
-    this.context.router.history.push(`/@${this.props.status.getIn(['account', 'acct'])}`, state);
+    this.context.router.history.push(`/@${this.props.status.getIn(['account', 'acct'])}`);
   };
 
   handleHotkeyMoveUp = e => {
@@ -628,6 +633,8 @@ class Status extends ImmutablePureComponent {
       media.push(<PictureInPicturePlaceholder />);
       mediaIcons.push('video-camera');
     } else if (attachments.size > 0) {
+      const language = status.getIn(['translation', 'language']) || status.get('language');
+
       if (muted || attachments.some(item => item.get('type') === 'unknown')) {
         media.push(
           <AttachmentList
@@ -637,14 +644,15 @@ class Status extends ImmutablePureComponent {
         );
       } else if (attachments.getIn([0, 'type']) === 'audio') {
         const attachment = status.getIn(['media_attachments', 0]);
+        const description = attachment.getIn(['translation', 'description']) || attachment.get('description');
 
         media.push(
           <Bundle fetchComponent={Audio} loading={this.renderLoadingAudioPlayer} >
             {Component => (
               <Component
                 src={attachment.get('url')}
-                alt={attachment.get('description')}
-                lang={status.get('language')}
+                alt={description}
+                lang={language}
                 poster={attachment.get('preview_url') || status.getIn(['account', 'avatar_static'])}
                 backgroundColor={attachment.getIn(['meta', 'colors', 'background'])}
                 foregroundColor={attachment.getIn(['meta', 'colors', 'foreground'])}
@@ -665,6 +673,7 @@ class Status extends ImmutablePureComponent {
         mediaIcons.push('music');
       } else if (attachments.getIn([0, 'type']) === 'video') {
         const attachment = status.getIn(['media_attachments', 0]);
+        const description = attachment.getIn(['translation', 'description']) || attachment.get('description');
 
         media.push(
           <Bundle fetchComponent={Video} loading={this.renderLoadingVideoPlayer} >
@@ -673,8 +682,8 @@ class Status extends ImmutablePureComponent {
               frameRate={attachment.getIn(['meta', 'original', 'frame_rate'])}
               blurhash={attachment.get('blurhash')}
               src={attachment.get('url')}
-              alt={attachment.get('description')}
-              lang={status.get('language')}
+              alt={description}
+              lang={language}
               inline
               sensitive={status.get('sensitive')}
               letterbox={settings.getIn(['media', 'letterbox'])}
@@ -694,7 +703,7 @@ class Status extends ImmutablePureComponent {
             {Component => (
               <Component
                 media={attachments}
-                lang={status.get('language')}
+                lang={language}
                 sensitive={status.get('sensitive')}
                 letterbox={settings.getIn(['media', 'letterbox'])}
                 fullwidth={!rootId && settings.getIn(['media', 'fullwidth'])}
@@ -727,7 +736,8 @@ class Status extends ImmutablePureComponent {
     }
 
     if (status.get('poll')) {
-      contentMedia.push(<PollContainer pollId={status.get('poll')} lang={status.get('language')} />);
+      const language = status.getIn(['translation', 'language']) || status.get('language');
+      contentMedia.push(<PollContainer pollId={status.get('poll')} lang={language} />);
       contentMediaIcons.push('tasks');
     }
 

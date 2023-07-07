@@ -1,13 +1,17 @@
-import React from 'react';
-import AutosuggestAccountContainer from 'flavours/glitch/features/compose/containers/autosuggest_account_container';
-import AutosuggestEmoji from './autosuggest_emoji';
-import AutosuggestLatex from './autosuggest_latex';
-import AutosuggestHashtag from './autosuggest_hashtag';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import ImmutablePureComponent from 'react-immutable-pure-component';
-import Textarea from 'react-textarea-autosize';
+
 import classNames from 'classnames';
+
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import ImmutablePureComponent from 'react-immutable-pure-component';
+
+import Textarea from 'react-textarea-autosize';
+
+import AutosuggestAccountContainer from 'flavours/glitch/features/compose/containers/autosuggest_account_container';
+
+import AutosuggestEmoji from './autosuggest_emoji';
+import { AutosuggestHashtag } from './autosuggest_hashtag';
+import AutosuggestLatex from './autosuggest_latex';
 
 const textAtCursorMatchesToken = (str, caretPosition) => {
   let word;
@@ -169,7 +173,7 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
     this.textarea.focus();
   };
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     if (nextProps.suggestions !== this.props.suggestions && nextProps.suggestions.size > 0 && this.state.suggestionsHidden && this.state.focused) {
       this.setState({ suggestionsHidden: false });
     }
@@ -200,7 +204,7 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
       inner = <AutosuggestAccountContainer id={suggestion.id} />;
       key   = suggestion.id;
     } else if (suggestion.type === 'latex') {
-      inner = <AutosuggestLatex latex={suggestion}/>;
+      inner = <AutosuggestLatex latex={suggestion} />;
       key = suggestion.expression;
     }
 
