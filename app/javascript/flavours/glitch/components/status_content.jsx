@@ -1,14 +1,19 @@
-import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
+import { PureComponent } from 'react';
+
 import { FormattedMessage, injectIntl } from 'react-intl';
-import Permalink from './permalink';
-import { connect } from 'react-redux';
+
 import classnames from 'classnames';
+
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { connect } from 'react-redux';
+
 import { Icon } from 'flavours/glitch/components/icon';
 import { autoPlayGif, languages as preloadedLanguages } from 'flavours/glitch/initial_state';
 import { decode as decodeIDNA } from 'flavours/glitch/utils/idna';
 import StatusExpandButton from './status_expand_button';
+
+import Permalink from './permalink';
 
 const textMatchesTarget = (text, origin, host) => {
   return (text === origin || text === host
@@ -64,7 +69,7 @@ const isLinkMisleading = (link) => {
   return !(textMatchesTarget(text, origin, host) || textMatchesTarget(text.toLowerCase(), origin, host));
 };
 
-class TranslateButton extends React.PureComponent {
+class TranslateButton extends PureComponent {
 
   static propTypes = {
     translation: ImmutablePropTypes.map,
@@ -105,7 +110,7 @@ const mapStateToProps = state => ({
   languages: state.getIn(['server', 'translationLanguages', 'items']),
 });
 
-class StatusContent extends React.PureComponent {
+class StatusContent extends PureComponent {
 
   static contextTypes = {
     identity: PropTypes.object,
@@ -159,7 +164,7 @@ class StatusContent extends React.PureComponent {
 
       if (mention) {
         link.addEventListener('click', this.onMentionClick.bind(this, mention), false);
-        link.setAttribute('title', mention.get('acct'));
+        link.setAttribute('title', `@${mention.get('acct')}`);
         if (rewriteMentions !== 'no') {
           while (link.firstChild) link.removeChild(link.firstChild);
           link.appendChild(document.createTextNode('@'));
@@ -339,11 +344,11 @@ class StatusContent extends React.PureComponent {
     const hidden = this.props.onExpandedToggle ? !this.props.expanded : this.state.hidden;
     const contentLocale = intl.locale.replace(/[_-].*/, '');
     const targetLanguages = this.props.languages?.get(status.get('language') || 'und');
-    const renderTranslate = this.props.onTranslate && this.context.identity.signedIn && ['public', 'unlisted'].includes(status.get('visibility')) && status.get('contentHtml').length > 0 && targetLanguages?.includes(contentLocale);
+    const renderTranslate = this.props.onTranslate && this.context.identity.signedIn && ['public', 'unlisted'].includes(status.get('visibility')) && status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale);
 
-    const content = { __html: status.get('translation') ? status.getIn(['translation', 'content']) : status.get('contentHtml') };
-    const spoilerContent = { __html: status.get('spoilerHtml') };
-    const lang = status.get('translation') ? intl.locale : status.get('language');
+    const content = { __html: status.getIn(['translation', 'contentHtml']) || status.get('contentHtml') };
+    const spoilerContent = { __html: status.getIn(['translation', 'spoilerHtml']) || status.get('spoilerHtml') };
+    const language = status.getIn(['translation', 'language']) || status.get('language');
     const classNames = classnames('status__content', {
       'status__content--with-action': parseClick && !disabled,
       'status__content--with-spoiler': status.get('spoiler_text').length > 0,
@@ -376,7 +381,7 @@ class StatusContent extends React.PureComponent {
           <p
             style={{ marginBottom: hidden && status.get('mentions').isEmpty() ? '0px' : null }}
           >
-            <span dangerouslySetInnerHTML={spoilerContent} className='translate' lang={lang} />
+            <span dangerouslySetInnerHTML={spoilerContent} className='translate' lang={language} />
             {' '}
             <StatusExpandButton
               hidden={hidden}
@@ -396,7 +401,7 @@ class StatusContent extends React.PureComponent {
               className='status__content__text translate'
               onMouseEnter={this.handleMouseEnter}
               onMouseLeave={this.handleMouseLeave}
-              lang={lang}
+              lang={language}
             />
             {!hidden && translateButton}
             {media}
@@ -421,7 +426,7 @@ class StatusContent extends React.PureComponent {
             tabIndex={0}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
-            lang={lang}
+            lang={language}
           />
           {translateButton}
           {media}
@@ -442,7 +447,7 @@ class StatusContent extends React.PureComponent {
             tabIndex={0}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
-            lang={lang}
+            lang={language}
           />
           {translateButton}
           {media}
