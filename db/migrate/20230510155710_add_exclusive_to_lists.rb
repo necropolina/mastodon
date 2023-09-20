@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
-class AddExclusiveToLists < ActiveRecord::Migration[6.1]
-  def change
-    add_column :lists, :exclusive, :boolean, null: false, default: false
+class AddExclusiveToLists < ActiveRecord::Migration[7.0]
+
+  def up
+    add_column :lists, :exclusive, :boolean
+    change_column_default :lists, :exclusive, false
+  end
+
+  def down
+    remove_column :lists, :exclusive
   end
 end
