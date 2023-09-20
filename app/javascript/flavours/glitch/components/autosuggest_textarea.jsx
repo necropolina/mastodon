@@ -11,12 +11,28 @@ import AutosuggestAccountContainer from 'flavours/glitch/features/compose/contai
 
 import AutosuggestEmoji from './autosuggest_emoji';
 import { AutosuggestHashtag } from './autosuggest_hashtag';
+import AutosuggestLatex from './autosuggest_latex';
 
 const textAtCursorMatchesToken = (str, caretPosition) => {
   let word;
+  let left;
+  let right;
 
-  let left  = str.slice(0, caretPosition).search(/[^\s\u200B]+$/);
-  let right = str.slice(caretPosition).search(/[\s\u200B]/);
+  left = str.slice(0, caretPosition).search(/\\[\(\[](?:(?!\\[\)\]]).)*(?:\\[\)\]])?$/);
+  if (left >= 0) {
+    right = str.slice(caretPosition).search(/\\[\)\]]/);
+    if (right < 0) {
+      word = str.slice(left);
+    } else {
+      word = str.slice(left, right + caretPosition + 2);
+    }
+    if (word.trim().length >= 3) {
+      return [left + 1, word];
+    }
+  }
+
+  left  = str.slice(0, caretPosition).search(/\S+$/);
+  right = str.slice(caretPosition).search(/\s/);
 
   if (right < 0) {
     word = str.slice(left);
@@ -187,6 +203,9 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
     } else if (suggestion.type === 'account') {
       inner = <AutosuggestAccountContainer id={suggestion.id} />;
       key   = suggestion.id;
+    } else if (suggestion.type === 'latex') {
+      inner = <AutosuggestLatex latex={suggestion} />;
+      key = suggestion.expression;
     }
 
     return (
@@ -215,6 +234,7 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
               value={value}
               onChange={this.onChange}
               onKeyDown={this.onKeyDown}
+              onInput={this.onInput}
               onKeyUp={onKeyUp}
               onFocus={this.onFocus}
               onBlur={this.onBlur}

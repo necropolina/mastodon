@@ -7,13 +7,12 @@ import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
-import { HotKeys } from 'react-hotkeys';
-
 import PictureInPicturePlaceholder from 'flavours/glitch/components/picture_in_picture_placeholder';
 import PollContainer from 'flavours/glitch/containers/poll_container';
 import NotificationOverlayContainer from 'flavours/glitch/features/notifications/containers/overlay_container';
 import { displayMedia } from 'flavours/glitch/initial_state';
 import { autoUnfoldCW } from 'flavours/glitch/utils/content_warning';
+import { HotKeys } from 'react-hotkeys';
 
 import Card from '../features/status/components/card';
 import Bundle from '../features/ui/components/bundle';
@@ -22,9 +21,9 @@ import { MediaGallery, Video, Audio } from '../features/ui/util/async-components
 import AttachmentList from './attachment_list';
 import StatusActionBar from './status_action_bar';
 import StatusContent from './status_content';
+import StatusExpandButton from './status_expand_button';
 import StatusHeader from './status_header';
 import StatusIcons from './status_icons';
-import StatusPrepend from './status_prepend';
 
 const domParser = new DOMParser();
 
@@ -832,6 +831,14 @@ class Status extends ImmutablePureComponent {
             tagLinks={settings.get('tag_misleading_links')}
             rewriteMentions={settings.get('rewrite_mentions')}
           />
+          {/* Only show expand button if collapsed and no spoiler tag is present */}
+          {isCollapsed && status.get('spoiler_text').length===0 ? (
+            <StatusExpandButton
+              hidden={isCollapsed}
+              handleSpoilerClick={parseClick}
+              mediaIcons={contentMediaIcons}
+            />
+          ) : null}
 
           {!isCollapsed || !(muted || !settings.getIn(['collapsed', 'show_action_bar'])) ? (
             <StatusActionBar

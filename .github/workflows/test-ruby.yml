@@ -138,10 +138,10 @@ jobs:
         run: sudo apt-get update
 
       - name: Install native Ruby dependencies
-        run: sudo apt-get install -y libicu-dev libidn11-dev
+        run: sudo apt-get update && sudo apt-get install -y libicu-dev libidn11-dev
 
       - name: Install additional system dependencies
-        run: sudo apt-get install -y ffmpeg imagemagick libpam-dev
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg imagemagick libpam-dev
 
       - name: Set up bundler cache
         uses: ruby/setup-ruby@v1
