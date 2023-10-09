@@ -77,6 +77,7 @@ ignore_unused:
   - 'imports.preambles.{following,blocking,muting,domain_blocking,bookmarks,lists}_html'
   - 'mail_subscriptions.unsubscribe.emails.*'
   - 'preferences.other' # some locales are missing other keys, therefore leading i18n-tasks to detect `preferences` as plural and not finding use
+  - 'false'
 
 ignore_inconsistent_interpolations:
   - '*.one'
