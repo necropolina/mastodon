@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
-class AddExclusiveToLists < ActiveRecord::Migration[7.0]
+require Rails.root.join('lib', 'mastodon', 'migration_helpers')
+
+class AddExclusiveToLists < ActiveRecord::Migration[6.1]
+  include Mastodon::MigrationHelpers
+
+  disable_ddl_transaction!
 
   def up
-    add_column :lists, :exclusive, :boolean
-    change_column_default :lists, :exclusive, false
+    safety_assured { add_column_with_default :lists, :exclusive, :boolean, default: false, allow_null: false }
   end
 
   def down
