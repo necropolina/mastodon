@@ -312,7 +312,7 @@ const startLaTeX = (state, position, latex_style) => {
   const latex_styles = {
     'inline':  {open: '\\(', close: '\\)'},
     'display': {open: '\\[', close: '\\]'}
-  }
+  };
   const { open, close } = latex_styles[latex_style];
 
   return state.merge({

@@ -9,7 +9,7 @@ export default class AutosuggestLatex extends React.PureComponent {
 
   setRef = (c) => {
     this.node = c;
-  }
+  };
 
   componentDidMount() {
     try {
