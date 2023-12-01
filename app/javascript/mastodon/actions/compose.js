@@ -589,14 +589,14 @@ const fetchComposeSuggestionsLatex = (dispatch, getState, token) => {
   for(let i=0;i<expression.length;i++) {
     switch(expression[i]) {
     case '\\':
-        i += 1;
-        break;
+      i += 1;
+      break;
     case '{':
-        brace += 1;
-        break;
+      brace += 1;
+      break;
     case '}':
-        brace -= 1;
-        break;
+      brace -= 1;
+      break;
     }
   }
   for(;brace<0;brace++) {
@@ -636,7 +636,7 @@ export function readyComposeSuggestionsLatex(token, latex) {
     token,
     latex,
   };
-};
+}
 
 export function readyComposeSuggestionsEmojis(token, emojis) {
   return {
@@ -816,7 +816,7 @@ export function startLaTeXCompose(position, latex_style) {
     position,
     latex_style,
   };
-};
+}
 
 export function changeComposing(value) {
   return {
