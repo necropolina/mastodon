@@ -25,7 +25,7 @@ class PublicFeed
     scope.merge!(without_local_only_scope) unless allow_local_only?
     scope.merge!(without_replies_scope) unless with_replies?
     scope.merge!(without_reblogs_scope) unless with_reblogs?
-    scope.merge!(without_duplicate_reblogs) if with_reblogs?
+    scope.merge!(without_duplicate_reblogs(limit, max_id, since_id, min_id)) if with_reblogs?
     scope.merge!(local_only_scope) if local_only?
     scope.merge!(remote_only_scope) if remote_only?
     scope.merge!(account_filters_scope) if account?
@@ -91,9 +91,18 @@ class PublicFeed
     Status.without_reblogs
   end
 
-  def without_duplicate_reblogs
+  def without_duplicate_reblogs(limit, max_id, since_id, min_id)
+    inner_query = Status.select('DISTINCT ON (reblog_of_id) statuses.id').reorder(reblog_of_id: :desc, id: :desc)
+    if min_id.present?
+      inner_query = inner_query.where(min_id < :id)
+    elsif since_id.present?
+      inner_query = inner_query.where(since_id < :id)
+    end
+    inner_query = inner_query.where(max_id > :id) if max_id.present?
+    inner_query = inner_query.limit(limit) if limit.present?
+
     Status.where(statuses: { reblog_of_id: nil })
-          .or(Status.where(id: Status.select('DISTINCT ON (reblog_of_id) statuses.id').reorder(reblog_of_id: :desc, id: :desc)))
+          .or(Status.where(id: inner_query))
   end
 
   def media_only_scope
