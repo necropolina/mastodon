@@ -92,14 +92,43 @@ class PublicFeed
   end
 
   def without_duplicate_reblogs(limit, max_id, since_id, min_id)
-    inner_query = Status.select('DISTINCT ON (reblog_of_id) statuses.id').reorder(reblog_of_id: :desc, id: :desc)
+    # See https://wiki.neuromatch.social/Filter_Duplicate_Boosts
+    # First get limited statuses that could contain boosts
+    # Get this first so the later DISTINCT ON term's need for ordering by reblog_of_id
+    # doesn't cause us to be filtering over the wrong statuses
+    candidate_statuses = Status.select(:id).reorder(id: :desc)
+
+    # apply similar filtering criteria to outer get call
     if min_id.present?
-      inner_query = inner_query.where(min_id < :id)
+      candidate_statuses = candidate_statuses.where(Status.arel_table[:id].gt(min_id))
     elsif since_id.present?
-      inner_query = inner_query.where(since_id < :id)
+      candidate_statuses = candidate_statuses.where(Status.arel_table[:id].gt(since_id))
+    elsif limit.present?
+      # We only apply the limit when we have no lower bound
+      #
+      # To avoid doing the full query twice (incl all the scopes from the outer get method)
+      # we just get some amount of statuses `n` larger than the final limit s.t. we assume
+      # the number of statuses that would be filtered out by the `get` contexts aren't >`n`
+      # This should be fast since it's just a slice from the index
+      limit *= 5
+      candidate_statuses = candidate_statuses.limit(limit)
     end
-    inner_query = inner_query.where(max_id > :id) if max_id.present?
-    inner_query = inner_query.limit(limit) if limit.present?
+
+    if max_id.present?
+      # We don't want to use the max_id since that will cause boosts to repeat
+      # across pages. Instead, if we're provided one, we increase it by a day -
+      # so ok if people are boosting the same post a lot and there are fewer than 20 posts
+      # in a day, you'll see duplicates.
+      max_time = Mastodon::Snowflake.to_time(max_id.to_i)
+      max_time += 1.day
+      max_id = Mastodon::Snowflake.id_at(max_time)
+      candidate_statuses = candidate_statuses.where(Status.arel_table[:id].lt(max_id))
+    end
+
+    inner_query = Status
+                  .where(id: candidate_statuses)
+                  .select('DISTINCT ON (reblog_of_id) statuses.id')
+                  .reorder(reblog_of_id: :desc, id: :desc)
 
     Status.where(statuses: { reblog_of_id: nil })
           .or(Status.where(id: inner_query))
