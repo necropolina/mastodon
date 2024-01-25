@@ -64,23 +64,26 @@ RSpec.describe PublicFeed do
         booster = Fabricate(:account, domain: nil)
 
         status = Fabricate(:status, account: poster)
+        # sleep for 2ms to make sure the other posts come in a greater snowflake ID
+        sleep(0.002)
+
         boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
         expect(subject).to include(boost.id)
 
         # sleep for 2ms to make sure the other posts come in a greater snowflake ID
         sleep(0.002)
 
-        (1..40).each do |_i|
+        (1..20).each do |_i|
           Fabricate(:status, account: poster)
         end
 
         # before a second boost, the second page should still include the original boost
-        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1, status.id).map(&:id)
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1, status.id - 1).map(&:id)
         expect(second_page).to include(boost.id)
 
         # after a second boost, the second page should no longer include the original boost
         second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
-        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1, status.id).map(&:id)
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1, status.id - 1).map(&:id)
 
         expect(subject).to include(second_boost.id)
         expect(second_page).to_not include(boost.id)
