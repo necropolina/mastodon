@@ -72,12 +72,12 @@ RSpec.describe PublicFeed do
         end
 
         # before a second boost, the second page should still include the original boost
-        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id, post.id).map(&:id)
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id, status.id).map(&:id)
         expect(second_page).to include(boost.id)
 
         # after a second boost, the second page should no longer include the original boost
         second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
-        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id, post.id).map(&:id)
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id, status.id).map(&:id)
 
         expect(subject).to include(second_boost.id)
         expect(second_page).to_not include(boost.id)
