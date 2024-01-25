@@ -58,6 +58,30 @@ RSpec.describe PublicFeed do
         expect(subject).to_not include(second_boost.id)
         expect(subject).to include(third_boost.id)
       end
+
+      it 'filters duplicate boosts across pagination' do
+        poster = Fabricate(:account, domain: nil)
+        booster = Fabricate(:account, domain: nil)
+
+        status = Fabricate(:status, account: poster)
+        boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
+        expect(subject).to include(boost.id)
+
+        (1..40).each do |_i|
+          Fabricate(:status, account: poster)
+        end
+
+        # before a second boost, the second page should still include the original boost
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id, post.id).map(&:id)
+        expect(second_page).to include(boost.id)
+
+        # after a second boost, the second page should no longer include the original boost
+        second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id, post.id).map(&:id)
+
+        expect(subject).to include(second_boost.id)
+        expect(second_page).to_not include(boost.id)
+      end
     end
 
     it 'filters out silenced accounts' do
