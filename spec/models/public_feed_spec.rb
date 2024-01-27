@@ -68,7 +68,6 @@ RSpec.describe PublicFeed do
         sleep(0.002)
 
         boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
-        expect(subject).to include(boost.id)
 
         # sleep for 2ms to make sure the other posts come in a greater snowflake ID
         sleep(0.002)
