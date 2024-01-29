@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
-import AutosuggestAccountContainer from 'flavours/glitch/features/compose/containers/autosuggest_account_container';
+import AutosuggestAccountContainer from '../features/compose/containers/autosuggest_account_container';
 
 import AutosuggestEmoji from './autosuggest_emoji';
 import { AutosuggestHashtag } from './autosuggest_hashtag';
@@ -29,8 +29,8 @@ const textAtCursorMatchesToken = (str, caretPosition, searchTokens) => {
     }
   }
 
-  left  = str.slice(0, caretPosition).search(/\S+$/);
-  right = str.slice(caretPosition).search(/\s/);
+  left  = str.slice(0, caretPosition).search(/[^\s\u200B]+$/);
+  right = str.slice(caretPosition).search(/[\s\u200B]/);
 
   if (right < 0) {
     word = str.slice(left);
