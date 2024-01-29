@@ -7,13 +7,13 @@ const inp = document.getElementById('expr');
 const output = document.getElementById('output');
 
 function go() {
-    const expr = inp.value;
-    const rep = tex_to_unicode(expr);
-    if(rep!==null) {
-        output.textContent = rep;
-    } else {
-        output.textContent = 'NOPE';
-    }
+  const expr = inp.value;
+  const rep = tex_to_unicode(expr);
+  if(rep!==null) {
+    output.textContent = rep;
+  } else {
+    output.textContent = 'NOPE';
+  }
 }
 
 inp.addEventListener('keyup',go);

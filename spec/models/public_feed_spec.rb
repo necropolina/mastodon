@@ -32,6 +32,63 @@ RSpec.describe PublicFeed do
       expect(subject).to_not include(boost.id)
     end
 
+    context 'with with_reblogs option' do
+      subject { described_class.new(nil, with_reblogs: true).get(20).map(&:id) }
+
+      it 'does include boosts' do
+        status = Fabricate(:status)
+        boost = Fabricate(:status, reblog_of_id: status.id)
+
+        expect(subject).to include(status.id)
+        expect(subject).to include(boost.id)
+      end
+
+      it 'only includes the most recent boost' do
+        poster = Fabricate(:account, domain: nil)
+        booster = Fabricate(:account, domain: nil)
+        second_booster = Fabricate(:account, domain: nil)
+
+        status = Fabricate(:status, account: poster)
+        boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
+        second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
+        third_boost = Fabricate(:status, reblog_of_id: status.id, account: second_booster)
+
+        expect(subject).to include(status.id)
+        expect(subject).to_not include(boost.id)
+        expect(subject).to_not include(second_boost.id)
+        expect(subject).to include(third_boost.id)
+      end
+
+      it 'filters duplicate boosts across pagination' do
+        poster = Fabricate(:account, domain: nil)
+        booster = Fabricate(:account, domain: nil)
+
+        status = Fabricate(:status, account: poster)
+        # sleep for 2ms to make sure the other posts come in a greater snowflake ID
+        sleep(0.002)
+
+        boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
+
+        # sleep for 2ms to make sure the other posts come in a greater snowflake ID
+        sleep(0.002)
+
+        (1..20).each do |_i|
+          Fabricate(:status, account: poster)
+        end
+
+        # before a second boost, the second page should still include the original boost
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1).map(&:id)
+        expect(second_page).to include(boost.id)
+
+        # after a second boost, the second page should no longer include the original boost
+        second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
+        second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1).map(&:id)
+
+        expect(subject).to include(second_boost.id)
+        expect(second_page).to_not include(boost.id)
+      end
+    end
+
     it 'filters out silenced accounts' do
       silenced_account = Fabricate(:account, silenced: true)
       status = Fabricate(:status, account: account)
