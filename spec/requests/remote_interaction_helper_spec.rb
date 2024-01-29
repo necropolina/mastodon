@@ -5,6 +5,8 @@ require 'rails_helper'
 describe 'Remote Interaction Helper' do
   describe 'GET /remote_interaction_helper' do
     it 'returns http success' do
+      allow(SecureRandom).to receive(:base64).with(16).and_return('ZbA+JmE7+bK8F5qvADZHuQ==')
+
       get remote_interaction_helper_path
 
       expect(response)
@@ -24,7 +26,7 @@ describe 'Remote Interaction Helper' do
 
   def expected_csp_headers
     <<~CSP.squish
-      default-src 'none'; frame-ancestors 'self'; form-action 'none'; script-src 'self' https://cb6e6126.ngrok.io 'wasm-unsafe-eval'; connect-src https:
+      default-src 'none'; frame-ancestors 'self'; form-action 'none'; script-src 'self' https://cb6e6126.ngrok.io 'wasm-unsafe-eval' 'nonce-ZbA+JmE7+bK8F5qvADZHuQ=='; connect-src https:
     CSP
   end
 end
