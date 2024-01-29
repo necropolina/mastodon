@@ -25,6 +25,7 @@ class PublicFeed
     scope.merge!(without_local_only_scope) unless allow_local_only?
     scope.merge!(without_replies_scope) unless with_replies?
     scope.merge!(without_reblogs_scope) unless with_reblogs?
+    scope.merge!(without_duplicate_reblogs) if with_reblogs?
     scope.merge!(local_only_scope) if local_only?
     scope.merge!(remote_only_scope) if remote_only?
     scope.merge!(account_filters_scope) if account?
@@ -88,6 +89,17 @@ class PublicFeed
 
   def without_reblogs_scope
     Status.without_reblogs
+  end
+
+  def without_duplicate_reblogs
+    Status.where(statuses: { reblog_of_id: nil })
+          .or(Status.where(<<~SQL.squish))
+            "statuses"."id" = (
+              SELECT MAX(id)
+              FROM statuses s2
+              WHERE s2.reblog_of_id = statuses.reblog_of_id
+            )
+          SQL
   end
 
   def media_only_scope
