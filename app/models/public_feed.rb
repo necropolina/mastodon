@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class PublicFeed
-  # number of days ahead to look when filtering boosts
-  FILTER_REBLOGS_N_DAYS_AHEAD = 1.day
-
   # @param [Account] account
   # @param [Hash] options
   # @option [Boolean] :with_replies
