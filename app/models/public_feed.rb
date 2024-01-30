@@ -25,12 +25,13 @@ class PublicFeed
     scope.merge!(without_local_only_scope) unless allow_local_only?
     scope.merge!(without_replies_scope) unless with_replies?
     scope.merge!(without_reblogs_scope) unless with_reblogs?
-    scope.merge!(without_duplicate_reblogs) if with_reblogs?
     scope.merge!(local_only_scope) if local_only?
     scope.merge!(remote_only_scope) if remote_only?
     scope.merge!(account_filters_scope) if account?
     scope.merge!(media_only_scope) if media_only?
     scope.merge!(language_scope) if account&.chosen_languages.present?
+
+    scope.merge!(without_duplicate_reblogs) if with_reblogs?
 
     scope.cache_ids.to_a_paginated_by_id(limit, max_id: max_id, since_id: since_id, min_id: min_id)
   end
@@ -91,15 +92,31 @@ class PublicFeed
     Status.without_reblogs
   end
 
+  # Inner query used in `without_duplicate_reblogs_scope`
+  # selects only the most recent boost for a given post
+  # Also applies scopes which catch the most common cases
+  # for missing a boost, but doesn't duplicate the whole query.
+  # This is not DRY because we want to avoid fork-of-a-fork merge conflict hell
+  def max_boost_id_scope
+    # use Arel for correlated subquery
+    s_table = Status.arel_table
+    s_alias = s_table.alias
+
+    inner_select = Status.select(s_alias[:id].maximum)
+                         .from(s_alias)
+                         .where(s_alias[:reblog_of_id]
+                                  .eq(s_table[:reblog_of_id]))
+    inner_select.merge!(local_only_scope.from(s_alias)) if local_only?
+    inner_select.merge!(remote_only_scope.from(s_alias)) if remote_only?
+    inner_select.merge!(account_filters_scope.from(s_alias)) if account?
+    inner_select.unscope!(:order)
+
+    Status.where('"statuses"."id" = (:maxid)', maxid: inner_select)
+  end
+
   def without_duplicate_reblogs
     Status.where(statuses: { reblog_of_id: nil })
-          .or(Status.where(<<~SQL.squish))
-            "statuses"."id" = (
-              SELECT MAX(id)
-              FROM statuses s2
-              WHERE s2.reblog_of_id = statuses.reblog_of_id
-            )
-          SQL
+          .or(max_boost_id_scope)
   end
 
   def media_only_scope

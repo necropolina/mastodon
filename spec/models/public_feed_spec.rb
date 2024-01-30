@@ -35,6 +35,11 @@ RSpec.describe PublicFeed do
     context 'with with_reblogs option' do
       subject { described_class.new(nil, with_reblogs: true).get(20).map(&:id) }
 
+      let!(:poster)  { Fabricate(:account, domain: nil) }
+      let!(:booster) { Fabricate(:account, domain: nil) }
+      let!(:second_booster) { Fabricate(:account, domain: nil) }
+      let!(:remote_booster) { Fabricate(:account, domain: 'example.com') }
+
       it 'does include boosts' do
         status = Fabricate(:status)
         boost = Fabricate(:status, reblog_of_id: status.id)
@@ -44,10 +49,6 @@ RSpec.describe PublicFeed do
       end
 
       it 'only includes the most recent boost' do
-        poster = Fabricate(:account, domain: nil)
-        booster = Fabricate(:account, domain: nil)
-        second_booster = Fabricate(:account, domain: nil)
-
         status = Fabricate(:status, account: poster)
         boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
         second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
@@ -60,9 +61,6 @@ RSpec.describe PublicFeed do
       end
 
       it 'filters duplicate boosts across pagination' do
-        poster = Fabricate(:account, domain: nil)
-        booster = Fabricate(:account, domain: nil)
-
         status = Fabricate(:status, account: poster)
         # sleep for 2ms to make sure the other posts come in a greater snowflake ID
         sleep(0.002)
@@ -86,6 +84,15 @@ RSpec.describe PublicFeed do
 
         expect(subject).to include(second_boost.id)
         expect(second_page).to_not include(boost.id)
+      end
+
+      it 'shows the most recent local boost when there is a more recent remote boost' do
+        status = Fabricate(:status, account: poster)
+        local_boost = Fabricate(:status, reblog_of_id: status.id, local: true, account: booster)
+        remote_boost = Fabricate(:status, reblog_of_id: status.id, id: local_boost.id + 1, local: false, uri: 'https://example.com/boosturl', account: remote_booster)
+
+        expect(subject).to include(local_boost.id)
+        expect(subject).to_not include(remote_boost.id)
       end
     end
 
