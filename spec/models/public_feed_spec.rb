@@ -35,6 +35,11 @@ RSpec.describe PublicFeed do
     context 'with with_reblogs option' do
       subject { described_class.new(nil, with_reblogs: true).get(20).map(&:id) }
 
+      let!(:poster)  { Fabricate(:account, domain: nil) }
+      let!(:booster) { Fabricate(:account, domain: nil) }
+      let!(:second_booster) { Fabricate(:account, domain: nil) }
+      let!(:remote_booster) { Fabricate(:account, domain: 'example.com') }
+
       it 'does include boosts' do
         status = Fabricate(:status)
         boost = Fabricate(:status, reblog_of_id: status.id)
@@ -44,10 +49,6 @@ RSpec.describe PublicFeed do
       end
 
       it 'only includes the most recent boost' do
-        poster = Fabricate(:account, domain: nil)
-        booster = Fabricate(:account, domain: nil)
-        second_booster = Fabricate(:account, domain: nil)
-
         status = Fabricate(:status, account: poster)
         boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
         second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
@@ -60,20 +61,16 @@ RSpec.describe PublicFeed do
       end
 
       it 'filters duplicate boosts across pagination' do
-        poster = Fabricate(:account, domain: nil)
-        booster = Fabricate(:account, domain: nil)
-
         status = Fabricate(:status, account: poster)
-        # sleep for 2ms to make sure the other posts come in a greater snowflake ID
-        sleep(0.002)
 
-        boost = Fabricate(:status, reblog_of_id: status.id, account: poster)
+        boost = Fabricate(:status, reblog_of_id: status.id, id: status.id + 1, account: poster)
 
         # sleep for 2ms to make sure the other posts come in a greater snowflake ID
         sleep(0.002)
 
-        (1..20).each do |_i|
-          Fabricate(:status, account: poster)
+        n_posts = 20
+        (1..n_posts).each do |i|
+          Fabricate(:status, account: poster, id: boost.id + i)
         end
 
         # before a second boost, the second page should still include the original boost
@@ -81,11 +78,37 @@ RSpec.describe PublicFeed do
         expect(second_page).to include(boost.id)
 
         # after a second boost, the second page should no longer include the original boost
-        second_boost = Fabricate(:status, reblog_of_id: status.id, account: booster)
+        second_boost = Fabricate(:status, reblog_of_id: status.id, id: boost.id + n_posts + 1, account: booster)
         second_page = described_class.new(nil, with_reblogs: true).get(20, boost.id + 1).map(&:id)
 
         expect(subject).to include(second_boost.id)
         expect(second_page).to_not include(boost.id)
+      end
+
+      context 'with local option' do
+        subject { described_class.new(nil, with_reblogs: true, local: true, remote: false).get(20).map(&:id) }
+
+        it 'shows the most recent local boost when there is a more recent remote boost' do
+          status = Fabricate(:status, account: poster)
+          local_boost = Fabricate(:status, reblog_of_id: status.id, local: true, account: booster)
+          remote_boost = Fabricate(:status, reblog_of_id: status.id, id: local_boost.id + 1, local: false, uri: 'https://example.com/boosturl', account: remote_booster)
+
+          expect(subject).to include(local_boost.id)
+          expect(subject).to_not include(remote_boost.id)
+        end
+      end
+
+      context 'with remote option' do
+        subject { described_class.new(nil, with_reblogs: true, local: false, remote: true).get(20).map(&:id) }
+
+        it 'shows the most recent remote boost when there is a more recent local boost' do
+          status = Fabricate(:status, account: poster)
+          remote_boost = Fabricate(:status, reblog_of_id: status.id, local: false, uri: 'https://example.com/boosturl', account: remote_booster)
+          local_boost = Fabricate(:status, reblog_of_id: status.id, id: remote_boost.id + 1, local: true, account: booster)
+
+          expect(subject).to include(remote_boost.id)
+          expect(subject).to_not include(local_boost.id)
+        end
       end
     end
 
