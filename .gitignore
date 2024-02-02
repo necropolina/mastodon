@@ -70,4 +70,6 @@ yarn-debug.log
 # Ignore Docker option files
 docker-compose.override.yml
 
-public/MathJax
+# Everything in a MathJax distribution, keeping only the compiled versions we use
+public/MathJax/es5/tex-*
+!public/MathJax/es5/tex-chtml.js
