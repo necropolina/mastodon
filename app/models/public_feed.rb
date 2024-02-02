@@ -25,12 +25,13 @@ class PublicFeed
     scope.merge!(without_local_only_scope) unless allow_local_only?
     scope.merge!(without_replies_scope) unless with_replies?
     scope.merge!(without_reblogs_scope) unless with_reblogs?
-    scope.merge!(without_duplicate_reblogs) if with_reblogs?
     scope.merge!(local_only_scope) if local_only?
     scope.merge!(remote_only_scope) if remote_only?
     scope.merge!(account_filters_scope) if account?
     scope.merge!(media_only_scope) if media_only?
     scope.merge!(language_scope) if account&.chosen_languages.present?
+
+    scope.merge!(without_duplicate_reblogs) if with_reblogs?
 
     scope.cache_ids.to_a_paginated_by_id(limit, max_id: max_id, since_id: since_id, min_id: min_id)
   end
@@ -91,15 +92,21 @@ class PublicFeed
     Status.without_reblogs
   end
 
+  def max_boost_id_scope
+    Status.where(<<~SQL.squish)
+      "statuses"."id" = (
+        SELECT MAX(id)
+        FROM "statuses" "s2"
+        WHERE "s2"."reblog_of_id" = "statuses"."reblog_of_id"
+          #{'AND ("s2"."local" = true OR "s2"."uri" IS NULL)' if local_only?}
+          #{'AND "s2"."local" = false AND "s2"."uri" IS NOT NULL' if remote_only?}
+        )
+    SQL
+  end
+
   def without_duplicate_reblogs
     Status.where(statuses: { reblog_of_id: nil })
-          .or(Status.where(<<~SQL.squish))
-            "statuses"."id" = (
-              SELECT MAX(id)
-              FROM statuses s2
-              WHERE s2.reblog_of_id = statuses.reblog_of_id
-            )
-          SQL
+          .or(max_boost_id_scope)
   end
 
   def media_only_scope
