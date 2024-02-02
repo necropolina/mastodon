@@ -41,9 +41,8 @@
 
     %script{ nonce: request.content_security_policy_nonce }
       :plain
-        var nonce = document.querySelector('meta[name="style-nonce"]').getAttribute('content');
         window.MathJax = {
-          chtml: {nonce: nonce},
+          chtml: {nonce: "#{request.content_security_policy_nonce}" },
           tex: {
             processEnvironments: false,
             processRefs: false,
