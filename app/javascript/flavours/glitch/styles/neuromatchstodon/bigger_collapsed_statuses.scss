@@ -11,4 +11,12 @@
       }
     }
   }
+
+  &--in-thread {
+    &.collapsed {
+      & > button {
+        margin-inline-start: 46px + 10px;
+      }
+    }
+  }
 }
