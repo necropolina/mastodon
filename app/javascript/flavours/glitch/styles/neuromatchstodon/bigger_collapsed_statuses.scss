@@ -1,10 +1,12 @@
 .status {
   &.collapsed {
     .status__content {
+      height: unset;
       max-height: 6em;
       padding-top: unset;
 
       &::after {
+        top: unset;
         height: 40%;
       }
     }
