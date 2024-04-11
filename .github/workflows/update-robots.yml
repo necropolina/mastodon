@@ -11,12 +11,6 @@ jobs:
   update-robots:
     runs-on: ubuntu-latest
     steps: 
-      - name: Create Branch
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        uses: peterjgrainger/action-create-branch@v2.2.0
-        with:
-          branch: robots.txt-update
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -32,27 +26,6 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer $API_KEY' \
           --data '{ "agent_types": [ "AI Data Scraper", "AI Assistant", "AI Search Crawler" ], "disallow": "/" }' >> public/robots.txt
-      - name: Create Pull Request
-        if: |
-          !steps.update.outputs.skip
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { repo, owner } = context.repo;
-            const result = await github.rest.pulls.create({
-              title: 'Update robots.txt',
-              owner,
-              repo,
-              head: 'robots.txt-update',
-              base: 'dev',
-              body: 'This PR was *auto-generated* by the `Update robots.txt` action and contains updates to our robots.txt file, pulled from [Dark Visitors](https://darkvisitors.com/).'
-            });
-            github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: result.data.number,
-              labels: ['automated pr']
-            });
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
