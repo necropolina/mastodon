@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  sync-upstream:
+  update-robots:
     runs-on: ubuntu-latest
     steps: 
       - name: Create Branch
@@ -31,25 +31,10 @@ jobs:
           curl --location 'https://api.darkvisitors.com/robots-txts' \
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer $API_KEY' \
-          --data '{ "agent_types": [ "AI Data Scraper", "AI Assistant", "AI Search Crawler" ], "disallow": "/" }' > public/robots.txt
+          --data '{ "agent_types": [ "AI Data Scraper", "AI Assistant", "AI Search Crawler" ], "disallow": "/" }' >> public/robots.txt
           git add public/robots.txt
           changes=$(git push origin 2>&1)
           if [ "$changes" = "Everything up-to-date" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Check if PR exists
-        env: 
-          GH_TOKEN: ${{ github.token }}
-        id: check
-        run: |
-          prs=$(gh pr list \
-            --repo "$GITHUB_REPOSITORY" \
-            --json baseRefName,headRefName \
-            --jq '
-              map(select(.baseRefName == "dev" and .headRefName == "robots.txt-update"))
-              | length
-            ')
-          if ((prs > 0)); then
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Create Pull Request
