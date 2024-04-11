@@ -83,6 +83,18 @@ Disallow: /
 # AI Data Scraper
 # https://darkvisitors.com/agents/gptbot
 
+User-agent: GPTBot
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/omgili
+
+User-agent: omgili
+Disallow: /
+
+# AI Search Crawler
+# https://darkvisitors.com/agents/perplexitybot
+
 User-agent: PerplexityBot
 Disallow: /
 
