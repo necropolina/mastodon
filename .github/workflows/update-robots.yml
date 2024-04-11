@@ -27,6 +27,8 @@ jobs:
         env:
           API_KEY: ${{ secrets.ROBOTS }}
         run: |
+          git config user.name 'hobgoblina'
+          git config user.email '20880695+hobgoblina@users.noreply.github.com'
           cp robots-base.txt public/robots.txt
           curl --location 'https://api.darkvisitors.com/robots-txts' \
           --header 'Content-Type: application/json' \
@@ -59,3 +61,4 @@ jobs:
               issue_number: result.data.number,
               labels: ['automated pr']
             });
+        
