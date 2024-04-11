@@ -33,13 +33,13 @@ jobs:
           --header 'Authorization: Bearer $API_KEY' \
           --data '{ "agent_types": [ "AI Data Scraper", "AI Assistant", "AI Search Crawler" ], "disallow": "/" }' >> public/robots.txt
           git add public/robots.txt
+          git commit -m "update robots.txt"
           changes=$(git push origin 2>&1)
           if [ "$changes" = "Everything up-to-date" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Create Pull Request
         if: |
-          !steps.check.outputs.skip &&
           !steps.update.outputs.skip
         uses: actions/github-script@v6
         with:
