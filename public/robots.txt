@@ -20,22 +20,28 @@ User-agent: *
 Disallow: /media_proxy/
 Disallow: /interact/
 
+# AI Data Scraper
+# https://darkvisitors.com/agents/ai2bot
+
+User-agent: AI2Bot
+Disallow: /
+
 # AI Search Crawler
 # https://darkvisitors.com/agents/amazonbot
 
 User-agent: Amazonbot
 Disallow: /
 
-# AI Data Scraper
-# https://darkvisitors.com/agents/anthropic-ai
-
-User-agent: anthropic-ai
-Disallow: /
-
 # AI Search Crawler
 # https://darkvisitors.com/agents/applebot
 
 User-agent: Applebot
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/applebot-extended
+
+User-agent: Applebot-Extended
 Disallow: /
 
 # AI Data Scraper
@@ -56,16 +62,28 @@ Disallow: /
 User-agent: ChatGPT-User
 Disallow: /
 
-# AI Assistant
-# https://darkvisitors.com/agents/cohere-ai
+# AI Data Scraper
+# https://darkvisitors.com/agents/claudebot
 
-User-agent: cohere-ai
+User-agent: ClaudeBot
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/cohere-training-data-crawler
+
+User-agent: cohere-training-data-crawler
 Disallow: /
 
 # AI Data Scraper
 # https://darkvisitors.com/agents/diffbot
 
 User-agent: Diffbot
+Disallow: /
+
+# AI Assistant
+# https://darkvisitors.com/agents/duckassistbot
+
+User-agent: DuckAssistBot
 Disallow: /
 
 # AI Data Scraper
@@ -87,15 +105,57 @@ User-agent: GPTBot
 Disallow: /
 
 # AI Data Scraper
+# https://darkvisitors.com/agents/kangaroo-bot
+
+User-agent: Kangaroo Bot
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/meta-externalagent
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# AI Assistant
+# https://darkvisitors.com/agents/meta-externalfetcher
+
+User-agent: Meta-ExternalFetcher
+Disallow: /
+
+# AI Search Crawler
+# https://darkvisitors.com/agents/oai-searchbot
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+# AI Data Scraper
 # https://darkvisitors.com/agents/omgili
 
 User-agent: omgili
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/pangubot
+
+User-agent: PanguBot
 Disallow: /
 
 # AI Search Crawler
 # https://darkvisitors.com/agents/perplexitybot
 
 User-agent: PerplexityBot
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/timpibot
+
+User-agent: Timpibot
+Disallow: /
+
+# AI Data Scraper
+# https://darkvisitors.com/agents/webzio-extended
+
+User-agent: Webzio-Extended
 Disallow: /
 
 # AI Search Crawler
